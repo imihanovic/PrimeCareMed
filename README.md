@@ -12,45 +12,41 @@ Web application for table reservation in the restaurant. :plate_with_cutlery:
 
 ## General Info
 
-Restaurant reservations is a web application that enables creating reservations in the restaurant.
+BookIt is a web application that enables table booking in the restaurant.
 
-> Project created as a college seminar for *Programming in C#*
-> *University of Split - University Department of Professional Studies*
+- Project created as a college seminar for *Programming in C#*
+- *University of Split - University Department of Professional Studies*
 
 ## Features
 
 ### User Management
 
-- Roles (base for authorization):
+- Roles:
     - Manager
-    - Admin
-    - Guest
+    - User (guest)
 - Available operations:
     - CRUD
 - Authentication (login/logout)
 - Show all users (with search and pagination)
-- Show guest details (guests can see their own details, manager and waiter can se all)
+- Show details (guests can see their own details, manager can see all)
 
 #### Table
 
 - Available operations:
     - CRUD
 - View all tables
-- Filter by day
 
 #### Reservation
 
 - Available operations:
     - Create
     - Edit and update 
-- View all reservations (pagination, by table number can see details of reservation)
-- Users can reserve a table (bot)
+- Show all reservations (pagination)
+- Filter reservations by day
+- Reservation can have multiple tables
+- Table in period between startTime and endTime will be unavailable to book
 
-
-### Mail Notification
-
-- Send "Welcome" mail to guest when his account is created
-- Send "Reservation confirmed" mail to guest when manager confirms reservation
+- Users can reserve a table (bot)?
 
 ## Technologies
 
@@ -60,7 +56,7 @@ Restaurant reservations is a web application that enables creating reservations 
 
 ## Database Model
 
-![restoran drawio](https://user-images.githubusercontent.com/92686358/223742557-4d7ef91c-eb03-4b0a-be23-7a3ca3bacbfb.png)
+![restoran2 drawio (2)](https://user-images.githubusercontent.com/92686358/225091311-68a71f9c-9ce1-4ef8-8d50-fbf923cf0984.png)
 
 ## Authors:
 ✍️ 
