@@ -21,19 +21,19 @@ namespace BookIt.Application.UnitTests.Services;
 public class UserServiceTests : BaseServiceTestConfiguration
 {
     private readonly IEmailService _emailService;
-    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly SignInManager<User> _signInManager;
     private readonly UserService _sut;
     private readonly ITemplateService _templateService;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
 
     public UserServiceTests()
     {
-        var userStore = Substitute.For<IUserStore<ApplicationUser>>();
+        var userStore = Substitute.For<IUserStore<User>>();
         _userManager =
-            Substitute.For<UserManager<ApplicationUser>>(userStore, null, null, null, null, null, null, null, null);
+            Substitute.For<UserManager<User>>(userStore, null, null, null, null, null, null, null, null);
         var contextAccessor = Substitute.For<IHttpContextAccessor>();
-        var userPrincipalFactory = Substitute.For<IUserClaimsPrincipalFactory<ApplicationUser>>();
-        _signInManager = Substitute.For<SignInManager<ApplicationUser>>(_userManager, contextAccessor,
+        var userPrincipalFactory = Substitute.For<IUserClaimsPrincipalFactory<User>>();
+        _signInManager = Substitute.For<SignInManager<User>>(_userManager, contextAccessor,
             userPrincipalFactory, null, null, null, null);
         _templateService = Substitute.For<ITemplateService>();
         _emailService = Substitute.For<IEmailService>();
@@ -47,8 +47,8 @@ public class UserServiceTests : BaseServiceTestConfiguration
     {
         // Arrange
         var createUserModel = Builder<CreateUserModel>.CreateNew().Build();
-        var applicationUser = Builder<ApplicationUser>.CreateNew().Build();
-        _userManager.CreateAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>()).Returns(IdentityResult.Success);
+        var applicationUser = Builder<User>.CreateNew().Build();
+        _userManager.CreateAsync(Arg.Any<User>(), Arg.Any<string>()).Returns(IdentityResult.Success);
         _userManager.FindByNameAsync(Arg.Any<string>()).Returns(applicationUser);
 
         // Act
@@ -56,8 +56,8 @@ public class UserServiceTests : BaseServiceTestConfiguration
 
         // Assert
         result.Id.Should().Be(applicationUser.Id);
-        await _userManager.Received(1).CreateAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>());
-        await _userManager.Received(1).GenerateEmailConfirmationTokenAsync(Arg.Any<ApplicationUser>());
+        await _userManager.Received(1).CreateAsync(Arg.Any<User>(), Arg.Any<string>());
+        await _userManager.Received(1).GenerateEmailConfirmationTokenAsync(Arg.Any<User>());
         await _templateService.Received(1).GetTemplateAsync(Arg.Any<string>());
         await _emailService.Received(1).SendEmailAsync(Arg.Any<EmailMessage>());
         await _userManager.Received(1).FindByNameAsync(Arg.Any<string>());
@@ -69,7 +69,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
         // Arrange
         var createUserModel = Builder<CreateUserModel>.CreateNew().Build();
         var identityErrors = Builder<IdentityError>.CreateListOfSize(5).Build().ToArray();
-        _userManager.CreateAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>())
+        _userManager.CreateAsync(Arg.Any<User>(), Arg.Any<string>())
             .Returns(IdentityResult.Failed(identityErrors));
 
         // Act
@@ -78,7 +78,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
         // Assert
         await callCreateAsync.Should().ThrowAsync<BadRequestException>()
             .WithMessage(identityErrors.FirstOrDefault()?.Description);
-        await _userManager.Received(1).CreateAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>());
+        await _userManager.Received(1).CreateAsync(Arg.Any<User>(), Arg.Any<string>());
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
     {
         // Arrange
         var loginUserModel = Builder<LoginUserModel>.CreateNew().Build();
-        var emptyUserListQueryable = new List<ApplicationUser>().AsQueryable().BuildMock();
+        var emptyUserListQueryable = new List<User>().AsQueryable().BuildMock();
         _userManager.Users.Returns(emptyUserListQueryable);
 
         // Act
@@ -101,12 +101,12 @@ public class UserServiceTests : BaseServiceTestConfiguration
     {
         // Arrange
         var loginUserModel = Builder<LoginUserModel>.CreateNew().Build();
-        var usersListQueryable = Builder<ApplicationUser>.CreateListOfSize(1)
+        var usersListQueryable = Builder<User>.CreateListOfSize(1)
             .All().With(u => u.UserName = loginUserModel.Username)
             .Build().AsQueryable().BuildMock();
         _userManager.Users.Returns(usersListQueryable);
         _signInManager
-            .PasswordSignInAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>())
+            .PasswordSignInAsync(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>())
             .Returns(SignInResult.Failed);
 
         // Act
@@ -115,7 +115,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
         // Assert
         await callCreateAsync.Should().ThrowAsync<BadRequestException>()
             .WithMessage("Username or password is incorrect");
-        await _signInManager.Received(1).PasswordSignInAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>(),
+        await _signInManager.Received(1).PasswordSignInAsync(Arg.Any<User>(), Arg.Any<string>(),
             Arg.Any<bool>(), Arg.Any<bool>());
     }
 
@@ -124,12 +124,12 @@ public class UserServiceTests : BaseServiceTestConfiguration
     {
         // Arrange
         var loginUserModel = Builder<LoginUserModel>.CreateNew().Build();
-        var usersList = Builder<ApplicationUser>.CreateListOfSize(1).All()
+        var usersList = Builder<User>.CreateListOfSize(1).All()
             .With(u => u.UserName = loginUserModel.Username).Build();
         var usersListQueryable = usersList.AsQueryable().BuildMock();
         _userManager.Users.Returns(usersListQueryable);
         _signInManager
-            .PasswordSignInAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>())
+            .PasswordSignInAsync(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>())
             .Returns(SignInResult.Success);
 
         // Act
@@ -139,7 +139,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
         result.Username.Should().Be(usersList[0].UserName);
         result.Email.Should().Be(usersList[0].Email);
         result.Token.Should().NotBeNullOrEmpty();
-        await _signInManager.Received(1).PasswordSignInAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>(),
+        await _signInManager.Received(1).PasswordSignInAsync(Arg.Any<User>(), Arg.Any<string>(),
             Arg.Any<bool>(), Arg.Any<bool>());
     }
 
@@ -149,7 +149,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
         // Arrange
         var confirmEmailModel = Builder<ConfirmEmailModel>.CreateNew().Build();
         var identityErrors = Builder<IdentityError>.CreateListOfSize(5).Build().ToArray();
-        _userManager.ConfirmEmailAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>())
+        _userManager.ConfirmEmailAsync(Arg.Any<User>(), Arg.Any<string>())
             .Returns(IdentityResult.Failed(identityErrors));
 
         // Act
@@ -159,7 +159,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
         await callConfirmEmailAsync.Should().ThrowAsync<UnprocessableRequestException>()
             .WithMessage("Your verification link has expired");
         await _userManager.Received(1).FindByIdAsync(Arg.Any<string>());
-        await _userManager.Received(1).ConfirmEmailAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>());
+        await _userManager.Received(1).ConfirmEmailAsync(Arg.Any<User>(), Arg.Any<string>());
     }
 
     [Fact]
@@ -167,7 +167,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
     {
         // Arrange
         var confirmEmailModel = Builder<ConfirmEmailModel>.CreateNew().Build();
-        _userManager.ConfirmEmailAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>())
+        _userManager.ConfirmEmailAsync(Arg.Any<User>(), Arg.Any<string>())
             .Returns(IdentityResult.Success);
 
         // Act
@@ -177,6 +177,6 @@ public class UserServiceTests : BaseServiceTestConfiguration
         result.Should().NotBeNull();
         result.Confirmed.Should().BeTrue();
         await _userManager.Received(1).FindByIdAsync(Arg.Any<string>());
-        await _userManager.Received(1).ConfirmEmailAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>());
+        await _userManager.Received(1).ConfirmEmailAsync(Arg.Any<User>(), Arg.Any<string>());
     }
 }

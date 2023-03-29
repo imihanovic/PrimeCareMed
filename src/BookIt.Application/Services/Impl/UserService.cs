@@ -17,13 +17,13 @@ public class UserService : IUserService
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
     private readonly IMapper _mapper;
-    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly SignInManager<User> _signInManager;
     private readonly ITemplateService _templateService;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
 
     public UserService(IMapper mapper,
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager,
+        UserManager<User> userManager,
+        SignInManager<User> signInManager,
         IConfiguration configuration,
         ITemplateService templateService,
         IEmailService emailService)
@@ -38,7 +38,7 @@ public class UserService : IUserService
 
     public async Task<CreateUserResponseModel> CreateAsync(CreateUserModel createUserModel)
     {
-        var user = _mapper.Map<ApplicationUser>(createUserModel);
+        var user = _mapper.Map<User>(createUserModel);
 
         var result = await _userManager.CreateAsync(user, createUserModel.Password);
 

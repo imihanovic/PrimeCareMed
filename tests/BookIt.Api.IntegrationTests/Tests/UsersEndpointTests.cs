@@ -156,14 +156,14 @@ public class UsersEndpointTests : BaseOneTimeSetup
     public async Task ConfirmEmail_Should_Update_User_Status()
     {
         // Arrange
-        var user = Builder<ApplicationUser>.CreateNew()
+        var user = Builder<User>.CreateNew()
             .With(u => u.UserName = "ConfirmEmailUser")
             .With(u => u.Email = "ConfirmEmailUser@email.com")
             .Build();
 
         var context = (await GetNewHostAsync()).Services.GetRequiredService<DatabaseContext>();
 
-        var userManager = Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
+        var userManager = Host.Services.GetRequiredService<UserManager<User>>();
 
         await userManager.CreateAsync(user, "Password.1!");
 
@@ -189,12 +189,12 @@ public class UsersEndpointTests : BaseOneTimeSetup
     public async Task ConfirmEmail_Should_Return_UnprocessableEntity_If_Token_Or_UserId_Are_Incorrect()
     {
         // Arrange
-        var user = Builder<ApplicationUser>.CreateNew()
+        var user = Builder<User>.CreateNew()
             .With(u => u.UserName = "ConfirmEmailUser2")
             .With(u => u.Email = "ConfirmEmailUser2@email.com")
             .Build();
 
-        var userManager = Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
+        var userManager = Host.Services.GetRequiredService<UserManager<User>>();
 
         await userManager.CreateAsync(user, "Password.1!");
 
@@ -235,12 +235,12 @@ public class UsersEndpointTests : BaseOneTimeSetup
     public async Task ChangePassword_Should_Return_BadRequest_If_OldPassword_Does_Not_Match_User_Password()
     {
         // Arrange
-        var user = Builder<ApplicationUser>.CreateNew()
+        var user = Builder<User>.CreateNew()
             .With(u => u.UserName = "ChangePasswordBadRequest")
             .With(u => u.Email = "ChangePasswordBadRequest@email.com")
             .Build();
 
-        var userManager = Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
+        var userManager = Host.Services.GetRequiredService<UserManager<User>>();
 
         var createdUser = await userManager.CreateAsync(user, "Password.1!");
 
@@ -263,14 +263,14 @@ public class UsersEndpointTests : BaseOneTimeSetup
     public async Task ChangePassword_Should_Return_BadRequest_If_NewPassword_Does_Not_Follow_The_Rules()
     {
         // Arrange
-        var user = Builder<ApplicationUser>.CreateNew()
+        var user = Builder<User>.CreateNew()
             .With(u => u.UserName = "ChangePasswordBadRequest2")
             .With(u => u.Email = "ChangePasswordBadRequest2@email.com")
             .Build();
 
         var context = (await GetNewHostAsync()).Services.GetRequiredService<DatabaseContext>();
 
-        var userManager = Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
+        var userManager = Host.Services.GetRequiredService<UserManager<User>>();
 
         var createdUser = await userManager.CreateAsync(user, "Password.1!");
 
@@ -293,13 +293,13 @@ public class UsersEndpointTests : BaseOneTimeSetup
     public async Task ChangePassword_Should_Update_User_Password_If_OldPassword_And_NewPassword_Are_Ok()
     {
         // Arrange
-        var user = Builder<ApplicationUser>.CreateNew()
+        var user = Builder<User>.CreateNew()
             .With(u => u.UserName = "ChangePasswordBadRequest3")
             .With(u => u.Email = "ChangePasswordBadRequest3@email.com")
             .With(u => u.EmailConfirmed = true)
             .Build();
 
-        var userManager = Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
+        var userManager = Host.Services.GetRequiredService<UserManager<User>>();
 
         await userManager.CreateAsync(user, "Password.1!");
 

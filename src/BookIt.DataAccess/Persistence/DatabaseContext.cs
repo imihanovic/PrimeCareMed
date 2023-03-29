@@ -8,7 +8,7 @@ using BookIt.Shared.Services;
 
 namespace BookIt.DataAccess.Persistence;
 
-public class DatabaseContext : IdentityDbContext<ApplicationUser>
+public class DatabaseContext : IdentityDbContext<User>
 {
     private readonly IClaimService _claimService;
 
