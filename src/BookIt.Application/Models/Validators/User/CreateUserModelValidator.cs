@@ -1,15 +1,15 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using BookIt.Application.Models.User;
-using BookIt.DataAccess.Identity;
+using BookIt.Core.Entities.Identity;
 
 namespace BookIt.Application.Models.Validators.User;
 
 public class CreateUserModelValidator : AbstractValidator<CreateUserModel>
 {
-    private readonly UserManager<DataAccess.Identity.User> _userManager;
+    private readonly UserManager<Core.Entities.Identity.User> _userManager;
 
-    public CreateUserModelValidator(UserManager<DataAccess.Identity.User> userManager)
+    public CreateUserModelValidator(UserManager<Core.Entities.Identity.User> userManager)
     {
         _userManager = userManager;
 

@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using BookIt.DataAccess.Identity;
+using BookIt.Core.Entities.Identity;
 
 namespace BookIt.Application.Helpers;
 

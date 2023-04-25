@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using BookIt.DataAccess.Identity;
+using BookIt.Core.Entities.Identity;
 
 namespace BookIt.DataAccess.Persistence;
 
@@ -15,6 +15,8 @@ public static class AutomatedMigration
 
         var userManager = services.GetRequiredService<UserManager<User>>();
 
-        await DatabaseContextSeed.SeedDatabaseAsync(context, userManager);
+        var roleManager=services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        await DatabaseContextSeed.SeedDatabaseAsync(context, roleManager, userManager);
     }
 }

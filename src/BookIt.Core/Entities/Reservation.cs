@@ -1,4 +1,5 @@
 ﻿using BookIt.Core.Common;
+using BookIt.Core.Entities.Identity;
 using BookIt.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,19 @@ namespace BookIt.Core.Entities
 {
     public class Reservation : BaseEntity
     {
-        public Guid UserId { get; set; }
-
-        public string NumberOfPersons { get; set; }
+        public User Manager { get; set; }
+#nullable enable
+        public User? Customer { get; set; }
+#nullable disable
+        public int NumberOfPersons { get; set; }
 
         public DateTime StartTime { get; set; }
 
         public DateTime EndTime { get; set; }
 
-        public ReservationStatusEnum Status { get; set; }
+        public ReservationStatus Status { get; set; }
+        
+        public List<Table> Tables { get; set; } = new();
+
     }
 }
