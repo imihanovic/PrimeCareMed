@@ -1,4 +1,4 @@
-using BookIt.DataAccess.Persistence;
+﻿using BookIt.DataAccess.Persistence;
 
 namespace BookIt.API;
 
@@ -10,7 +10,7 @@ public static class Program
 
         using (var scope = host.Services.CreateScope())
         {
-            //await AutomatedMigration.MigrateAsync(scope.ServiceProvider);
+            await AutomatedMigration.MigrateAsync(scope.ServiceProvider);
         }
 
         await host.RunAsync();

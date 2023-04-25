@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BookIt.Application.Models.User;
-using BookIt.DataAccess.Identity;
+using BookIt.Core.Entities.Identity;
 
 namespace BookIt.Application.MappingProfiles;
 

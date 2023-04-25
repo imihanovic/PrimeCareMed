@@ -1,17 +1,26 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using BookIt.DataAccess.Identity;
+using BookIt.Core.Enums;
+using BookIt.Core.Entities.Identity;
 
 namespace BookIt.DataAccess.Persistence;
 
 public static class DatabaseContextSeed
 {
-    public static async Task SeedDatabaseAsync(DatabaseContext context, UserManager<User> userManager)
+    public static async Task SeedDatabaseAsync(DatabaseContext context, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
     {
+        if (!roleManager.Roles.Any())
+        {
+            foreach(var name in Enum.GetNames(typeof(UserRole))) 
+            {
+                await roleManager.CreateAsync(new IdentityRole(name));
+            }
+        }
         if (!userManager.Users.Any())
         {
-            var user = new User { UserName = "admin", Email = "admin@admin.com", EmailConfirmed = true };
+            var user = new User { UserName = "admin@admin.com", Email = "admin@admin.com", EmailConfirmed = true, FirstName="admin", LastName="admin"};
 
             await userManager.CreateAsync(user, "Admin123.?");
+            await userManager.AddToRoleAsync(user, "Administrator");
         }
 
         await context.SaveChangesAsync();

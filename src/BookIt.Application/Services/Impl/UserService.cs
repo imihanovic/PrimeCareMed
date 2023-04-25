@@ -8,7 +8,7 @@ using BookIt.Application.Helpers;
 using BookIt.Application.Models;
 using BookIt.Application.Models.User;
 using BookIt.Application.Templates;
-using BookIt.DataAccess.Identity;
+using BookIt.Core.Entities.Identity;
 
 namespace BookIt.Application.Services.Impl;
 

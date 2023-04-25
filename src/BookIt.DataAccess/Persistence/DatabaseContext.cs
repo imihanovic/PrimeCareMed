@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using BookIt.Core.Common;
 using BookIt.Core.Entities;
-using BookIt.DataAccess.Identity;
 using BookIt.Shared.Services;
+using BookIt.Core.Entities.Identity;
+using Microsoft.Extensions.Hosting;
+using System.Reflection.Emit;
 
 namespace BookIt.DataAccess.Persistence;
 
@@ -21,11 +23,29 @@ public class DatabaseContext : IdentityDbContext<User>
 
     public DbSet<TodoList> TodoLists { get; set; }
 
+    public DbSet<Table> Tables { get; set; }
+    public DbSet<Reservation> Reservations { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
         base.OnModelCreating(builder);
+            
+        builder.Entity<Table>()
+        .HasMany(e => e.Reservations)
+        .WithMany(e => e.Tables)
+        .UsingEntity("TableReservation");
+
+        builder.Entity<User>()
+        .HasMany(e => e.ManagerReservations)
+        .WithOne(e => e.Manager)
+        .IsRequired();
+
+        builder.Entity<User>()
+        .HasMany(e => e.CustomerReservations)
+        .WithOne(e => e.Customer)
+        .IsRequired();
     }
 
     public new async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())

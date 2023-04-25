@@ -12,9 +12,9 @@ using BookIt.Application.Exceptions;
 using BookIt.Application.Models.User;
 using BookIt.Application.Services;
 using BookIt.Application.Services.Impl;
-using BookIt.DataAccess.Identity;
 using NSubstitute;
 using Xunit;
+using BookIt.Core.Entities.Identity;
 
 namespace BookIt.Application.UnitTests.Services;
 

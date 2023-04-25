@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using BookIt.DataAccess.Identity;
 using BookIt.DataAccess.Persistence;
 using BookIt.DataAccess.Repositories;
 using BookIt.DataAccess.Repositories.Impl;
+using BookIt.Core.Entities.Identity;
 
 namespace BookIt.DataAccess;
 
@@ -48,8 +48,9 @@ public static class DataAccessDependencyInjection
 
     private static void AddIdentity(this IServiceCollection services)
     {
-        services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddEntityFrameworkStores<DatabaseContext>();
+        services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddEntityFrameworkStores<DatabaseContext>()
+            .AddRoles<IdentityRole>();
 
         services.Configure<IdentityOptions>(options =>
         {

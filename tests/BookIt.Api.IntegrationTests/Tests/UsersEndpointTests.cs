@@ -11,9 +11,9 @@ using BookIt.Api.IntegrationTests.Config.Constants;
 using BookIt.Api.IntegrationTests.Helpers;
 using BookIt.Application.Models;
 using BookIt.Application.Models.User;
-using BookIt.DataAccess.Identity;
 using BookIt.DataAccess.Persistence;
 using NUnit.Framework;
+using BookIt.Core.Entities.Identity;
 
 namespace BookIt.Api.IntegrationTests.Tests;
 
