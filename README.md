@@ -64,7 +64,7 @@ BookIt is a web application that enables table booking in the restaurant.
 
 Option 2
 
-![restoran drawio (1)](https://user-images.githubusercontent.com/92686358/225355599-ce6453c4-4fef-4a42-9731-4ead6c6f2b89.png)
+![restoranVerzija2 drawio](https://user-images.githubusercontent.com/92686358/234578643-efdc6286-5d5a-41bb-9cf9-79b5c5dc09c9.png)
 
 
 ## Authors:
