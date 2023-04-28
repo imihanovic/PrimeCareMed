@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using BookIt.Core.Enums;
 using BookIt.Core.Entities.Identity;
+using BookIt.Core.Entities;
 
 namespace BookIt.DataAccess.Persistence;
 
@@ -21,6 +22,7 @@ public static class DatabaseContextSeed
 
             await userManager.CreateAsync(user, "Admin123.?");
             await userManager.AddToRoleAsync(user, "Administrator");
+
         }
 
         await context.SaveChangesAsync();

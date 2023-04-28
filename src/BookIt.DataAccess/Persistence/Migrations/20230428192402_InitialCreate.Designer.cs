@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookIt.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230425211451_InitialCreate")]
+    [Migration("20230428192402_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,26 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("BookIt.Core.Entities.Dish", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DishDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DishName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Dish");
+                });
 
             modelBuilder.Entity("BookIt.Core.Entities.Identity.User", b =>
                 {
@@ -107,12 +127,11 @@ namespace BookIt.DataAccess.Persistence.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("ManagerId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("NumberOfPersons")
                         .HasColumnType("integer");
+
+                    b.Property<string>("ReservationDetails")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp with time zone");
@@ -124,9 +143,61 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("ManagerId");
-
                     b.ToTable("Reservations");
+                });
+
+            modelBuilder.Entity("BookIt.Core.Entities.Restaurant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ManagerId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RestaurantName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RestaurantOwner")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManagerId")
+                        .IsUnique();
+
+                    b.ToTable("Restaurant");
+                });
+
+            modelBuilder.Entity("BookIt.Core.Entities.RestaurantDish", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("DishId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<Guid?>("RestaurantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DishId");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.ToTable("RestaurantDish");
                 });
 
             modelBuilder.Entity("BookIt.Core.Entities.Table", b =>
@@ -141,10 +212,15 @@ namespace BookIt.DataAccess.Persistence.Migrations
                     b.Property<int>("NumberOfSeats")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Smoking")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("Tables");
                 });
@@ -373,15 +449,44 @@ namespace BookIt.DataAccess.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("BookIt.Core.Entities.Restaurant", b =>
+                {
                     b.HasOne("BookIt.Core.Entities.Identity.User", "Manager")
-                        .WithMany("ManagerReservations")
-                        .HasForeignKey("ManagerId")
+                        .WithOne("Restaurant")
+                        .HasForeignKey("BookIt.Core.Entities.Restaurant", "ManagerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
-
                     b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("BookIt.Core.Entities.RestaurantDish", b =>
+                {
+                    b.HasOne("BookIt.Core.Entities.Dish", "Dish")
+                        .WithMany("RestaurantDishes")
+                        .HasForeignKey("DishId");
+
+                    b.HasOne("BookIt.Core.Entities.Restaurant", "Restaurant")
+                        .WithMany("RestaurantDishes")
+                        .HasForeignKey("RestaurantId");
+
+                    b.Navigation("Dish");
+
+                    b.Navigation("Restaurant");
+                });
+
+            modelBuilder.Entity("BookIt.Core.Entities.Table", b =>
+                {
+                    b.HasOne("BookIt.Core.Entities.Restaurant", "Restaurant")
+                        .WithMany("Tables")
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("BookIt.Core.Entities.TodoItem", b =>
@@ -460,11 +565,23 @@ namespace BookIt.DataAccess.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BookIt.Core.Entities.Dish", b =>
+                {
+                    b.Navigation("RestaurantDishes");
+                });
+
             modelBuilder.Entity("BookIt.Core.Entities.Identity.User", b =>
                 {
                     b.Navigation("CustomerReservations");
 
-                    b.Navigation("ManagerReservations");
+                    b.Navigation("Restaurant");
+                });
+
+            modelBuilder.Entity("BookIt.Core.Entities.Restaurant", b =>
+                {
+                    b.Navigation("RestaurantDishes");
+
+                    b.Navigation("Tables");
                 });
 
             modelBuilder.Entity("BookIt.Core.Entities.TodoList", b =>

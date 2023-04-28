@@ -38,13 +38,19 @@ public class DatabaseContext : IdentityDbContext<User>
         .UsingEntity("TableReservation");
 
         builder.Entity<User>()
-        .HasMany(e => e.ManagerReservations)
-        .WithOne(e => e.Manager)
+        .HasMany(e => e.CustomerReservations)
+        .WithOne(e => e.Customer)
         .IsRequired();
 
         builder.Entity<User>()
-        .HasMany(e => e.CustomerReservations)
-        .WithOne(e => e.Customer)
+        .HasOne(e => e.Restaurant)
+        .WithOne(e => e.Manager)
+        .HasForeignKey<Restaurant>(e => e.ManagerId)
+        .IsRequired();
+
+        builder.Entity<Restaurant>()
+        .HasMany(e => e.Tables)
+        .WithOne(e => e.Restaurant)
         .IsRequired();
     }
 

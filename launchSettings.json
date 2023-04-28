@@ -4,7 +4,9 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "bookit.api": "StartDebugging"
+        "bookit.api": "StartDebugging",
+        "pgadmin4": "StartWithoutDebugging",
+        "postgres": "StartWithoutDebugging"
       }
     }
   }

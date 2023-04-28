@@ -7,9 +7,9 @@ namespace BookIt.Core.Entities.Identity
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-
-        public ICollection<Reservation> ManagerReservations { get; set; }= new List<Reservation>();
-
+#nullable enable
+        public Restaurant? Restaurant { get; set; }
+#nullable disable
         public ICollection<Reservation> CustomerReservations { get; set; } = new List<Reservation>();
 
     }
