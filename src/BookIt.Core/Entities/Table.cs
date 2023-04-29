@@ -11,6 +11,7 @@ namespace BookIt.Core.Entities
 
         public TableSmoking Smoking { get; set; }
 
+        public Restaurant Restaurant { get; set; }
         public List<Reservation> Reservations { get; set; } = new();
     }
 }

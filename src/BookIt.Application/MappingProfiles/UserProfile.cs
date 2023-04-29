@@ -8,6 +8,6 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        CreateMap<CreateUserModel, User>();
+        CreateMap<CreateUserModel, ApplicationUser>();
     }
 }

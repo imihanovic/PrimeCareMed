@@ -3,8 +3,13 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "bookit.frontend",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}",
       "serviceActions": {
-        "bookit.api": "StartDebugging"
+        "bookit.api": "StartDebugging",
+        "pgadmin4": "StartWithoutDebugging",
+        "postgres": "StartWithoutDebugging"
       }
     }
   }
