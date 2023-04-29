@@ -9,7 +9,7 @@ namespace BookIt.Core.Entities
         public string RestaurantName { get;set; }
         public string Address { get; set; }
         public string ManagerId { get; set; }
-        public User Manager { get; set; }
+        public ApplicationUser Manager { get; set; }
 
         public ICollection<RestaurantDish> RestaurantDishes { get; set; } = new List<RestaurantDish>();
 

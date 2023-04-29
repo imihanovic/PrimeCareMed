@@ -7,9 +7,9 @@ namespace BookIt.Application.Models.Validators.User;
 
 public class CreateUserModelValidator : AbstractValidator<CreateUserModel>
 {
-    private readonly UserManager<Core.Entities.Identity.User> _userManager;
+    private readonly UserManager<Core.Entities.Identity.ApplicationUser> _userManager;
 
-    public CreateUserModelValidator(UserManager<Core.Entities.Identity.User> userManager)
+    public CreateUserModelValidator(UserManager<Core.Entities.Identity.ApplicationUser> userManager)
     {
         _userManager = userManager;
 

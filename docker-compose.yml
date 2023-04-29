@@ -1,6 +1,16 @@
 ﻿version: '3.4'
 
 services:
+    
+  bookit.frontend:
+    image: ${DOCKER_REGISTRY-}bookitfrontend
+    build:
+      context: .
+      dockerfile: src/BookIt.Frontend/Dockerfile
+    environment:
+      CONNECTION_STRING: "Host=postgres;Port=5432;Database=postgres;Username=admin;Password=root;Integrated Security=true;Pooling=true;"
+
+
   bookit.api:
     image: ${DOCKER_REGISTRY-}bookitapi
     build:

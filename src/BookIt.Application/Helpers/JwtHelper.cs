@@ -9,7 +9,7 @@ namespace BookIt.Application.Helpers;
 
 public static class JwtHelper
 {
-    public static string GenerateToken(User user, IConfiguration configuration)
+    public static string GenerateToken(ApplicationUser user, IConfiguration configuration)
     {
         var secretKey = configuration.GetValue<string>("JwtConfiguration:SecretKey");
 

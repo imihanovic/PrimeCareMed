@@ -2,7 +2,7 @@
 
 namespace BookIt.Core.Entities.Identity
 {
-    public class User : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         public string FirstName { get; set; }
 

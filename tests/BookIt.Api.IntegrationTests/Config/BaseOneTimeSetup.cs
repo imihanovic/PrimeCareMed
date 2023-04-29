@@ -69,9 +69,9 @@ public class BaseOneTimeSetup
 
         var context = host.Services.GetRequiredService<DatabaseContext>();
 
-        var userManager = host.Services.GetRequiredService<UserManager<User>>();
+        var userManager = host.Services.GetRequiredService<UserManager<ApplicationUser>>();
 
-        var databaseUser = Builder<User>.CreateNew()
+        var databaseUser = Builder<ApplicationUser>.CreateNew()
             .With(u => u.EmailConfirmed = true)
             .With(u => u.Email = UserConstants.DefaultUserDb.Email)
             .With(u => u.UserName = UserConstants.DefaultUserDb.Username)
@@ -88,7 +88,7 @@ public class BaseOneTimeSetup
     {
         var configuration = host.Services.GetRequiredService<IConfiguration>();
 
-        var userManager = host.Services.GetRequiredService<UserManager<User>>();
+        var userManager = host.Services.GetRequiredService<UserManager<ApplicationUser>>();
 
         var user = await userManager.FindByNameAsync(UserConstants.DefaultUserDb.Username);
 

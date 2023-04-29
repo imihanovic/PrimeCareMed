@@ -10,7 +10,7 @@ using System.Reflection.Emit;
 
 namespace BookIt.DataAccess.Persistence;
 
-public class DatabaseContext : IdentityDbContext<User>
+public class DatabaseContext : IdentityDbContext<ApplicationUser>
 {
     private readonly IClaimService _claimService;
 
@@ -37,12 +37,12 @@ public class DatabaseContext : IdentityDbContext<User>
         .WithMany(e => e.Tables)
         .UsingEntity("TableReservation");
 
-        builder.Entity<User>()
+        builder.Entity<ApplicationUser>()
         .HasMany(e => e.CustomerReservations)
         .WithOne(e => e.Customer)
         .IsRequired();
 
-        builder.Entity<User>()
+        builder.Entity<ApplicationUser>()
         .HasOne(e => e.Restaurant)
         .WithOne(e => e.Manager)
         .HasForeignKey<Restaurant>(e => e.ManagerId)

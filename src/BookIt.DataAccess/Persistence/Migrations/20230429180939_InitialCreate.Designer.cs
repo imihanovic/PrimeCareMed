@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookIt.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230428192402_InitialCreate")]
+    [Migration("20230429180939_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                     b.ToTable("Dish");
                 });
 
-            modelBuilder.Entity("BookIt.Core.Entities.Identity.User", b =>
+            modelBuilder.Entity("BookIt.Core.Entities.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -443,7 +443,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("BookIt.Core.Entities.Reservation", b =>
                 {
-                    b.HasOne("BookIt.Core.Entities.Identity.User", "Customer")
+                    b.HasOne("BookIt.Core.Entities.Identity.ApplicationUser", "Customer")
                         .WithMany("CustomerReservations")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -454,7 +454,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("BookIt.Core.Entities.Restaurant", b =>
                 {
-                    b.HasOne("BookIt.Core.Entities.Identity.User", "Manager")
+                    b.HasOne("BookIt.Core.Entities.Identity.ApplicationUser", "Manager")
                         .WithOne("Restaurant")
                         .HasForeignKey("BookIt.Core.Entities.Restaurant", "ManagerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -510,7 +510,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BookIt.Core.Entities.Identity.User", null)
+                    b.HasOne("BookIt.Core.Entities.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -519,7 +519,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BookIt.Core.Entities.Identity.User", null)
+                    b.HasOne("BookIt.Core.Entities.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -534,7 +534,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookIt.Core.Entities.Identity.User", null)
+                    b.HasOne("BookIt.Core.Entities.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -543,7 +543,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("BookIt.Core.Entities.Identity.User", null)
+                    b.HasOne("BookIt.Core.Entities.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -570,7 +570,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                     b.Navigation("RestaurantDishes");
                 });
 
-            modelBuilder.Entity("BookIt.Core.Entities.Identity.User", b =>
+            modelBuilder.Entity("BookIt.Core.Entities.Identity.ApplicationUser", b =>
                 {
                     b.Navigation("CustomerReservations");
 

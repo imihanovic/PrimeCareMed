@@ -7,7 +7,7 @@ namespace BookIt.Core.Entities
     public class Reservation : BaseEntity
     {
 #nullable enable
-        public User? Customer { get; set; }
+        public ApplicationUser? Customer { get; set; }
 #nullable disable
         public int NumberOfPersons { get; set; }
 
