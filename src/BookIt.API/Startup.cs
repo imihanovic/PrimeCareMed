@@ -3,9 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using BookIt.API.Filters;
 using BookIt.API.Middleware;
 using BookIt.Application;
+using BookIt.Core.Entities.Identity;
 using BookIt.Application.Models.Validators;
 using BookIt.DataAccess;
 using Npgsql;
+using Microsoft.AspNetCore.Identity;
+using BookIt.DataAccess.Persistence;
 
 namespace BookIt.API;
 
