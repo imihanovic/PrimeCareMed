@@ -1,7 +1,22 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using BookIt.DataAccess.Persistence;
+using BookIt.Core.Entities.Identity;
+using BookIt.Shared.Services;
+using BookIt.Shared.Services.Impl;
 
+var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseNpgsql(connectionString));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<DatabaseContext>();
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<IClaimService, ClaimService>();
 
 var app = builder.Build();
 
@@ -21,6 +36,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 //app.UseAuthentication();
 app.UseAuthorization();
