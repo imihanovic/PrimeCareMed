@@ -1,14 +1,18 @@
 ﻿@page
+@using BookIt.Core.Enums;
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-md-4 justify-content-center">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+<div class="container text-center d-flex align-items-center justify-content-center">
+    <div>
+        <div>
+        <h1>@ViewData["Title"]</h1>
+        </div>
+        <div>
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Create a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -32,6 +36,16 @@
                 <label asp-for="Input.PhoneNumber"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
+            @if(User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+            {
+                <div class="form-floating">
+                <select asp-for = "Input.Role" class="form-control"
+                 asp-items="@Html.GetEnumSelectList<UserRole>()">
+                     <option disabled selected>Select a user role</option>
+                </select>
+                <label asp-for="Input.Role"></label>
+                </div>
+            }        
             <div class="form-floating">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
                 <label asp-for="Input.Password"></label>
@@ -43,7 +57,8 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
+            </form>
+        </div>  
     </div>
 </div>
 

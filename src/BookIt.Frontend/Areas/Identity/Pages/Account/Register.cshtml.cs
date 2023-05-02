@@ -80,6 +80,7 @@ namespace BookIt.Frontend.Areas.Identity.Pages.Account
 
             [Required]
             [DataType(DataType.Text)]
+            [Phone]
             [Display(Name = "Phone number*")]
             public string PhoneNumber { get; set; }
             /// <summary>
@@ -91,6 +92,9 @@ namespace BookIt.Frontend.Areas.Identity.Pages.Account
             [Display(Name = "Email*")]
             public string Email { get; set; }
 
+            [Required]
+            [Display(Name = "User role*")]
+            public UserRole Role { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -120,6 +124,7 @@ namespace BookIt.Frontend.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            var isAdmin = this.User.IsInRole("Administrator");
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
@@ -128,7 +133,14 @@ namespace BookIt.Frontend.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.PhoneNumber = Input.PhoneNumber;
-                await _userManager.AddToRoleAsync(user, "Customer");
+                if(isAdmin)
+                {
+                    await _userManager.AddToRoleAsync(user, Input.Role.ToString());
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, "Customer");
+                }
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -166,6 +178,7 @@ namespace BookIt.Frontend.Areas.Identity.Pages.Account
             }
 
             // If we got this far, something failed, redisplay form
+            
             return Page();
         }
 
