@@ -19,10 +19,6 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
         _claimService = claimService;
     }
 
-    public DbSet<TodoItem> TodoItems { get; set; }
-
-    public DbSet<TodoList> TodoLists { get; set; }
-
     public DbSet<Table> Tables { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
 

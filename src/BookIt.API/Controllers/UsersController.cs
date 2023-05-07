@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using BookIt.Application.Models;
 using BookIt.Application.Models.User;
 using BookIt.Application.Services;
+using BookIt.Application.Models.WeatherForecast;
+using BookIt.Application.Services.Impl;
 
 namespace BookIt.API.Controllers;
 

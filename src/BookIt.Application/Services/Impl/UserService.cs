@@ -9,6 +9,8 @@ using BookIt.Application.Models;
 using BookIt.Application.Models.User;
 using BookIt.Application.Templates;
 using BookIt.Core.Entities.Identity;
+using BookIt.DataAccess.Repositories;
+using System.Security.Claims;
 
 namespace BookIt.Application.Services.Impl;
 
@@ -20,13 +22,15 @@ public class UserService : IUserService
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ITemplateService _templateService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserRepository _userRepository;
 
     public UserService(IMapper mapper,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IConfiguration configuration,
         ITemplateService templateService,
-        IEmailService emailService)
+        IEmailService emailService,
+        IUserRepository userRepository)
     {
         _mapper = mapper;
         _userManager = userManager;
@@ -34,6 +38,7 @@ public class UserService : IUserService
         _configuration = configuration;
         _templateService = templateService;
         _emailService = emailService;
+        _userRepository = userRepository;
     }
 
     public async Task<CreateUserResponseModel> CreateAsync(CreateUserModel createUserModel)
@@ -117,5 +122,10 @@ public class UserService : IUserService
         {
             Id = Guid.Parse(user.Id)
         };
+    }
+
+    public async Task<IEnumerable<ApplicationUser>> GetAllUsersAsync()
+    {
+        return await _userRepository.GetAllUsersAsync();
     }
 }

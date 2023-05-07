@@ -25,13 +25,11 @@ public static class ApplicationDependencyInjection
 
     private static void AddServices(this IServiceCollection services, IWebHostEnvironment env)
     {
+
         services.AddScoped<IWeatherForecastService, WeatherForecastService>();
-        services.AddScoped<ITodoListService, TodoListService>();
-        services.AddScoped<ITodoItemService, TodoItemService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IClaimService, ClaimService>();
         services.AddScoped<ITemplateService, TemplateService>();
-
         if (env.IsDevelopment())
             services.AddScoped<IEmailService, DevEmailService>();
         else
