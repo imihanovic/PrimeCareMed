@@ -1,11 +1,9 @@
 ﻿using FluentValidation.AspNetCore;
-using Microsoft.EntityFrameworkCore;
 using BookIt.API.Filters;
 using BookIt.API.Middleware;
 using BookIt.Application;
 using BookIt.Application.Models.Validators;
 using BookIt.DataAccess;
-using Npgsql;
 
 namespace BookIt.API;
 
@@ -38,6 +36,7 @@ public class Startup
 
         services.AddEmailConfiguration(_configuration);
     }
+
 
     public void Configure(IApplicationBuilder app)
     {

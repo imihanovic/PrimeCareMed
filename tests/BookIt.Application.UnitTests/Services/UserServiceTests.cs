@@ -15,6 +15,7 @@ using BookIt.Application.Services.Impl;
 using NSubstitute;
 using Xunit;
 using BookIt.Core.Entities.Identity;
+using BookIt.DataAccess.Repositories;
 
 namespace BookIt.Application.UnitTests.Services;
 
@@ -25,6 +26,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
     private readonly UserService _sut;
     private readonly ITemplateService _templateService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserRepository _userRepository;
 
     public UserServiceTests()
     {
@@ -39,7 +41,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
         _emailService = Substitute.For<IEmailService>();
 
         _sut = new UserService(Mapper, _userManager, _signInManager, Configuration, _templateService,
-            _emailService);
+            _emailService, _userRepository);
     }
 
     [Fact]

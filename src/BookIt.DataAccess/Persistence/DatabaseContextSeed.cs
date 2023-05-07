@@ -22,7 +22,6 @@ public static class DatabaseContextSeed
 
             await userManager.CreateAsync(user, "Admin123.?");
             await userManager.AddToRoleAsync(user, "Administrator");
-
         }
 
         await context.SaveChangesAsync();

@@ -1,0 +1,30 @@
+﻿@page
+@model BookIt.Frontend.Pages.Users.ViewAllUsersModel
+@{
+}
+<h1>All Users</h1>
+<hr/>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Phone</th>
+            <th>Role</th>
+        </tr>        
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Key.UserName</td>
+                <td>@user.Key.FirstName</td>
+                <td>@user.Key.LastName</td>
+                <td>@user.Key.PhoneNumber</td>
+                <td>@user.Value</td>
+            </tr>
+        }
+    </tbody>
+</table>
