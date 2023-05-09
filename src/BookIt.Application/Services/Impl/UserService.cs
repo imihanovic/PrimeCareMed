@@ -124,8 +124,18 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<IEnumerable<ApplicationUser>> GetAllUsersAsync()
+    public IEnumerable<ListUsersModel> GetAllUsersAsync()
     {
-        return await _userRepository.GetAllUsersAsync();
+        var usersFromDatabase =  _userRepository.GetAllUsersAsync().Result.ToList();
+        var users = new List<ListUsersModel>();
+        foreach(var user in usersFromDatabase)
+        {
+            var userDto = _mapper.Map<ListUsersModel>(user);
+            var role = _userManager.GetRolesAsync(user).Result.ToList().First();
+            userDto.UserRole = role;
+            users.Add(userDto);
+        }
+        return users;
     }
+
 }

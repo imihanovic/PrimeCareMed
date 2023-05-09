@@ -1,4 +1,5 @@
-﻿using BookIt.Application.Services;
+﻿using BookIt.Application.Models.User;
+using BookIt.Application.Services;
 using BookIt.Core.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +16,7 @@ namespace BookIt.Frontend.Pages.Users
         private readonly UserManager<ApplicationUser> _userManager;
 
 #nullable enable
-        public Dictionary<ApplicationUser, string> Users { get; set; } = new Dictionary<ApplicationUser, string>();
+        public List<ListUsersModel> Users { get; set; }
 #nullable disable
 
         public ViewAllUsersModel(IUserService userService, UserManager<ApplicationUser> userManager)
@@ -24,21 +25,9 @@ namespace BookIt.Frontend.Pages.Users
             _userManager = userManager;
         }
 
-        public async void OnGet()
+        public void OnGet()
         {
-            var users = _userService.GetAllUsersAsync().Result.ToList();
-            foreach (var user in users)
-            {
-                try
-                {
-                    var role = _userManager.GetRolesAsync(user).Result.ToList().First();
-                    Users.Add(user, role);
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }             
-            }
+            Users =  _userService.GetAllUsersAsync().ToList();
         }
     }
 }

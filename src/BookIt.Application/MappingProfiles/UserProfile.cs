@@ -9,6 +9,6 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<CreateUserModel, ApplicationUser>();
-        CreateMap<IEnumerable<ApplicationUser>, IEnumerable<UserResponseModel>>();
+        CreateMap<ApplicationUser, ListUsersModel>();
     }
 }

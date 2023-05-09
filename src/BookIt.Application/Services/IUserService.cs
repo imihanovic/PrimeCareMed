@@ -15,6 +15,6 @@ public interface IUserService
 
     Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel);
 
-    Task<IEnumerable<ApplicationUser>> GetAllUsersAsync();
+    IEnumerable<ListUsersModel> GetAllUsersAsync();
 
 }
