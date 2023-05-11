@@ -1,6 +1,6 @@
 ﻿using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Persistence;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -9,10 +9,12 @@ namespace BookIt.DataAccess.Repositories.Impl
     public class UserRepository : IUserRepository
     {
         private readonly DatabaseContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserRepository(DatabaseContext context)
+        public UserRepository(DatabaseContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<ApplicationUser>> GetAllUsersAsync()
@@ -23,11 +25,15 @@ namespace BookIt.DataAccess.Repositories.Impl
         {
             return  _context.Users.FirstOrDefault(user => user.Id == id);
         }
-        public void Update(ApplicationUser user)
+        public ApplicationUser Update(ApplicationUser user)
         {
             var editItem = _context.Users.FirstOrDefault(x => x.Id == user.Id);
             editItem.FirstName = user.FirstName;
-            _context.SaveChanges();            
+            editItem.LastName = user.LastName;
+            editItem.Email = user.Email;
+            editItem.PhoneNumber = user.PhoneNumber;
+            _context.SaveChanges();
+            return editItem;
         }
         public void Delete(string id)
         {

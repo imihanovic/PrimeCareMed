@@ -1,7 +1,6 @@
 ﻿using BookIt.Application.Models;
 using BookIt.Application.Models.User;
 using BookIt.Core.Entities.Identity;
-using BookIt.Core.Enums;
 
 namespace BookIt.Application.Services;
 
@@ -15,6 +14,9 @@ public interface IUserService
 
     Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel);
 
-    IEnumerable<ListUsersModel> GetAllUsersAsync();
+    IEnumerable<ListUsersModel> GetAllUsers();
 
+    void DeleteUser(string id);
+
+    ApplicationUser EditUser(UpdateUserModel userModel);
 }

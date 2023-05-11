@@ -27,7 +27,7 @@ namespace BookIt.Frontend.Pages.Users
 
         public void OnGet()
         {
-            Users =  _userService.GetAllUsersAsync().ToList();
+            Users =  _userService.GetAllUsers().ToList();
         }
     }
 }

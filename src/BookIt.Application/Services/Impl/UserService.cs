@@ -10,7 +10,7 @@ using BookIt.Application.Models.User;
 using BookIt.Application.Templates;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
-using System.Security.Claims;
+using System.Data;
 
 namespace BookIt.Application.Services.Impl;
 
@@ -124,18 +124,37 @@ public class UserService : IUserService
         };
     }
 
-    public IEnumerable<ListUsersModel> GetAllUsersAsync()
+    public IEnumerable<ListUsersModel> GetAllUsers()
     {
         var usersFromDatabase =  _userRepository.GetAllUsersAsync().Result.ToList();
         var users = new List<ListUsersModel>();
         foreach(var user in usersFromDatabase)
         {
             var userDto = _mapper.Map<ListUsersModel>(user);
-            var role = _userManager.GetRolesAsync(user).Result.ToList().First();
-            userDto.UserRole = role;
+            try
+            {
+                var role = _userManager.GetRolesAsync(user).Result.ToList().First();
+                userDto.UserRole = role;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             users.Add(userDto);
         }
         return users;
+    }
+
+    public void DeleteUser(string id)
+    {
+        _userRepository.Delete(id);
+    }
+
+    public ApplicationUser EditUser(UpdateUserModel userModel)
+    {
+        var user = _mapper.Map<ApplicationUser>(userModel);
+        var newUser = _userRepository.Update(user);
+        return newUser;
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿@page "/users/edit/{id:Guid}"
+@using BookIt.Core.Enums
 @model BookIt.Frontend.Pages.Users.EditUserModel
 @{
      ViewData["Title"] = "Edit user";
@@ -33,7 +34,19 @@
                 <input asp-for="EditUser.PhoneNumber" class="form-control" aria-required="true" />
                 <label asp-for="EditUser.PhoneNumber"></label>
                 <span asp-validation-for="EditUser.PhoneNumber" class="text-danger"></span>
-            </div>     
+            </div> 
+            @if(User.IsInRole("Administrator"))
+            {
+                <div class="form-floating">
+                <select asp-for = "EditUser.Role" class="form-control">
+                    @foreach (var role in Enum.GetNames(typeof(UserRole)))
+                    {
+                        <option value="@role" selected="@(role.ToString()==Model.EditUser.Role?true:false)">@role</option>
+                    }
+                </select>
+                <label asp-for="EditUser.Role"></label>
+                </div>
+            }    
             <div class="form-floating align-items-center justify-content-center mt-2">
                 <button asp-page-handler="edit" class="btn btn-success">Edit</button>
                 <button asp-page-handler="delete" class="btn btn-danger"

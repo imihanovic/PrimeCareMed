@@ -1,6 +1,4 @@
-﻿using BookIt.Core.Entities;
-using BookIt.Core.Entities.Identity;
-using BookIt.Core.Enums;
+﻿using BookIt.Core.Entities.Identity;
 
 namespace BookIt.DataAccess.Repositories
 {
@@ -10,7 +8,7 @@ namespace BookIt.DataAccess.Repositories
 
         ApplicationUser GetUserById(string id);
 
-        void Update(ApplicationUser user);
+        ApplicationUser Update(ApplicationUser user);
 
         void Delete(string id);
     }

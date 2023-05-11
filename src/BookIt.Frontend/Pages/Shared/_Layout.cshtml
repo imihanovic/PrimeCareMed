@@ -25,6 +25,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Users
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                    <li><a class="dropdown-item" asp-page="Users/ViewAllUsers">View All</a></li>                               
+                                    <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Add New</a></li>
+                                </ul>
+                            </li>
+                        }                    
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
