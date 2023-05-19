@@ -19,15 +19,28 @@ namespace BookIt.Frontend.Pages.Users
         public List<ListUsersModel> Users { get; set; }
 #nullable disable
 
+        public List<string> UserModelProperties;
+
         public ViewAllUsersModel(IUserService userService, UserManager<ApplicationUser> userManager)
         {
             _userService = userService;
             _userManager = userManager;
         }
 
-        public void OnGet()
+        public void OnGet(string sort, string keyword, string roleFilter)
         {
             Users =  _userService.GetAllUsers().ToList();
+
+            ViewData["Sort"] = sort;
+            UserModelProperties = _userService.GetUserModelFields();
+
+            Users = _userService.UserSorting(Users, sort).ToList();
+
+            ViewData["Keyword"] = keyword;
+            Users = _userService.UserSearch(Users, keyword).ToList();
+
+            ViewData["RoleFilter"] = roleFilter;
+            Users = _userService.UserFilter(Users, roleFilter).ToList();
         }
     }
 }

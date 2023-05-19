@@ -6,10 +6,10 @@ namespace BookIt.DataAccess.Repositories
     {
         Task<IEnumerable<ApplicationUser>> GetAllUsersAsync();
 
-        ApplicationUser GetUserById(string id);
+        Task<ApplicationUser> GetUserByIdAsync(string id);
 
-        ApplicationUser Update(ApplicationUser user);
+        Task<ApplicationUser> UpdateAsync(ApplicationUser user);
 
-        void Delete(string id);
+        void DeleteAsync(string id);
     }
 }

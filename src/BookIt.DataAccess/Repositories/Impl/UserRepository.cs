@@ -21,23 +21,23 @@ namespace BookIt.DataAccess.Repositories.Impl
         {
             return await _context.Users.OrderBy(user => user.Id).ToListAsync();
         }
-        public ApplicationUser GetUserById(string id)
+        public async Task<ApplicationUser> GetUserByIdAsync(string id)
         {
-            return  _context.Users.FirstOrDefault(user => user.Id == id);
+            return  await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
         }
-        public ApplicationUser Update(ApplicationUser user)
+        public async Task<ApplicationUser> UpdateAsync(ApplicationUser user)
         {
-            var editItem = _context.Users.FirstOrDefault(x => x.Id == user.Id);
+            var editItem = await GetUserByIdAsync(user.Id);
             editItem.FirstName = user.FirstName;
             editItem.LastName = user.LastName;
             editItem.Email = user.Email;
             editItem.PhoneNumber = user.PhoneNumber;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return editItem;
         }
-        public void Delete(string id)
+        public  void DeleteAsync(string id)
         {
-            var deleteItem = _context.Users.FirstOrDefault(x => x.Id == id);
+            var deleteItem = _context.Users.FirstOrDefault(user => user.Id == id);
             _context.Users.Remove(deleteItem);
             _context.SaveChanges();
         }

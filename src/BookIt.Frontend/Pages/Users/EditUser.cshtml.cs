@@ -38,7 +38,7 @@ namespace BookIt.Frontend.Pages.Users
 
         public void OnGet()
         {
-            var user = _userRepository.GetUserById(Id);
+            var user = _userRepository.GetUserByIdAsync(Id).Result;
             var role = _userManager.GetRolesAsync(user).Result.ToList().First();
             EditUser = _mapper.Map<UpdateUserModel>(user);
             EditUser.Role = role;
