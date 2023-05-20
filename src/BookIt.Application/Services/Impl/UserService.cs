@@ -126,8 +126,8 @@ public class UserService : IUserService
 
     public IEnumerable<ListUsersModel> GetAllUsers()
     {
-        var usersFromDatabase =  _userRepository.GetAllUsersAsync().Result.ToList();
-        var users = new List<ListUsersModel>();
+        var usersFromDatabase =  _userRepository.GetAllUsersAsync().Result;
+        List<ListUsersModel> users = new List<ListUsersModel>();
         foreach(var user in usersFromDatabase)
         {
             var userDto = _mapper.Map<ListUsersModel>(user);
@@ -142,7 +142,7 @@ public class UserService : IUserService
             }
             users.Add(userDto);
         }
-        return users;
+        return users.AsEnumerable();
     }
 
     public List<string> GetUserModelFields()
@@ -154,6 +154,7 @@ public class UserService : IUserService
 
     public IEnumerable<ListUsersModel> UserSorting(IEnumerable<ListUsersModel> users, string sortOrder)
     {
+        IEnumerable<ListUsersModel> sortedUsers = users;
         switch (sortOrder)
         {
             case "FirstName":
@@ -179,7 +180,7 @@ public class UserService : IUserService
 
     public IEnumerable<ListUsersModel> UserSearch(IEnumerable<ListUsersModel> users, string searchString)
     {
-        IEnumerable<ListUsersModel> searchedUsers = users.ToList();
+        IEnumerable<ListUsersModel> searchedUsers = users;
         if (!String.IsNullOrEmpty(searchString))
         {
             var searchStrTrim = searchString.ToLower().Trim();
@@ -195,7 +196,7 @@ public class UserService : IUserService
 
     public IEnumerable<ListUsersModel> UserFilter(IEnumerable<ListUsersModel> users, string role)
     {
-        IEnumerable<ListUsersModel> filteredUsers = users.ToList();
+        IEnumerable<ListUsersModel> filteredUsers = users;
         if (!String.IsNullOrEmpty(role))
         {
             var roleTrim = role.ToLower().Trim();

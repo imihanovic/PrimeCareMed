@@ -4,6 +4,7 @@ using BookIt.Core.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Drawing.Printing;
 
 namespace BookIt.Frontend.Pages.Users
 {
@@ -16,31 +17,49 @@ namespace BookIt.Frontend.Pages.Users
         private readonly UserManager<ApplicationUser> _userManager;
 
 #nullable enable
-        public List<ListUsersModel> Users { get; set; }
+        public PaginatedList<ListUsersModel> Users { get; set; }
 #nullable disable
 
         public List<string> UserModelProperties;
 
+        public int TotalPages { get; set; }
         public ViewAllUsersModel(IUserService userService, UserManager<ApplicationUser> userManager)
         {
             _userService = userService;
             _userManager = userManager;
         }
 
-        public void OnGet(string sort, string keyword, string roleFilter)
+        public void OnGet(string sort, string currentFilter, string keyword, string roleFilter, int? pageIndex)
         {
-            Users =  _userService.GetAllUsers().ToList();
+            if (keyword != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                keyword = currentFilter;
+            }
 
-            ViewData["Sort"] = sort;
+            ViewData["CurrentFilter"] = keyword;
+            int pageSize = 1;
+
+            var users = _userService.GetAllUsers();
+
             UserModelProperties = _userService.GetUserModelFields();
 
-            Users = _userService.UserSorting(Users, sort).ToList();
+
+            ViewData["CurrentSort"] = sort;
+            users = _userService.UserSorting(users, sort);
 
             ViewData["Keyword"] = keyword;
-            Users = _userService.UserSearch(Users, keyword).ToList();
+            users = _userService.UserSearch(users, keyword);
 
             ViewData["RoleFilter"] = roleFilter;
-            Users = _userService.UserFilter(Users, roleFilter).ToList();
+            users = _userService.UserFilter(users, roleFilter);
+
+            Users = PaginatedList<ListUsersModel>.Create(users, pageIndex ?? 1, pageSize);
+
+            TotalPages = (int)Math.Ceiling(decimal.Divide(users.Count(), pageSize));
         }
     }
 }
