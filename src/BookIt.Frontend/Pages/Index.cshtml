@@ -1,4 +1,10 @@
 ﻿@page
+@using Microsoft.AspNetCore.Identity
+@using BookIt.Core.Entities.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -7,4 +13,14 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <div class="row ms-4">
+            <div class="col text-center">
+                <a class="btn btn-outline-primary" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                <a class="btn btn-outline-primary" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </div>
+        </div>
+    }
 </div>

@@ -10,7 +10,7 @@ using BookIt.Application.Models.User;
 using BookIt.Application.Templates;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
-using System.Security.Claims;
+using System.Data;
 
 namespace BookIt.Application.Services.Impl;
 
@@ -124,8 +124,96 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<IEnumerable<ApplicationUser>> GetAllUsersAsync()
+    public IEnumerable<ListUsersModel> GetAllUsers()
     {
-        return await _userRepository.GetAllUsersAsync();
+        var usersFromDatabase =  _userRepository.GetAllUsersAsync().Result;
+        List<ListUsersModel> users = new List<ListUsersModel>();
+        foreach(var user in usersFromDatabase)
+        {
+            var userDto = _mapper.Map<ListUsersModel>(user);
+            try
+            {
+                var role = _userManager.GetRolesAsync(user).Result.ToList().First();
+                userDto.UserRole = role;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            users.Add(userDto);
+        }
+        return users.AsEnumerable();
     }
+
+    public List<string> GetUserModelFields()
+    {
+        var userDto = new ListUsersModel();
+        return userDto.GetType().GetProperties().Where(x => x.Name != "Id").Select(x => x.Name).ToList();
+    }
+
+
+    public IEnumerable<ListUsersModel> UserSorting(IEnumerable<ListUsersModel> users, string sortOrder)
+    {
+        IEnumerable<ListUsersModel> sortedUsers = users;
+        switch (sortOrder)
+        {
+            case "FirstName":
+                return users.OrderBy(s => s.FirstName);
+            case "FirstNameDesc":
+                return users = users.OrderByDescending(s => s.FirstName);
+            case "LastName":
+                return users.OrderBy(s => s.LastName);
+            case "LastNameDesc":
+                return users.OrderByDescending(s => s.LastName);
+            case "UserName":
+                return users.OrderBy(s => s.UserName);
+            case "UserNameDesc":
+                return users.OrderByDescending(s => s.UserName);
+            case "Email":
+                return users.OrderBy(s => s.Email);
+            case "EmailDesc":
+                return users.OrderByDescending(s => s.Email);
+            default:
+                return users.OrderBy(s => s.LastName);
+        }
+    }
+
+    public IEnumerable<ListUsersModel> UserSearch(IEnumerable<ListUsersModel> users, string searchString)
+    {
+        IEnumerable<ListUsersModel> searchedUsers = users;
+        if (!String.IsNullOrEmpty(searchString))
+        {
+            var searchStrTrim = searchString.ToLower().Trim();
+            searchedUsers = users.Where(s => s.LastName.ToLower().Contains(searchStrTrim)
+                                        || s.FirstName.ToLower().Contains(searchStrTrim)
+                                        || s.UserName.ToLower().Contains(searchStrTrim)
+                                        || s.Email.ToLower().Contains(searchStrTrim)
+                                        || s.PhoneNumber.ToLower().Contains(searchStrTrim)
+                                        );
+        }
+        return searchedUsers;
+    }
+
+    public IEnumerable<ListUsersModel> UserFilter(IEnumerable<ListUsersModel> users, string role)
+    {
+        IEnumerable<ListUsersModel> filteredUsers = users;
+        if (!String.IsNullOrEmpty(role))
+        {
+            var roleTrim = role.ToLower().Trim();
+            filteredUsers = users.Where(s => s.UserRole.ToLower() == roleTrim);
+        }
+        return filteredUsers;
+    }
+
+    public void DeleteUser(string id)
+    {
+        _userRepository.DeleteAsync(id);
+    }
+
+    public ApplicationUser EditUser(UpdateUserModel userModel)
+    {
+        var user = _mapper.Map<ApplicationUser>(userModel);
+        return  _userRepository.UpdateAsync(user).Result;
+    }
+
 }

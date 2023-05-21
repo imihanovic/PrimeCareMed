@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/register"
 @using BookIt.Core.Enums;
 @model RegisterModel
 @{
@@ -36,7 +36,7 @@
                 <label asp-for="Input.PhoneNumber"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-            @if(User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+            @if(User.IsInRole("Administrator"))
             {
                 <div class="form-floating">
                 <select asp-for = "Input.Role" class="form-control"
@@ -61,7 +61,12 @@
         </div>  
     </div>
 </div>
-
+@if (User.IsInRole("Administrator"))
+{
+    <a asp-area="" asp-page="/Users/ViewAllUsers" class="btn btn-primary" aria-current="page">
+        <i class="bi bi-people-fill"></i> Users
+    </a>
+}
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
