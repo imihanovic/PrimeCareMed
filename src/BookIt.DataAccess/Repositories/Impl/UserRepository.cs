@@ -28,10 +28,12 @@ namespace BookIt.DataAccess.Repositories.Impl
         public async Task<ApplicationUser> UpdateAsync(ApplicationUser user)
         {
             var editItem = await GetUserByIdAsync(user.Id);
+            editItem.UserName = user.Email;
             editItem.FirstName = user.FirstName;
             editItem.LastName = user.LastName;
             editItem.Email = user.Email;
             editItem.PhoneNumber = user.PhoneNumber;
+            editItem.EmailConfirmed = true;
             await _context.SaveChangesAsync();
             return editItem;
         }
