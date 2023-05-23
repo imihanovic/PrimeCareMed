@@ -26,6 +26,7 @@ public static class DataAccessDependencyInjection
     private static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRestaurantRepository, RestaurantRepository>();
     }
 
     private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

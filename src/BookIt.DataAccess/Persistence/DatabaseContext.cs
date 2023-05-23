@@ -5,8 +5,6 @@ using BookIt.Core.Common;
 using BookIt.Core.Entities;
 using BookIt.Shared.Services;
 using BookIt.Core.Entities.Identity;
-using Microsoft.Extensions.Hosting;
-using System.Reflection.Emit;
 
 namespace BookIt.DataAccess.Persistence;
 
@@ -21,6 +19,8 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Table> Tables { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<Restaurant> Restaurants { get; set; }
+    public DbSet<Dish> Dishes { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder builder)

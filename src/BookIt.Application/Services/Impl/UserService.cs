@@ -145,6 +145,30 @@ public class UserService : IUserService
         return users.AsEnumerable();
     }
 
+    public IEnumerable<ListUsersModel> GetAllManagers()
+    {
+        var usersFromDatabase = _userRepository.GetAllUsersAsync().Result;
+        List<ListUsersModel> managers = new List<ListUsersModel>();
+        foreach (var user in usersFromDatabase)
+        {
+            var userDto = _mapper.Map<ListUsersModel>(user);
+            try
+            {
+                var role = _userManager.GetRolesAsync(user).Result.ToList().First();
+                userDto.UserRole = role;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            if(userDto.UserRole == "Manager")
+            {
+                managers.Add(userDto);
+            }          
+        }
+        return managers.AsEnumerable();
+    }
+
     public List<string> GetUserModelFields()
     {
         var userDto = new ListUsersModel();
