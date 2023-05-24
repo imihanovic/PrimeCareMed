@@ -1,6 +1,4 @@
-﻿using BookIt.Application.Models.User;
-
-namespace BookIt.Application.Models.Restaurant
+﻿namespace BookIt.Application.Models.Restaurant
 {
     public class RestaurantModel : BaseResponseModel
     {
@@ -8,5 +6,8 @@ namespace BookIt.Application.Models.Restaurant
         public string RestaurantName { get; set; }
         public string Address { get; set; }
         public string ManagerId { get; set; }
+        public string ManagerFirstName { get; set; }
+        public string ManagerLastName { get; set; }
+        public string ManagerUserName { get; set; }
     }
 }

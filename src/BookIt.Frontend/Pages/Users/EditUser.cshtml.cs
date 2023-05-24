@@ -5,7 +5,6 @@ using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -44,6 +43,9 @@ namespace BookIt.Frontend.Pages.Users
 
         [BindProperty]
         public UpdateUserModel EditUser { get; set; }
+
+        [BindProperty]
+        public IEnumerable<ListUsersModel> Managers => _userService.GetAllManagers();
 
         public void OnGet()
         {

@@ -31,6 +31,7 @@
             </div>
             <div class="form-floating">
                 <select asp-for = "NewRestaurant.ManagerId" class="form-control">
+                    <option disabled selected>Select a manager</option>
                     @foreach (var manager in Model.Managers)
                     {
                         <option value="@manager.Id">@manager.UserName</option>

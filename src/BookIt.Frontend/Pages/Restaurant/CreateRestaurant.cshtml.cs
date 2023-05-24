@@ -12,10 +12,12 @@ namespace BookIt.Frontend.Pages.Restaurant
     {
         private readonly IRestaurantRepository _restaurantRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IRestaurantService _restaurantService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         public CreateRestaurantModel(IRestaurantRepository restaurantRepository,
             IMapper mapper,
+            IRestaurantService restaurantService,
             IUserService userService,
             IUserRepository userRepository)
         { 
@@ -23,10 +25,11 @@ namespace BookIt.Frontend.Pages.Restaurant
             _mapper = mapper;
             _userService = userService;
             _userRepository = userRepository;
+            _restaurantService = restaurantService;
         }
 
         [BindProperty]
-        public RestaurantModel NewRestaurant { get; set; }
+        public RestaurantModelForCreate NewRestaurant { get; set; }
 
         [BindProperty]
         public IEnumerable<ListUsersModel> Managers => _userService.GetAllManagers();
@@ -39,7 +42,8 @@ namespace BookIt.Frontend.Pages.Restaurant
             var restaurant = _mapper.Map<BookIt.Core.Entities.Restaurant>(NewRestaurant);
             try
             {
-                await _restaurantRepository.AddAsync(restaurant);
+                await _restaurantService.AddAsync(NewRestaurant);
+                return RedirectToPage("ViewAllRestaurants");
             }
             catch (Exception ex)
             {
@@ -47,7 +51,6 @@ namespace BookIt.Frontend.Pages.Restaurant
                 ViewData["Message"] = string.Format($"Manager {manager.Result.UserName} is already selected for other restaurant!!!");
                 Console.WriteLine(ex.Message);
             }
-
             return Page();
         }
     }
