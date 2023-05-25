@@ -8,6 +8,7 @@ using BookIt.Application.Services;
 using BookIt.Application.Services.Impl;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using BookIt.DataAccess.Repositories;
+using BookIt.Frontend.Policies;
 using BookIt.DataAccess.Repositories.Impl;
 using BookIt.Application.Common.Email;
 
@@ -31,6 +32,8 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdministratorRole",
          policy => policy.RequireRole("Administrator"));
+    options.AddPolicy("RequireAdministratorRoleOrAnonymous",
+         policy => policy.AddRequirements(new AllowAnonymousAuthorizationRequirement()));
 });
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

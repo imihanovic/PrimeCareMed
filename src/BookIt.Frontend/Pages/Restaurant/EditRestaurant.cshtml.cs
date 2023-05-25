@@ -6,11 +6,10 @@ using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Security.Claims;
 
 namespace BookIt.Frontend.Pages.Restaurant
 {
-    [Authorize(Roles = ("Administrator, Manager"))]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class EditRestaurantModel : PageModel
     {
         private readonly IRestaurantRepository _restaurantRepository;
@@ -65,9 +64,8 @@ namespace BookIt.Frontend.Pages.Restaurant
                 var manager = _userRepository.GetUserByIdAsync(EditRestaurant.ManagerId);
                 ViewData["Message"] = string.Format($"Manager {manager.Result.UserName} is already selected for other restaurant!!!");
                 Console.WriteLine(ex.Message);
-            }
-
-            return Page();
+                return Page();
+            }         
         }
 
         public IActionResult OnPostDelete()

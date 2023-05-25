@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using BookIt.Application.Models.Restaurant;
-using BookIt.Application.Models.User;
 using BookIt.Core.Entities;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
-using Microsoft.EntityFrameworkCore.Design.Internal;
-using static System.Collections.Specialized.BitVector32;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookIt.Application.Services.Impl
 {
@@ -14,12 +13,17 @@ namespace BookIt.Application.Services.Impl
         private readonly IMapper _mapper;
         private readonly IRestaurantRepository _restaurantRepository;
         private readonly IUserRepository _userRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RestaurantService(IMapper mapper, IRestaurantRepository restaurantRepository, IUserRepository userRepository) 
+        public RestaurantService(IMapper mapper,
+            IRestaurantRepository restaurantRepository,
+            IUserRepository userRepository,
+            UserManager<ApplicationUser> userManager) 
         {
             _mapper = mapper;
             _restaurantRepository = restaurantRepository;
             _userRepository = userRepository;
+            _userManager = userManager;
         }
         public async Task<RestaurantModel> AddAsync(RestaurantModelForCreate createRestaurantModel)
         {
@@ -31,6 +35,7 @@ namespace BookIt.Application.Services.Impl
         public IEnumerable<RestaurantModel> GetAllRestaurants()
         {
             var restaurantsFromDatabase = _restaurantRepository.GetAllRestaurantsAsync().Result;
+            
             List<RestaurantModel> restaurants = new List<RestaurantModel>();
             foreach (var restaurant in restaurantsFromDatabase)
             {

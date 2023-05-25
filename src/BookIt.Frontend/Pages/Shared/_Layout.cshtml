@@ -33,20 +33,23 @@
                         Home
                     </a>
                 </li>
-                @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
+                @if (User.IsInRole("Administrator"))
                 {
                     <li class="nav-item" style="font-size:20px">
                         <a asp-area="" asp-page="/Users/ViewAllUsers" class="nav-link text-white" aria-current="page">
                         <i class="bi bi-people-fill"></i>
                         Users
                         </a>
-                    </li>
+                    </li>           
+                }
+                @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
+                {
                     <li class="nav-item" style="font-size:20px">
                         <a asp-area="" asp-page="/Restaurant/ViewAllRestaurants" class="nav-link text-white" aria-current="page">
                         <i class="fas fa-utensils"></i>
                         Restaurants
                         </a>
-                    </li>                   
+                    </li>        
                 }
             </ul>
             <hr>

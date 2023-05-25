@@ -3,11 +3,14 @@ using BookIt.Application.Models.Restaurant;
 using BookIt.Application.Models.User;
 using BookIt.Application.Services;
 using BookIt.DataAccess.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Data;
 
 namespace BookIt.Frontend.Pages.Restaurant
 {
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class CreateRestaurantModel : PageModel
     {
         private readonly IRestaurantRepository _restaurantRepository;

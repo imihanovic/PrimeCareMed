@@ -1,14 +1,19 @@
 ﻿using BookIt.Application.Models.Restaurant;
 using BookIt.Application.Models.User;
 using BookIt.Application.Services;
+using BookIt.Core.Entities.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Data;
 
 namespace BookIt.Frontend.Pages.Restaurant
 {
+    [Authorize(Roles = "Administrator,Manager")]
     public class ViewAllRestaurantsModel : PageModel
     {
         public readonly IRestaurantService _restaurantService;
-
+        public readonly UserManager<ApplicationUser> _userManager;
 #nullable enable
         public PaginatedList<RestaurantModel> Restaurants { get; set; }
 
@@ -17,13 +22,17 @@ namespace BookIt.Frontend.Pages.Restaurant
 
         public int TotalPages { get; set; }
 
-        public ViewAllRestaurantsModel(IRestaurantService restaurantService)
+        public ViewAllRestaurantsModel(IRestaurantService restaurantService,
+            UserManager<ApplicationUser> userManager)
         {
             _restaurantService = restaurantService;
+            _userManager = userManager;
         }
 
         public void OnGet(string sort, string currentFilter, string keyword, int? pageIndex)
         {
+            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+
             if (keyword != null)
             {
                 pageIndex = 1;
@@ -37,6 +46,10 @@ namespace BookIt.Frontend.Pages.Restaurant
             int pageSize = 1;
 
             var restaurants = _restaurantService.GetAllRestaurants();
+            if (this.User.IsInRole("Manager"))
+            {
+                restaurants = restaurants.Where(r => r.ManagerId == currentUser.Id);
+            }
 
             RestaurantModelProperties = _restaurantService.GetRestaurantModelFields();
 

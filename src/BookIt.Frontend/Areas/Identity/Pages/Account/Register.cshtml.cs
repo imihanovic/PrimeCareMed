@@ -11,9 +11,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using BookIt.Core.Entities.Identity;
 using BookIt.Core.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookIt.Frontend.Areas.Identity.Pages.Account
 {
+
+    [Authorize(Policy = "RequireAdministratorRoleOrAnonymous")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -92,7 +95,7 @@ namespace BookIt.Frontend.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
-
+        
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             var isAdmin = this.User.IsInRole("Administrator");

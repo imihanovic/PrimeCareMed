@@ -10,8 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BookIt.Frontend.Pages.Users
 {
-    //[Authorize(Policy = "RequireAdministratorRole")]
-    [Authorize(Roles = ("Administrator, Manager"))]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class EditUserModel : PageModel
     {
         private IUserService _userService;
