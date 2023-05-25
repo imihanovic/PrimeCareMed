@@ -39,7 +39,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dish");
+                    b.ToTable("Dishes");
                 });
 
             modelBuilder.Entity("BookIt.Core.Entities.Identity.ApplicationUser", b =>
@@ -168,7 +168,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                     b.HasIndex("ManagerId")
                         .IsUnique();
 
-                    b.ToTable("Restaurant");
+                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("BookIt.Core.Entities.RestaurantDish", b =>

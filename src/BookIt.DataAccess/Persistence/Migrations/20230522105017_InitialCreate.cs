@@ -52,7 +52,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dish",
+                name: "Dishes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -62,7 +62,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dish", x => x.Id);
+                    table.PrimaryKey("PK_Dishes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -195,7 +195,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Restaurant",
+                name: "Restaurants",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -206,9 +206,9 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Restaurant", x => x.Id);
+                    table.PrimaryKey("PK_Restaurants", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Restaurant_AspNetUsers_ManagerId",
+                        name: "FK_Restaurants_AspNetUsers_ManagerId",
                         column: x => x.ManagerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -229,14 +229,14 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_RestaurantDish", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RestaurantDish_Dish_DishId",
+                        name: "FK_RestaurantDish_Dishes_DishId",
                         column: x => x.DishId,
-                        principalTable: "Dish",
+                        principalTable: "Dishes",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_RestaurantDish_Restaurant_RestaurantId",
+                        name: "FK_RestaurantDish_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
-                        principalTable: "Restaurant",
+                        principalTable: "Restaurants",
                         principalColumn: "Id");
                 });
 
@@ -254,9 +254,9 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Tables", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tables_Restaurant_RestaurantId",
+                        name: "FK_Tables_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
-                        principalTable: "Restaurant",
+                        principalTable: "Restaurants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -328,12 +328,6 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Restaurant_ManagerId",
-                table: "Restaurant",
-                column: "ManagerId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RestaurantDish_DishId",
                 table: "RestaurantDish",
                 column: "DishId");
@@ -342,6 +336,12 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 name: "IX_RestaurantDish_RestaurantId",
                 table: "RestaurantDish",
                 column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Restaurants_ManagerId",
+                table: "Restaurants",
+                column: "ManagerId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_TableReservation_TablesId",
@@ -381,7 +381,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Dish");
+                name: "Dishes");
 
             migrationBuilder.DropTable(
                 name: "Reservations");
@@ -390,7 +390,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 name: "Tables");
 
             migrationBuilder.DropTable(
-                name: "Restaurant");
+                name: "Restaurants");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

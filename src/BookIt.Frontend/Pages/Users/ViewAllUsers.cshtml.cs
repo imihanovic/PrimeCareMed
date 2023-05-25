@@ -4,12 +4,11 @@ using BookIt.Core.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Drawing.Printing;
 
 namespace BookIt.Frontend.Pages.Users
 {
 
-    [Authorize(Roles = ("Administrator, Manager"))]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class ViewAllUsersModel : PageModel
     {
 
