@@ -19,6 +19,11 @@ namespace BookIt.Application.Models.Restaurant
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Address*")]
+        public string City { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Address*")]
         public string Address { get; set; }
 
         [Required]

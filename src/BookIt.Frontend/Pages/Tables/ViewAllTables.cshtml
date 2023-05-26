@@ -1,0 +1,32 @@
+﻿@page
+@model BookIt.Frontend.Pages.Tables.ViewAllTablesModel
+@{
+    ViewData["Title"] = "Tables";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr/>
+<table class="table table-striped table-bordered user-table">
+<thead>
+    <tr>
+        @foreach (var property in Model.TableModelProperties)
+        {
+            <th>@property</th>           
+        }
+    </tr>
+</thead>
+<tbody>
+    @if (Model.Tables.Count() > 0)
+    {
+        @foreach (var table in Model.Tables)
+        {
+            <tr class="align-middle">
+                <td>@table.TableName</td>
+                <td>@table.NumberOfSeats</td>
+                <td>@table.Area</td>
+                <td>@table.Smoking</td>
+            </tr>
+        }
+    }
+</tbody>
+</table>
