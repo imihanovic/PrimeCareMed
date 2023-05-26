@@ -22,7 +22,7 @@ namespace BookIt.DataAccess.Repositories.Impl
 
         public async Task<IEnumerable<Table>> GetAllTablesAsync()
         {
-            return await _context.Tables.OrderBy(r => r.Id).ToListAsync();
+            return await _context.Tables.OrderBy(r => r.Id).Include(r => r.Restaurant).ToListAsync();
         }
     }
 }

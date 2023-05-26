@@ -8,6 +8,6 @@ namespace BookIt.Application.Services
 
         List<string> GetTableModelFields();
 
-        IEnumerable<TableModel> GetAllTables();
+        IEnumerable<TableModel> GetAllTables(Guid id);
     }
 }

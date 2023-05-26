@@ -1,10 +1,20 @@
-﻿@page
+﻿@page "/{id:Guid}"
 @model BookIt.Frontend.Pages.Tables.ViewAllTablesModel
 @{
     ViewData["Title"] = "Tables";
 }
 
 <h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-8">
+        <h2>@Model.RestaurantModel.RestaurantName  @Model.RestaurantModel.RestaurantOwner</h2>
+    </div>
+    <div class="col-4">
+        <h5> number of tables: @Model.Tables.Count()</h5>
+        <h5> restaurant capacity: @Model.Tables.Select(r => r.NumberOfSeats).Sum()</h5>
+    </div>
+ 
+</div>
 <hr/>
 <table class="table table-striped table-bordered user-table">
 <thead>

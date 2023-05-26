@@ -30,7 +30,8 @@ namespace BookIt.Application.Services.Impl
             var restaurant = _restaurantRepository.GetRestaurantByIdAsync(Guid.Parse(createTableModel.RestaurantId)).Result;
             var counter = _tableRepository.GetAllTablesAsync().Result.Where(t => t.Restaurant == restaurant).Count()+1;
             table.Restaurant = restaurant;
-            table.TableName = restaurant.RestaurantName + restaurant.City + restaurant.Address+counter;
+            table.Restaurant.Id = restaurant.Id;
+            table.TableName = restaurant.RestaurantName + restaurant.City + restaurant.Address+'_'+counter;
             await _tableRepository.AddAsync(table);
             return _mapper.Map<TableModel>(table);
         }
@@ -38,10 +39,10 @@ namespace BookIt.Application.Services.Impl
         public List<string> GetTableModelFields()
         {
             var tableDto = new TableModel();
-            return tableDto.GetType().GetProperties().Where(x => x.Name != "RestaurantId" && x.Name != "Id").Select(x => x.Name).ToList();
+            return tableDto.GetType().GetProperties().Where(x => x.Name != "RestaurantId" && x.Name != "Id" && x.Name != "City" && x.Name != "Address" && x.Name != "RestaurantOwner" && x.Name != "RestaurantName").Select(x => x.Name).ToList();
         }
 
-        public IEnumerable<TableModel> GetAllTables()
+        public IEnumerable<TableModel> GetAllTables(Guid id)
         {
             var tablesFromDatabase = _tableRepository.GetAllTablesAsync().Result;
 
@@ -49,7 +50,15 @@ namespace BookIt.Application.Services.Impl
             foreach (var table in tablesFromDatabase)
             {
                 var tableDto = _mapper.Map<TableModel>(table);
-                tables.Add(tableDto);
+                tableDto.RestaurantId = table.Restaurant.Id.ToString();
+                tableDto.RestaurantOwner = table.Restaurant.RestaurantOwner;
+                tableDto.RestaurantName = table.Restaurant.RestaurantName;
+                tableDto.City = table.Restaurant.City;
+                tableDto.Address = table.Restaurant.Address;
+                if (table.Restaurant.Id  == id)
+                {                  
+                    tables.Add(tableDto);
+                }
             }
             return tables.AsEnumerable();
         }

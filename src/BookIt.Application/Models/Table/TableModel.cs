@@ -9,6 +9,14 @@
 
         public string Smoking { get; set; }
 
+        public string RestaurantOwner { get; set; }
+
+        public string RestaurantName { get; set; }
+
+        public string City { get; set; }
+
+        public string Address { get; set; }
+
         public string RestaurantId { get; set; }
     }
 }

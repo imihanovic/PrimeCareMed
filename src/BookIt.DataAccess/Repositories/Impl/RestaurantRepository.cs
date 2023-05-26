@@ -29,6 +29,7 @@ namespace BookIt.DataAccess.Repositories.Impl
             var editItem = await GetRestaurantByIdAsync(restaurant.Id);
             editItem.RestaurantOwner = restaurant.RestaurantOwner;
             editItem.RestaurantName = restaurant.RestaurantName;
+            editItem.City = restaurant.City;
             editItem.Address = restaurant.Address;
             editItem.ManagerId = restaurant.ManagerId;
             await _context.SaveChangesAsync();

@@ -63,7 +63,7 @@ namespace BookIt.Application.Services.Impl
         public List<string> GetRestaurantModelFields()
         {
             var restaurantDto = new RestaurantModel();
-            return restaurantDto.GetType().GetProperties().Where(x => x.Name != "ManagerId" && x.Name != "Id").Select(x => x.Name).ToList();
+            return restaurantDto.GetType().GetProperties().Where(x => x.Name != "ManagerId" && x.Name != "Id" && x.Name != "ManagerFirstName" && x.Name != "ManagerLastName").Select(x => x.Name).ToList();
         }
 
         public IEnumerable<RestaurantModel> RestaurantSorting(IEnumerable<RestaurantModel> restaurants, string sortOrder)
