@@ -12,31 +12,48 @@ Web application for table reservation in the restaurant. :plate_with_cutlery:
 
 ## General Info
 
-BookIt is a web application that enables table booking in the restaurant.
+BookIt is a web application that enables table booking in restaurants.
 
 - Project created as a college seminar for *Programming in C#*
 - *University of Split - University Department of Professional Studies*
 
 ## Features
 
-### User Management
+### User Management 🧑 👩
 
 - Roles:
-    - Manager
-    - User (guest)
+    - Admin
+    - Manager - can only manage one restaurant
+    - Customer
 - Available operations:
     - CRUD
 - Authentication (login/logout)
-- Show all users (with search and pagination)
-- Show details (guests can see their own details, manager can see all)
+- Show all users (with search and pagination for admin)
+- Show details (customers and managers can see their own details, admin can see all)
 
-#### Table
+#### Table 
 
 - Available operations:
     - CRUD
-- View all tables
+- View tables for admin - Admin can see all tables for all restaurants
+- View tables for manager - Manager can see all tables in the restaurant they manage
 
-#### Reservation
+#### Restaurant 🍽️
+
+- Available operations:
+    - CRUD
+- Only admin can create restaurants and set a manager
+- Manager can edit Restaurant
+
+#### Dish 🍷🍔
+
+- Available operations:
+    - CRUD
+- Admin and Manager can create new Dish
+- Admin can add any dish to any restaurant
+- Manager can only add dish to the restaurant they manage
+
+#### Reservation 📖✏️
 
 - Available operations:
     - Create
@@ -59,12 +76,7 @@ BookIt is a web application that enables table booking in the restaurant.
 
 ## Database Model
 
-![restoran2 drawio (2)](https://user-images.githubusercontent.com/92686358/225091311-68a71f9c-9ce1-4ef8-8d50-fbf923cf0984.png)
-
-
-Option 2
-
-![restoranVerzija2 drawio](https://user-images.githubusercontent.com/92686358/234578643-efdc6286-5d5a-41bb-9cf9-79b5c5dc09c9.png)
+![restoranVerzija2 drawio (1)](https://github.com/imihanovic/Sudoku/assets/92686358/763d83c5-e441-4f6d-b692-94765af417c2)
 
 
 ## Authors:
