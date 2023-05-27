@@ -1,4 +1,5 @@
-﻿using BookIt.Core.Entities.Identity;
+﻿using BookIt.Core.Entities;
+using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace BookIt.DataAccess.Repositories.Impl
 
         public async Task<IEnumerable<ApplicationUser>> GetAllUsersAsync()
         {
-            return await _context.Users.OrderBy(user => user.Id).ToListAsync();
+            return await _context.Users.OrderBy(user => user.Id).Include(user => user.Restaurant).ToListAsync();
         }
         public async Task<ApplicationUser> GetUserByIdAsync(string id)
         {

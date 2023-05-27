@@ -1,6 +1,6 @@
 ﻿namespace BookIt.Application.Models.Table
 {
-    public class TableModel
+    public class TableModel : BaseResponseModel
     {
         public string TableName { get; set; }
         public int NumberOfSeats { get; set; }

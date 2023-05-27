@@ -9,7 +9,9 @@ namespace BookIt.Application.MappingProfiles
         public TableProfile()
         {
             CreateMap<TableModelForCreate, Table>();
-            CreateMap<Restaurant, TableModelForCreate>();
+            CreateMap<Table, TableModelForCreate>();
+            CreateMap<TableModelForUpdate, Table>();
+            CreateMap<Table, TableModelForUpdate>();
             CreateMap<TableModel, Table>();
             CreateMap<Table, TableModel>();
         }

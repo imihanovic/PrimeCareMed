@@ -1,16 +1,19 @@
 ﻿using BookIt.Core.Entities;
 using BookIt.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BookIt.DataAccess.Repositories.Impl
 {
     public class RestaurantRepository : IRestaurantRepository
     {
         private readonly DatabaseContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public RestaurantRepository(DatabaseContext context)
+        public RestaurantRepository(DatabaseContext context, IUserRepository userRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _userRepository = userRepository;
         }
 
         public async Task<Restaurant> AddAsync(Restaurant restaurant)

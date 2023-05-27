@@ -40,21 +40,27 @@
                 </select>
                 <label asp-for="NewTable.Smoking"></label>
             </div>
-            <div class="form-floating">
-                <select asp-for = "NewTable.RestaurantId" class="form-control">
-                    <option disabled selected>Select a restaurant</option>
-                    @foreach (var restaurant in Model.Restaurants)
-                    {
-                        <option value="@restaurant.Id">@restaurant.RestaurantName @restaurant.Address</option>
-                    }
-                </select>
-                <label asp-for="NewTable.RestaurantId"></label>
-            </div>
+            @if(Model.Restaurants.Count() > 0)
+            {
+                <div class="form-floating">
+                    <select asp-for = "NewTable.RestaurantId" class="form-control">
+                        <option disabled selected>Select a restaurant</option>
+                        @foreach (var restaurant in Model.Restaurants)
+                        {
+                            <option value="@restaurant.Id">@restaurant.RestaurantName @restaurant.Address</option>
+                        }
+                    </select>
+                    <label asp-for="NewTable.RestaurantId"></label>
+                </div>         
+            }         
             <button id="createTableSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Create table</button>
             </form>
         </div>  
     </div>
 </div>
+<a class="btn btn-primary"  onclick="window.history.back()">
+    Back <i class='fas fa-angle-left'></i>
+</a>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

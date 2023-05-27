@@ -2,7 +2,7 @@
 
 namespace BookIt.Application.Models.Table
 {
-    public class TableModelForCreate
+    public class TableModelForUpdate
     {
         public string Id { get; set; }
 
@@ -20,10 +20,5 @@ namespace BookIt.Application.Models.Table
         [DataType(DataType.Text)]
         [Display(Name = "Smoking allowed*")]
         public string Smoking { get; set; }
-
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Restaurant*")]
-        public string RestaurantId { get; set; }
     }
 }
