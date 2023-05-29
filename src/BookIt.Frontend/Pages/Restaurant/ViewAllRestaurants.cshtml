@@ -68,8 +68,9 @@
                     <th class="d-none d-lg-table-cell">
                         @property                     
                     </th>
-                }                     
+                }  
             }
+             <th>Tables</th>
         </tr>
     </thead>
     <tbody>
@@ -80,10 +81,12 @@
                 <tr class="align-middle">
                     <td class="d-none d-lg-table-cell">@restaurant.RestaurantOwner</td>
                     <td class="d-none d-lg-table-cell">@restaurant.RestaurantName</td>
+                     <td class="d-none d-lg-table-cell">@restaurant.City</td>
                     <td class="d-none d-lg-table-cell">@restaurant.Address</td>
-                    <td class="d-none d-lg-table-cell">@restaurant.ManagerFirstName</td>
-                    <td class="d-none d-lg-table-cell">@restaurant.ManagerLastName</td>
                     <td class="d-none d-lg-table-cell">@restaurant.ManagerUserName</td>
+                    <td>
+                        <a asp-area="" asp-page="/Tables/ViewAllTables" asp-route-id="@restaurant.Id">Tables</a>
+                    </td>
                     @if (User.IsInRole("Administrator"))
                     {
                         <td><a class="btn btn-outline-primary" asp-page="EditRestaurant" asp-route-id="@restaurant.Id"><i class="bi bi-info-lg"></i></a></td>

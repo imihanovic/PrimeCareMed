@@ -201,6 +201,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     RestaurantOwner = table.Column<string>(type: "text", nullable: true),
                     RestaurantName = table.Column<string>(type: "text", nullable: true),
+                    City = table.Column<string>(type: "text", nullable: true),
                     Address = table.Column<string>(type: "text", nullable: true),
                     ManagerId = table.Column<string>(type: "text", nullable: false)
                 },
@@ -245,6 +246,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    TableName = table.Column<string>(type: "text", nullable: true),
                     NumberOfSeats = table.Column<int>(type: "integer", nullable: false),
                     Area = table.Column<int>(type: "integer", nullable: false),
                     Smoking = table.Column<int>(type: "integer", nullable: false),

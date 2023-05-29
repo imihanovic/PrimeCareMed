@@ -153,6 +153,9 @@ namespace BookIt.DataAccess.Persistence.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
                     b.Property<string>("ManagerId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -215,6 +218,9 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
                     b.Property<int>("Smoking")
                         .HasColumnType("integer");
+
+                    b.Property<string>("TableName")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
