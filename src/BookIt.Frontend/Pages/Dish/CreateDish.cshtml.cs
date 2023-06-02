@@ -42,7 +42,7 @@ namespace BookIt.Frontend.Pages.Dish
             try
             {
                 await _dishService.AddAsync(NewDish);
-                return RedirectToPage("../Restaurant/ViewAllRestaurants");
+                return RedirectToPage("ViewAllDishes");
             }
             catch (Exception ex)
             {

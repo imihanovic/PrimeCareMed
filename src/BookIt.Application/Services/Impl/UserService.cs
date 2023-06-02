@@ -11,6 +11,7 @@ using BookIt.Application.Templates;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
 using System.Data;
+using BookIt.Application.Models.Dish;
 
 namespace BookIt.Application.Services.Impl;
 

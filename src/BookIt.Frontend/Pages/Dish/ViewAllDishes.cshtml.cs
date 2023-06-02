@@ -16,7 +16,7 @@ namespace BookIt.Frontend.Pages.Dish
         public readonly IDishRepository _dishRepository;
         public readonly UserManager<ApplicationUser> _userManager;
 #nullable enable
-        public IEnumerable<DishModel> Dishes { get; set; }
+        public PaginatedList<DishModel> Dishes { get; set; }
 
 #nullable disable
         public List<string> DishModelProperties;
@@ -30,29 +30,33 @@ namespace BookIt.Frontend.Pages.Dish
             _userManager = userManager;
         }
 
-        public void OnGet(string currentFilter, string keyword)
+        public void OnGet(string currentFilter, string keyword, string categoryFilter, int? pageIndex)
         {
-            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
-
             if (keyword != null)
             {
-                Redirect("./Dishes/ViewAllDishes");
+                pageIndex = 1;
             }
             else
             {
                 keyword = currentFilter;
             }
 
+            DishModelProperties = _dishService.GetDishModelFields();
+
             ViewData["CurrentFilter"] = keyword;
             int pageSize = 1;
 
             var dishes = _dishService.GetAllDishes();
 
-            DishModelProperties = _dishService.GetDishModelFields();
-
             ViewData["Keyword"] = keyword;
-            //dishes = _dishService.DishSearch(dishes, keyword);
-            Dishes = dishes;
+            dishes = _dishService.DishSearch(dishes, keyword);
+
+            ViewData["CategoryFilter"] = categoryFilter;
+            dishes = _dishService.DishFilter(dishes, categoryFilter);
+
+            Dishes = PaginatedList<DishModel>.Create(dishes, pageIndex ?? 1, pageSize);
+
+            TotalPages = (int)Math.Ceiling(decimal.Divide(dishes.Count(), pageSize));
 
         }
         public IActionResult OnPostDelete(Guid id)

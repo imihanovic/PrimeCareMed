@@ -51,7 +51,7 @@ namespace BookIt.Application.Services.Impl
         public List<string> GetDishModelFields()
         {
             var dishDto = new DishModel();
-            return dishDto.GetType().GetProperties().Where(x => x.Name != "DishDescription" && x.Name != "Category").Select(x => x.Name).ToList();
+            return dishDto.GetType().GetProperties().Where(x => x.Name != "Id").Select(x => x.Name).ToList();
         }
         public IEnumerable<DishModel> DishSearch(IEnumerable<DishModel> dishes, string searchString)
         {
@@ -65,6 +65,18 @@ namespace BookIt.Application.Services.Impl
             }
             return searchedDishes;
         }
+
+        public IEnumerable<DishModel> DishFilter(IEnumerable<DishModel> dishes, string category)
+        {
+            IEnumerable<DishModel> filtratedDishes = dishes;
+            if (!String.IsNullOrEmpty(category))
+            {
+                var categoryTrim = category.ToLower().Trim();
+                filtratedDishes = dishes.Where(t => t.Category.ToLower() == categoryTrim);
+            }
+            return filtratedDishes;
+        }
+
         public async Task DeleteDishAsync(Guid Id)
         {
             await _dishRepository.DeleteAsync(Id);
