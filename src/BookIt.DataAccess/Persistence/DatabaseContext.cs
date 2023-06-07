@@ -36,7 +36,7 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ApplicationUser>()
         .HasMany(e => e.CustomerReservations)
         .WithOne(e => e.Customer)
-        .IsRequired();
+        .IsRequired(false);
 
         builder.Entity<ApplicationUser>()
         .HasOne(e => e.Restaurant)

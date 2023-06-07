@@ -50,8 +50,9 @@ namespace BookIt.DataAccess.Repositories.Impl
         public async Task<Restaurant> GetRestaurantByTableAsync(Guid tableId)
         {
             var allRestaurants = _restaurantRepository.GetAllRestaurantsAsync().Result;
-            var table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == tableId);
+            var table = GetTableByIdAsync(tableId).Result;
             var restaurant = allRestaurants.First(r => r.Tables.Contains(table));
+            //var restaurant1 = await _restaurantRepository.GetRestaurantByIdAsync(table.Restaurant.Id);
             return restaurant;
         }
     }

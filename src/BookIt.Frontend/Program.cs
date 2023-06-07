@@ -50,6 +50,8 @@ builder.Services.AddScoped<SmtpSettings>();
 builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.AddScoped<IDishRepository, DishRepository>();
 builder.Services.AddScoped<IDishService, DishService>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

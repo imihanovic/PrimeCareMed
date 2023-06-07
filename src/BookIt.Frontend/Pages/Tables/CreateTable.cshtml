@@ -40,7 +40,7 @@
                 </select>
                 <label asp-for="NewTable.Smoking"></label>
             </div>
-            @if(Model.Restaurants.Count() > 0)
+            @if(Model.Restaurants.Count() > 0 && User.IsInRole("Administrator"))
             {
                 <div class="form-floating">
                     <select asp-for = "NewTable.RestaurantId" class="form-control">

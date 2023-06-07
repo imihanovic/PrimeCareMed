@@ -49,5 +49,12 @@ namespace BookIt.DataAccess.Repositories.Impl
         {
             return await _context.Restaurants.FirstOrDefaultAsync(r => r.Id == id);
         }
+
+        public async Task<Restaurant> GetRestaurantByManagerIdAsync(string managerId)
+        {
+            var allRestaurants = await GetAllRestaurantsAsync();
+            var restaurant = allRestaurants.First(r => r.ManagerId == managerId);
+            return restaurant;
+        }
     }
 }

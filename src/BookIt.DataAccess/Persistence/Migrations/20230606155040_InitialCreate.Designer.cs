@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookIt.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230527222739_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230606155040_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -121,7 +121,6 @@ namespace BookIt.DataAccess.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CustomerId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("EndTime")
@@ -382,9 +381,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 {
                     b.HasOne("BookIt.Core.Entities.Identity.ApplicationUser", "Customer")
                         .WithMany("CustomerReservations")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.Navigation("Customer");
                 });
