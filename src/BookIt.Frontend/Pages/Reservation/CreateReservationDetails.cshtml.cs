@@ -29,10 +29,5 @@ namespace BookIt.Frontend.Pages.Reservation
                 ViewData["Address"] = restaurant.Address;
             }
         }
-
-        public IActionResult OnPost(int numberOfPersons, string tableArea, string smokingArea, string reservationDate)
-        {
-            return RedirectToPage("CreateReservation", new { numberOfPersons = numberOfPersons, tableArea = tableArea, smokingArea = smokingArea, reservationDate = reservationDate, restaurantId = Id});
-        }
     }
 }

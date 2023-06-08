@@ -26,11 +26,15 @@ namespace BookIt.Application.Services.Impl
         }
         public async Task<Reservation> AddAsync(ReservationModelForCreate createReservationModel)
         {
-            var reservation = _mapper.Map<Reservation>(createReservationModel);
+            //var reservation = _mapper.Map<Reservation>(createReservationModel);
 
-            reservation.StartTime = DateTime.UtcNow;
-            reservation.EndTime = DateTime.UtcNow.AddHours(1).AddMinutes(30);
-            reservation.Tables.Add(_tableRepository.GetAllTablesAsync().Result.First());
+            var reservation = new Reservation();
+            reservation.NumberOfPersons = createReservationModel.NumberOfPerson;
+            reservation.StartTime = createReservationModel.Date.ToUniversalTime();
+            reservation.Tables = createReservationModel.Tables;
+            reservation.Status = Core.Enums.ReservationStatus.Reserved;
+
+            reservation.EndTime = createReservationModel.Date.AddHours(2).ToUniversalTime();
             await _reservationRepository.AddAsync(reservation);
             return reservation;
         }

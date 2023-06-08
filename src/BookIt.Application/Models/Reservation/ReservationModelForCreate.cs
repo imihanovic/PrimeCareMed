@@ -18,7 +18,7 @@ namespace BookIt.Application.Models.Reservation
 
         [DataType(DataType.DateTime)]
         [Display(Name = "Date*")]
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
 
 
         [Required]
@@ -32,7 +32,7 @@ namespace BookIt.Application.Models.Reservation
         public ReservationStatus Status { get; set; }
 
         [Required]
-        public List<string> Tables { get; set; }
+        public List<BookIt.Core.Entities.Table> Tables { get; set; }
 
 
         [DataType(DataType.Text)]

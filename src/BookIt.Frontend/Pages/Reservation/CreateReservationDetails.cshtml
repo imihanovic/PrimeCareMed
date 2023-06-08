@@ -13,7 +13,7 @@
         <h4>@ViewData["Address"]</h4>
         </div>
         <div>
-            <form id="createReservationDetailsForm" method="post">
+            <form id="createReservationDetailsForm" asp-page="CreateReservation" method="post">
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
              <div class="form-floating">
@@ -44,6 +44,7 @@
                 </select>
                 <label for="smokingArea">Smoking area</label>
             </div>
+            <input type="hidden" name="restaurantId" value="@Model.Id"/>
             <button id="createReservationDetailsSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Next</button>
             </form>
         </div>  

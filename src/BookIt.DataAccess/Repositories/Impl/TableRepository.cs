@@ -26,6 +26,11 @@ namespace BookIt.DataAccess.Repositories.Impl
             return await _context.Tables.OrderBy(r => r.Id).Include(r => r.Restaurant).ToListAsync();
         }
 
+        public async Task<IEnumerable<Table>> GetAllTablesByRestaurantAsync(Guid restaurantId)
+        {
+            return await _context.Tables.OrderBy(r => r.Id).Include(r => r.Restaurant).Include(r => r.Reservations).Where(t => t.Restaurant.Id == restaurantId).ToListAsync();
+        }
+
         public async Task<Table> UpdateAsync(Table table)
         {
             var editItem = await GetTableByIdAsync(table.Id);

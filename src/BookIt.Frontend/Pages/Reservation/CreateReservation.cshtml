@@ -17,15 +17,19 @@
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
-                <select asp-for = "NewReservation.Time" class="form-control">
+                <select asp-for = "NewReservation.Time" class="form-control" name="reservationTime">
                     <option disabled selected>Select time</option>
-                        @for(var i = 12; i <= 22; i++)
+                        @foreach(var slot in Model.AvailableSlots)
                         {
-                            <option value="@i:00">@i:00</option>
-                            <option value="@i:30">@i:30</option>
+                            <option value="@slot">@slot</option>
                         }
                 </select>
                 <label asp-for="NewReservation.Time"></label>
+                <input type="hidden" name="numberOfPersons" value="@ViewData["NumberOfPersons"]"/>
+                <input type="hidden" name="reservationDate" value="@ViewData["ReservationDate"]"/>
+                <input type="hidden" name="smokingArea" value="@ViewData["SmokingArea"]"/>
+                <input type="hidden" name="tableArea" value="@ViewData["TableArea"]"/>
+                <input type="hidden" name="restaurantId" value="@ViewData["RestaurantId"]"/>
             </div>
             <button id="createReservationSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Create reservation</button>
             </form>

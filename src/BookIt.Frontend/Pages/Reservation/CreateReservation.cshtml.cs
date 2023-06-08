@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
 using BookIt.Application.Models.Reservation;
-using BookIt.Application.Models.Restaurant;
-using BookIt.Application.Models.Table;
-using BookIt.Application.Models.User;
 using BookIt.Application.Services;
-using BookIt.Application.Services.Impl;
 using BookIt.Core.Entities;
 using BookIt.DataAccess.Repositories;
-using BookIt.DataAccess.Repositories.Impl;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -18,19 +13,26 @@ namespace BookIt.Frontend.Pages.Reservation
         private readonly IReservationService _reservationService;
         private readonly IRestaurantService _restaurantService;
         private readonly IUserRepository _userRepository;
+        private readonly IReservationRepository _reservationRepository;
+        private readonly ITableRepository _tableRepository;
         private readonly ITableService _tableService;
         private readonly IMapper _mapper;
+        private List<string> timeSlots = new List<string> { "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"};
         public CreateReservationModel(IRestaurantRepository restaurantRepository,
+            ITableRepository tableRepository,
             IMapper mapper,
             IRestaurantService restaurantService,
+            IReservationRepository reservationRepository,
             IReservationService reservationService,
             ITableService tableService,
             IUserRepository userRepository)
         {
             _reservationService = reservationService;
             _mapper = mapper;
+            _tableRepository = tableRepository;
             _restaurantService = restaurantService;
             _tableService = tableService;
+            _reservationRepository = reservationRepository;
             _userRepository = userRepository;
         }
 
@@ -38,9 +40,13 @@ namespace BookIt.Frontend.Pages.Reservation
         public ReservationModelForCreate NewReservation { get; set; }
 
         [BindProperty]
-        public IEnumerable<TableModel> Tables { get; set; }
+        public IEnumerable<Table> Tables { get; set; }
 
-        public void OnGet(int numberOfPersons, string tableArea, string smokingArea, string reservationDate, Guid restaurantId)
+
+        public List<string> AvailableSlots { get; set; }
+
+
+        public async Task<IActionResult> OnPostAsync(int numberOfPersons, string tableArea, string smokingArea, string reservationDate, Guid restaurantId, string reservationTime)
         {
             var restaurant = _restaurantService.GetAllRestaurants().FirstOrDefault(r => r.Id == restaurantId);
             if (restaurant != null)
@@ -48,25 +54,68 @@ namespace BookIt.Frontend.Pages.Reservation
                 ViewData["RestaurantName"] = restaurant.RestaurantName;
                 ViewData["Address"] = restaurant.Address;
             }
+
             ViewData["ReservationDate"] = reservationDate;
             ViewData["NumberOfPersons"] = numberOfPersons;
+            ViewData["SmokingArea"] = smokingArea;
+            ViewData["TableArea"] = tableArea;
+            ViewData["RestaurantId"] = restaurantId;
 
             var tables = _tableService.GetAllTables(restaurantId);
+            var tablesEntites = _tableRepository.GetAllTablesByRestaurantAsync(restaurantId).Result;
 
+            var slotsToTableMap = new Dictionary<string, List<Table>>();
+            foreach (var slot in timeSlots)
+            {
+                var availableTableList = new List<Table>();
+
+                var slotDivided = slot.Split(":");
+                var hours = int.Parse(slotDivided[0]);
+
+                foreach (var table in tablesEntites)
+                {
+                    var tableReservations = table.Reservations.Where(r => r.StartTime == DateTime.Parse(reservationDate).AddHours(hours).ToUniversalTime());                    
+                    if(tableReservations.Count() == 0 && (table.Area.ToString() == tableArea || tableArea is null) && (table.Smoking.ToString() == smokingArea || smokingArea is null))
+                    {
+                        availableTableList.Add(table);
+                    }
+                }                
+                if(availableTableList.Count > 0 && availableTableList.Select(t=> t.NumberOfSeats).Sum() >= numberOfPersons)
+                {
+                    slotsToTableMap.Add(slot, availableTableList);
+                }
+            }
+
+            AvailableSlots = slotsToTableMap.Keys.ToList();
+
+            if(reservationTime is not null)
+            {
+                var slotDivided = reservationTime.Split(":");
+                var hours = int.Parse(slotDivided[0]);
+
+                NewReservation.NumberOfPerson = numberOfPersons;
+                NewReservation.Date = DateTime.Parse(reservationDate).AddHours(hours);
+                NewReservation.Tables = new List<Table>();
+                var capacity = 0;
+                foreach (var table in slotsToTableMap[reservationTime])
+                {
+                    NewReservation.Tables.Add(table);
+                    capacity = capacity + table.NumberOfSeats;
+                    if (capacity >= numberOfPersons)
+                        break;
+                }
+
+                try
+                {
+                    await _reservationService.AddAsync(NewReservation);
+                    //redirect
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
             
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            try
-            {
-                await _reservationService.AddAsync(NewReservation);
-                return RedirectToPage("../Restaurant/ViewAllRestaurants");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
             return Page();
         }
     }
