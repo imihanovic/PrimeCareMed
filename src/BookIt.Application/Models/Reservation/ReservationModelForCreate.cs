@@ -1,4 +1,5 @@
-﻿using BookIt.Core.Enums;
+﻿using BookIt.Core.Entities.Identity;
+using BookIt.Core.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace BookIt.Application.Models.Reservation
@@ -9,7 +10,7 @@ namespace BookIt.Application.Models.Reservation
 
         [DataType(DataType.Text)]
         [Display(Name = "customer")]
-        public string customerid { get; set; }
+        public ApplicationUser Customer { get; set; }
 
         [Required]
         [Range(1, 20)]
@@ -38,7 +39,6 @@ namespace BookIt.Application.Models.Reservation
         [DataType(DataType.Text)]
         [Display(Name = "Reservation details")]
         public string ReservationDetails { get; set; }
-
 
     }
 }

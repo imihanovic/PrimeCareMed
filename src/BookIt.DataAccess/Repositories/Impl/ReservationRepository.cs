@@ -21,6 +21,21 @@ namespace BookIt.DataAccess.Repositories.Impl
         public async Task<IEnumerable<Reservation>> GetAllReservationsAsync()
         {
             return await _context.Reservations.OrderBy(r => r.Id).ToListAsync();
+        } 
+
+        public async Task<Reservation> GetReservationByIdAsync(Guid id)
+        {
+            return await _context.Reservations.FirstOrDefaultAsync(r => r.Id == id);
+        }
+
+        public async Task<Reservation> UpdateAsync(Reservation reservation)
+        {
+            var editItem = await GetReservationByIdAsync(reservation.Id);
+            editItem.Status = reservation.Status;
+            Console.WriteLine($"Reservation details after post: {reservation.ReservationDetails}");
+            editItem.ReservationDetails = reservation.ReservationDetails;
+            await _context.SaveChangesAsync();
+            return editItem;
         }
     }
 }

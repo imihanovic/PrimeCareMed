@@ -10,6 +10,8 @@ namespace BookIt.Application.MappingProfiles
         {
             CreateMap<ReservationModelForCreate, Reservation>();
             CreateMap<Reservation, ReservationModelForCreate>();
+            CreateMap<Reservation, ReservationModelForUpdate>();
+            CreateMap<ReservationModelForUpdate, Reservation>();
         }
     }
 }

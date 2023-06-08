@@ -7,5 +7,9 @@ namespace BookIt.DataAccess.Repositories
         Task<Reservation> AddAsync(Reservation reservation);
 
         Task<IEnumerable<Reservation>> GetAllReservationsAsync();
+
+        Task<Reservation> GetReservationByIdAsync(Guid id);
+
+        Task<Reservation> UpdateAsync(Reservation reservation);
     }
 }

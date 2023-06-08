@@ -9,7 +9,7 @@
 }
 <h1>@ViewData["Title"]</h1>
 <hr/>
-@if (User.IsInRole("Administrator"))
+@if (User.IsInRole("Administrator") || User.IsInRole("Customer"))
 {
     <div class="form-actions no-color col">
         <form asp-action="ViewAllRestaurants" method="get" >
@@ -39,7 +39,7 @@
         <tr>
             @foreach (var property in Model.RestaurantModelProperties)
             {
-                if(property != "Address" && User.IsInRole("Administrator"))
+                if(property != "Address" && (User.IsInRole("Administrator") || User.IsInRole("Customer")))
                 {
                     <th class="@(property == "RestaurantName" ? "" : "d-none d-lg-table-cell")">
                         @property      
@@ -72,7 +72,10 @@
                     </th>
                 }  
             }
-             <th>Tables</th>
+            @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
+            {
+                <th>Tables</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -86,9 +89,12 @@
                     <td class="d-none d-lg-table-cell">@restaurant.City</td>
                     <td class="d-none d-lg-table-cell">@restaurant.Address</td>
                     <td class="d-none d-lg-table-cell">@restaurant.ManagerUserName</td>
-                    <td>
-                        <a asp-area="" asp-page="/Tables/ViewAllTables" asp-route-id="@restaurant.Id">Tables</a>
-                    </td>
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
+                    {
+                        <td>
+                            <a asp-area="" asp-page="/Tables/ViewAllTables" asp-route-id="@restaurant.Id">Tables</a>
+                        </td>
+                    }                 
                     @if (User.IsInRole("Administrator"))
                     {
                         <td><a class="btn btn-outline-primary" asp-page="EditRestaurant" asp-route-id="@restaurant.Id"><i class="bi bi-info-lg"></i></a></td>
@@ -100,7 +106,7 @@
     </tbody>
 </table>
 
-@if (User.IsInRole("Administrator"))
+@if (User.IsInRole("Administrator") || User.IsInRole("Customer"))
 {
     <div>
         <ul class="pagination">

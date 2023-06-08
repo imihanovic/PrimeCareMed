@@ -5,7 +5,6 @@ using BookIt.Core.Entities;
 using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Reflection.Metadata.Ecma335;
 
 namespace BookIt.Frontend.Pages.Tables
 {

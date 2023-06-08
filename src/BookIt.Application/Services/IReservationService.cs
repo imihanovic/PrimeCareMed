@@ -6,5 +6,7 @@ namespace BookIt.Application.Services
     public interface IReservationService
     {
         Task<Reservation> AddAsync(ReservationModelForCreate createReservationModel);
+
+        Reservation EditReservationAsync(ReservationModelForUpdate reservationModel);
     }
 }

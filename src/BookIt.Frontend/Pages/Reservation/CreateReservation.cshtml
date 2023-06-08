@@ -31,6 +31,14 @@
                 <input type="hidden" name="tableArea" value="@ViewData["TableArea"]"/>
                 <input type="hidden" name="restaurantId" value="@ViewData["RestaurantId"]"/>
             </div>
+            @if (User.IsInRole("Manager"))
+            {
+                <div class="form-floating">
+                    <input asp-for="NewReservation.ReservationDetails" class="form-control" aria-required="true" name="reservationDetails"/>
+                    <label asp-for="NewReservation.ReservationDetails"></label>
+                    <span asp-validation-for="NewReservation.ReservationDetails" class="text-danger"></span>
+                </div>
+            }
             <button id="createReservationSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Create reservation</button>
             </form>
         </div>  

@@ -13,6 +13,7 @@ namespace BookIt.Application.Services.Impl
         private readonly ITableRepository _tableRepository;
         private readonly IRestaurantRepository _restaurantRepository;
         private readonly IUserRepository _userRepository;
+        private const int NUMBER_OF_SEATS = 2;
 
         public TableService(IMapper mapper,
             ITableRepository tableRepository,
@@ -36,6 +37,7 @@ namespace BookIt.Application.Services.Impl
             table.Restaurant = restaurant;
             table.Restaurant.Id = restaurant.Id;
             table.TableName = restaurant.RestaurantName + restaurant.City + restaurant.Address+'_'+uniqueCounter;
+            table.NumberOfSeats = NUMBER_OF_SEATS;
             await _tableRepository.AddAsync(table);
             return _mapper.Map<TableModel>(table);
         }

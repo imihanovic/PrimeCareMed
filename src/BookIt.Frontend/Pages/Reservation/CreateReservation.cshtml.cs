@@ -2,7 +2,10 @@
 using BookIt.Application.Models.Reservation;
 using BookIt.Application.Services;
 using BookIt.Core.Entities;
+using BookIt.Core.Enums;
+using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -13,6 +16,7 @@ namespace BookIt.Frontend.Pages.Reservation
         private readonly IReservationService _reservationService;
         private readonly IRestaurantService _restaurantService;
         private readonly IUserRepository _userRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IReservationRepository _reservationRepository;
         private readonly ITableRepository _tableRepository;
         private readonly ITableService _tableService;
@@ -22,6 +26,7 @@ namespace BookIt.Frontend.Pages.Reservation
             ITableRepository tableRepository,
             IMapper mapper,
             IRestaurantService restaurantService,
+            UserManager<ApplicationUser> userManager,
             IReservationRepository reservationRepository,
             IReservationService reservationService,
             ITableService tableService,
@@ -29,6 +34,7 @@ namespace BookIt.Frontend.Pages.Reservation
         {
             _reservationService = reservationService;
             _mapper = mapper;
+            _userManager = userManager;
             _tableRepository = tableRepository;
             _restaurantService = restaurantService;
             _tableService = tableService;
@@ -46,8 +52,11 @@ namespace BookIt.Frontend.Pages.Reservation
         public List<string> AvailableSlots { get; set; }
 
 
-        public async Task<IActionResult> OnPostAsync(int numberOfPersons, string tableArea, string smokingArea, string reservationDate, Guid restaurantId, string reservationTime)
+        public async Task<IActionResult> OnPostAsync(int numberOfPersons, string tableArea, string smokingArea, string reservationDate, Guid restaurantId, string reservationTime, string reservationDetails)
         {
+            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
+
             var restaurant = _restaurantService.GetAllRestaurants().FirstOrDefault(r => r.Id == restaurantId);
             if (restaurant != null)
             {
@@ -92,7 +101,18 @@ namespace BookIt.Frontend.Pages.Reservation
             {
                 var slotDivided = reservationTime.Split(":");
                 var hours = int.Parse(slotDivided[0]);
-
+                
+                if(currentUserRole == "Customer")
+                {
+                    NewReservation.Customer = currentUser;
+                    NewReservation.Status = ReservationStatus.Reserved;
+                    NewReservation.ReservationDetails = currentUser.FirstName + ' ' + currentUser.LastName + ' ' + currentUser.Email + ' ' + currentUser.PhoneNumber;
+                }
+                else
+                {
+                    NewReservation.ReservationDetails = reservationDetails;
+                    NewReservation.Status = ReservationStatus.Affirmed;
+                }
                 NewReservation.NumberOfPerson = numberOfPersons;
                 NewReservation.Date = DateTime.Parse(reservationDate).AddHours(hours);
                 NewReservation.Tables = new List<Table>();
@@ -108,7 +128,7 @@ namespace BookIt.Frontend.Pages.Reservation
                 try
                 {
                     await _reservationService.AddAsync(NewReservation);
-                    //redirect
+                    return RedirectToPage("../Restaurant/ViewAllRestaurants");
                 }
                 catch (Exception ex)
                 {

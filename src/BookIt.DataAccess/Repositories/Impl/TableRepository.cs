@@ -36,7 +36,6 @@ namespace BookIt.DataAccess.Repositories.Impl
             var editItem = await GetTableByIdAsync(table.Id);
             editItem.Area = table.Area;
             editItem.Smoking = table.Smoking;
-            editItem.NumberOfSeats = table.NumberOfSeats;
             await _context.SaveChangesAsync();
             return editItem;
         }
