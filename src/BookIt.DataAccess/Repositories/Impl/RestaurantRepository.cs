@@ -24,7 +24,7 @@ namespace BookIt.DataAccess.Repositories.Impl
         }
         public async Task<IEnumerable<Restaurant>> GetAllRestaurantsAsync()
         {
-            return await _context.Restaurants.OrderBy(r => r.Id).ToListAsync();
+            return await _context.Restaurants.OrderBy(r => r.Id).Include(r => r.Tables).ToListAsync();
         }
 
         public async Task<Restaurant> UpdateAsync(Restaurant restaurant)

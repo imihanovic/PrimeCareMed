@@ -16,7 +16,7 @@
             <form id="createReservationDetailsForm" asp-page="CreateReservation" method="post">
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-             <div class="form-floating">
+            <div class="form-floating">
                 <input id="reservationDate" type="date" name="reservationDate" class="form-control" required min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" />
                 <label for="reservationDate">Reservation date</label>
             </div>

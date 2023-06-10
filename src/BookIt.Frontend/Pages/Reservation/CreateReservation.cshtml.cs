@@ -128,7 +128,7 @@ namespace BookIt.Frontend.Pages.Reservation
                 try
                 {
                     await _reservationService.AddAsync(NewReservation);
-                    return RedirectToPage("../Restaurant/ViewAllRestaurants");
+                    return RedirectToPage("ViewAllReservation");
                 }
                 catch (Exception ex)
                 {

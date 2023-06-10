@@ -17,5 +17,6 @@ namespace BookIt.DataAccess.Repositories
         Task DeleteAsync(Guid id);
 
         Task<Restaurant> GetRestaurantByTableAsync(Guid tableId);
+
     }
 }

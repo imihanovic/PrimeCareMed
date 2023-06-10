@@ -67,7 +67,7 @@ namespace BookIt.Frontend.Pages.Reservation
 
             _reservationService.EditReservationAsync(EditReservation);
 
-            return RedirectToPage("../Restaurant/ViewAllRestaurants");
+            return RedirectToPage("ViewAllReservation");
         }
     }
 }

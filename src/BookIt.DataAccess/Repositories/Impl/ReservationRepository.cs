@@ -20,8 +20,8 @@ namespace BookIt.DataAccess.Repositories.Impl
 
         public async Task<IEnumerable<Reservation>> GetAllReservationsAsync()
         {
-            return await _context.Reservations.OrderBy(r => r.Id).ToListAsync();
-        } 
+            return await _context.Reservations.OrderBy(r => r.Id).Include(r => r.Customer).Include(r => r.Tables).ToListAsync();
+        }
 
         public async Task<Reservation> GetReservationByIdAsync(Guid id)
         {

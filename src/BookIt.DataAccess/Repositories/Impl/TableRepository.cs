@@ -7,11 +7,15 @@ namespace BookIt.DataAccess.Repositories.Impl
     public class TableRepository : ITableRepository
     {
         private readonly DatabaseContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly IRestaurantRepository _restaurantRepository;
-        public TableRepository(DatabaseContext context, IRestaurantRepository restaurantRepository)
+        public TableRepository(DatabaseContext context,
+            IRestaurantRepository restaurantRepository,
+            IUserRepository userRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _restaurantRepository = restaurantRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<Table> AddAsync(Table table)

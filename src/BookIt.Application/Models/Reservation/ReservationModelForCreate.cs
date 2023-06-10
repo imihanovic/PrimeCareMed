@@ -36,6 +36,7 @@ namespace BookIt.Application.Models.Reservation
         public List<BookIt.Core.Entities.Table> Tables { get; set; }
 
 
+        [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Reservation details")]
         public string ReservationDetails { get; set; }
