@@ -83,7 +83,7 @@ namespace BookIt.Frontend.Pages.Reservation
 
                 foreach (var table in tablesEntites)
                 {
-                    var tableReservations = table.Reservations.Where(r => r.StartTime == DateTime.Parse(reservationDate).AddHours(hours).ToUniversalTime());                    
+                    var tableReservations = table.Reservations.Where(r => r.StartTime == DateTime.Parse(reservationDate).AddHours(hours).ToUniversalTime() && r.Status != ReservationStatus.Cancelled);                    
                     if(tableReservations.Count() == 0 && (table.Area.ToString() == tableArea || tableArea is null) && (table.Smoking.ToString() == smokingArea || smokingArea is null))
                     {
                         availableTableList.Add(table);

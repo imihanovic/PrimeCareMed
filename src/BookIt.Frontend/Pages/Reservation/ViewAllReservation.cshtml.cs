@@ -43,7 +43,7 @@ namespace BookIt.Frontend.Pages.Reservation
             _userManager = userManager;
         }
 
-        public void OnGet(string sort, string currentFilter, string keyword, string statusFilter, string reservationDate, string reservationTime, int? pageIndex)
+        public async Task OnGetAsync(string sort, string currentFilter, string keyword, string statusFilter, string reservationDate, string reservationTime, int? pageIndex)
         {
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
@@ -74,7 +74,6 @@ namespace BookIt.Frontend.Pages.Reservation
             if (currentUserRole == "Manager")
             {
                 reservations = _reservationService.GetAllReservationsForManager(currentUser.Id);
-                //reservations = _reservationService.GetAllReservationsByManagerIdAsync(reservations, currentUser.Id);
             }
             else if (currentUserRole == "Customer")
             {

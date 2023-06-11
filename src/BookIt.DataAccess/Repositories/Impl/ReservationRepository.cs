@@ -1,6 +1,7 @@
 ﻿using BookIt.Core.Entities;
 using BookIt.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace BookIt.DataAccess.Repositories.Impl
 {
@@ -20,7 +21,7 @@ namespace BookIt.DataAccess.Repositories.Impl
 
         public async Task<IEnumerable<Reservation>> GetAllReservationsAsync()
         {
-            return await _context.Reservations.OrderBy(r => r.Id).Include(r => r.Customer).Include(r => r.Tables).ToListAsync();
+            return await _context.Reservations.OrderBy(r => r.Id).Include(r => r.Customer).Include(r => r.Tables).ThenInclude(r => r.Restaurant).ToListAsync(); 
         }
 
         public async Task<Reservation> GetReservationByIdAsync(Guid id)

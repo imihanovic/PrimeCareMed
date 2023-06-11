@@ -49,49 +49,60 @@ namespace BookIt.Application.Services.Impl
             return reservation;
         }
 
-        public IEnumerable<ReservationModel> GetAllReservations()
+        public ReservationModel GetAreaAndSmokingForReservation (ReservationModel reservationDto, Reservation reservation)
         {
-            var reservationsFromDatabase = _reservationRepository.GetAllReservationsAsync().Result;
+            reservationDto.TableArea = reservation.Tables.FirstOrDefault().Area.ToString();
+            reservationDto.SmokingArea = reservation.Tables.FirstOrDefault().Smoking.ToString();
+
+            return reservationDto;
+        }
+
+        public IEnumerable<ReservationModel> MapAndAddAllReservations(IEnumerable<Reservation> filteredReservations)
+        {
             List<ReservationModel> reservations = new List<ReservationModel>();
-            foreach (var reservation in reservationsFromDatabase)
+            foreach (var reservation in filteredReservations)
             {
                 var reservationDto = _mapper.Map<ReservationModel>(reservation);
                 reservationDto.StartTime = DateTime.Parse(reservationDto.StartTime).ToString("yyyy-MM-dd  HH:mm");
+                reservationDto = GetAreaAndSmokingForReservation(reservationDto, reservation);
                 reservations.Add(reservationDto);
             }
             return reservations.AsEnumerable();
+        }
+        public IEnumerable<ReservationModel> GetAllReservations()
+        {
+            var reservationsFromDatabase = _reservationRepository.GetAllReservationsAsync().Result;
+            return MapAndAddAllReservations(reservationsFromDatabase);
+        }
+        public IEnumerable<ReservationModel> GetAllReservationsForManager(string managerId)
+        {
+            var reservationsFromDatabase = _reservationRepository.GetAllReservationsAsync().Result.Where(r => r.Tables.First().Restaurant.ManagerId == managerId);
+            return MapAndAddAllReservations(reservationsFromDatabase);
         }
         public IEnumerable<ReservationModel> GetAllReservationsForCustomer(string customerId)
         {
             var reservationsFromDatabase = _reservationRepository.GetAllReservationsAsync().Result.Where(r => (r.Customer != null && r.Customer.Id == customerId));
-            List<ReservationModel> reservations = new List<ReservationModel>();
-            foreach (var reservation in reservationsFromDatabase)
-            {
-                var reservationDto = _mapper.Map<ReservationModel>(reservation);
-                reservationDto.StartTime = DateTime.Parse(reservationDto.StartTime).ToString("yyyy-MM-dd  HH:mm");
-                reservations.Add(reservationDto);
-            }
-            return reservations.AsEnumerable();
+            return MapAndAddAllReservations(reservationsFromDatabase);
         }
 
-        public IEnumerable<ReservationModel> GetAllReservationsForManager(string managerId)
-        {
-            var currentUserTables = _restaurantRepository.GetRestaurantByManagerIdAsync(managerId).Result.Tables.ToList();
-            List<ReservationModel> reservations = new List<ReservationModel>();
-            foreach (var table in currentUserTables)
-            {
-                var managersReservation = _reservationRepository.GetAllReservationsAsync().Result.Where(r => r.Tables.Contains(table));
+        //public IEnumerable<ReservationModel> GetAllReservationsForManager(string managerId)
+        //{
+        //    var currentUserTables = _restaurantRepository.GetRestaurantByManagerIdAsync(managerId).Result.Tables.ToList();
+        //    List<ReservationModel> reservations = new List<ReservationModel>();
+        //    foreach (var table in currentUserTables)
+        //    {
+        //        var managersReservation = _reservationRepository.GetAllReservationsAsync().Result.Where(r => r.Tables.Contains(table));
 
-                foreach (var reservation in managersReservation)
-                {
-                    var reservationDto = _mapper.Map<ReservationModel>(reservation);
-                    reservationDto.StartTime = DateTime.Parse(reservationDto.StartTime).ToString("yyyy-MM-dd  HH:mm");
-                    reservations.Add(reservationDto);
-                }
-            }
+        //        foreach (var reservation in managersReservation)
+        //        {
+        //            var reservationDto = _mapper.Map<ReservationModel>(reservation);
+        //            reservationDto.StartTime = DateTime.Parse(reservationDto.StartTime).ToString("yyyy-MM-dd  HH:mm");
+        //            reservations.Add(reservationDto);
+        //        }
+        //    }
 
-            return reservations.DistinctBy(r => r.Id).AsEnumerable();
-        }
+        //    return reservations.DistinctBy(r => r.Id).AsEnumerable();
+        //}
 
         public Reservation EditReservationAsync(ReservationModelForUpdate reservationModel)
         {
@@ -154,18 +165,6 @@ namespace BookIt.Application.Services.Impl
             }
             return filteredReservations;
         }
-
-        //public IEnumerable<ReservationModel> GetAllReservationsByManagerIdAsync(IEnumerable<ReservationModel> reservations, string managerId)
-        //{
-        //    var reservationsFromDB = _reservationRepository.GetAllReservationsAsync().Result.Where(r => r.Tables.First().Restaurant.Manager.Id == managerId);
-        //    var returnedValues = new List<ReservationModel>();
-        //    foreach (var reservation in reservationsFromDB)
-        //    {
-        //        returnedValues.Add(_mapper.Map<ReservationModel>(reservation));
-        //    }
-        //    reservations = returnedValues;
-        //    return reservations;
-        //}
 
         public IEnumerable<ReservationModel> ReservationSearch(IEnumerable<ReservationModel> reservations, string searchString)
         {

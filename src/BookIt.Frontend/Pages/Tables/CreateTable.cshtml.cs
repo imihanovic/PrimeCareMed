@@ -49,7 +49,7 @@ namespace BookIt.Frontend.Pages.Tables
             if(currentUserRole == "Manager")
             {
                 var restaurant = _restaurantRepository.GetRestaurantByManagerIdAsync(currentUser.Id).Result;
-                Console.WriteLine($"restoran id : {restaurant.Id}");
+         
                 NewTable.RestaurantId = restaurant.Id.ToString();
             }
 

@@ -22,12 +22,13 @@ namespace BookIt.Application.Services
         IEnumerable<ReservationModel> ReservationFilterByReservationDate(IEnumerable<ReservationModel> reservations, string reservationDate);
 
         IEnumerable<ReservationModel> ReservationFilterByReservationTime(IEnumerable<ReservationModel> reservations, string reservationTime);
+        IEnumerable<ReservationModel> MapAndAddAllReservations(IEnumerable<Reservation> filteredReservations);
 
-        //IEnumerable<ReservationModel> GetAllReservationsByManagerIdAsync(IEnumerable<ReservationModel> reservations, string managerId);
+        IEnumerable<ReservationModel> GetAllReservationsForManager(string managerId);
 
         IEnumerable<ReservationModel> GetAllReservationsForCustomer(string customerId);
 
-        IEnumerable<ReservationModel> GetAllReservationsForManager(string managerId);
+        ReservationModel GetAreaAndSmokingForReservation(ReservationModel reservationDto, Reservation reservation);
 
     }
 }
