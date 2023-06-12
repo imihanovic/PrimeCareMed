@@ -198,7 +198,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("RestaurantDish");
+                    b.ToTable("RestaurantDishes");
                 });
 
             modelBuilder.Entity("BookIt.Core.Entities.Table", b =>

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookIt.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230527222739_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230612200120_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -200,7 +200,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("RestaurantDish");
+                    b.ToTable("RestaurantDishes");
                 });
 
             modelBuilder.Entity("BookIt.Core.Entities.Table", b =>
