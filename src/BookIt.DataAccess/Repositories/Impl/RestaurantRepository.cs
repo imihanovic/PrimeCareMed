@@ -24,7 +24,7 @@ namespace BookIt.DataAccess.Repositories.Impl
         }
         public async Task<IEnumerable<Restaurant>> GetAllRestaurantsAsync()
         {
-            return await _context.Restaurants.OrderBy(r => r.Id).ToListAsync();
+            return await _context.Restaurants.OrderBy(r => r.Id).Include(r => r.Tables).ToListAsync();
         }
 
         public async Task<Restaurant> UpdateAsync(Restaurant restaurant)
@@ -48,6 +48,13 @@ namespace BookIt.DataAccess.Repositories.Impl
         public async Task<Restaurant> GetRestaurantByIdAsync(Guid id)
         {
             return await _context.Restaurants.FirstOrDefaultAsync(r => r.Id == id);
+        }
+
+        public async Task<Restaurant> GetRestaurantByManagerIdAsync(string managerId)
+        {
+            var allRestaurants = await GetAllRestaurantsAsync();
+            var restaurant = allRestaurants.First(r => r.ManagerId == managerId);
+            return restaurant;
         }
     }
 }

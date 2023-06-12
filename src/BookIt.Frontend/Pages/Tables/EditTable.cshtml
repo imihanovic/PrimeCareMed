@@ -16,11 +16,6 @@
             <form id="editTableForm" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
-                <input asp-for="EditTable.NumberOfSeats" class="form-control" aria-required="true" />
-                <label asp-for="EditTable.NumberOfSeats"></label>
-                <span asp-validation-for="EditTable.NumberOfSeats" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
                 <select asp-for = "EditTable.Area" class="form-control">
                     @foreach (var area in (TableArea[])Enum.GetValues(typeof(TableArea)))
                     {

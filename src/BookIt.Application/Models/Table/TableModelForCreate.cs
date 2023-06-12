@@ -7,11 +7,6 @@ namespace BookIt.Application.Models.Table
         public string Id { get; set; }
 
         [Required]
-        [Range(1, 13)]
-        [Display(Name = "Number of seats*")]
-        public int NumberOfSeats { get; set; }
-
-        [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Restaurant area*")]
         public string Area { get; set; }

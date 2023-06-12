@@ -7,11 +7,15 @@ namespace BookIt.DataAccess.Repositories.Impl
     public class TableRepository : ITableRepository
     {
         private readonly DatabaseContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly IRestaurantRepository _restaurantRepository;
-        public TableRepository(DatabaseContext context, IRestaurantRepository restaurantRepository)
+        public TableRepository(DatabaseContext context,
+            IRestaurantRepository restaurantRepository,
+            IUserRepository userRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _restaurantRepository = restaurantRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<Table> AddAsync(Table table)
@@ -26,12 +30,16 @@ namespace BookIt.DataAccess.Repositories.Impl
             return await _context.Tables.OrderBy(r => r.Id).Include(r => r.Restaurant).ToListAsync();
         }
 
+        public async Task<IEnumerable<Table>> GetAllTablesByRestaurantAsync(Guid restaurantId)
+        {
+            return await _context.Tables.OrderBy(r => r.Id).Include(r => r.Restaurant).Include(r => r.Reservations).Where(t => t.Restaurant.Id == restaurantId).ToListAsync();
+        }
+
         public async Task<Table> UpdateAsync(Table table)
         {
             var editItem = await GetTableByIdAsync(table.Id);
             editItem.Area = table.Area;
             editItem.Smoking = table.Smoking;
-            editItem.NumberOfSeats = table.NumberOfSeats;
             await _context.SaveChangesAsync();
             return editItem;
         }
@@ -50,8 +58,9 @@ namespace BookIt.DataAccess.Repositories.Impl
         public async Task<Restaurant> GetRestaurantByTableAsync(Guid tableId)
         {
             var allRestaurants = _restaurantRepository.GetAllRestaurantsAsync().Result;
-            var table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == tableId);
+            var table = GetTableByIdAsync(tableId).Result;
             var restaurant = allRestaurants.First(r => r.Tables.Contains(table));
+            //var restaurant1 = await _restaurantRepository.GetRestaurantByIdAsync(table.Restaurant.Id);
             return restaurant;
         }
     }

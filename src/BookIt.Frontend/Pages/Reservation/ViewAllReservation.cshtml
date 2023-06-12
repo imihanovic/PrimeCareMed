@@ -1,0 +1,234 @@
+﻿@page
+@using BookIt.Core.Enums
+@model BookIt.Frontend.Pages.Reservation.ViewAllReservationModel
+@{
+    ViewData["Title"] = "Reservations";
+    var sort = ViewData["CurrentSort"] as string;
+    var keyword = ViewData["Keyword"] as string;
+    var reservationDate = ViewData["ReservationDate"] as string;
+    var reservationTime = ViewData["ReservationTime"] as string;
+    var restaurantFilter = ViewData["RestaurantFilter"] as string;
+    var statusFilter = ViewData["StatusFilter"] as string;
+    var tableArea = ViewData["TableArea"] as string;
+    var smokingArea = ViewData["SmokingArea"] as string;
+    var prevDisabled = !Model.Reservations.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Reservations.HasNextPage ? "disabled" : "";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr/>
+
+@if (User.IsInRole("Manager"))
+{
+    <td><a class="btn btn-outline-primary mb-2" asp-page="../Reservation/CreateReservationDetails" asp-route-id="@Model.RestaurantId"><i class="bi bi-pencil-square"></i>Create new reservation</a></td>
+}
+<div class="form-actions no-color col">
+    <form asp-action="ViewAllReservation" method="get" >
+        <div class="row">
+            <div class="col-4 col-sm-7">
+                <div class="input-group mb-3">
+                    <input type="search" class="form-control" placeholder="Search..." name="keyword" value="@keyword">               
+                    <select class="form-select" aria-label="Example select with button addon" name="statusFilter">
+                        <option value="">Any status</option>
+                        @foreach (var status in Enum.GetNames(typeof(ReservationStatus)))
+                        {
+                            <option value="@status" selected="@(status == statusFilter)">@status</option>
+                        }
+                    </select>
+                    <input id="reservationDate" type="date" name="reservationDate" class="form-control" value="@reservationDate"/>
+                    <select class="form-select" name="reservationTime" aria-label="Example select with button addon">
+                        <option value="">Any time</option>
+                            @foreach(var slot in Model.Slots)
+                            {
+                                <option value="@slot" selected="@(slot == reservationTime)">@slot</option>
+                            }
+                    </select>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+            <div class="col-1">
+                <a asp-action="ViewAllReservation" class="btn btn-secondary clear-btn">Clear</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2 col-sm-7">
+                <div class="input-group mb-3">
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <select class="form-select" aria-label="Example select with button addon" name="restaurantFilter">
+                            <option value="">All restaurants</option>
+                            @foreach (var restaurant in Model.AllRestaurants)
+                            {
+                                <option value="@restaurant.Id" selected="@(restaurant.Id.ToString() == restaurantFilter)">@restaurant.RestaurantName</option>
+                            }
+                        </select>
+                    } 
+                    <select class="form-select" aria-label="Example select with button addon" name="tableArea">
+                        <option value="">Any table area</option>
+                        @foreach (var area in Enum.GetNames(typeof(TableArea)))
+                        {
+                            <option value="@area" selected="@(area == tableArea)">@area</option>
+                        }
+                    </select>
+                    <select class="form-select" aria-label="Example select with button addon" name="smokingArea">
+                        <option value="">Any smoking area</option>
+                        @foreach (var smoking in Enum.GetNames(typeof(TableSmoking)))
+                        {
+                            <option value="@smoking" selected="@(smoking == smokingArea)">@smoking</option>
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-filter"></i></button>
+                </div>
+            </div>  
+        </div>
+    </form>
+</div>
+
+<table class="table table-striped table-bordered user-table">
+    <thead>
+        <tr>
+            @foreach (var property in Model.ReservationModelProperties)
+            {
+                if(property == "ReservationDetails")
+                {
+                    <th>
+                        @property
+                        @if (sort is null)
+                        {
+                            <a asp-page="ViewAllReservation" asp-route-statusFilter="@ViewData["StatusFilter"]"
+                                asp-route-reservationTime="@ViewData["ReservationTime"]"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                asp-route-reservationDate="@ViewData["ReservationDate"]"
+                                asp-route-sort=@($"{@property}") class="sort-icon"><span class="bi bi-sort-alpha-down "></span></a>
+                            <a asp-page="ViewAllReservation" asp-route-statusFilter="@ViewData["StatusFilter"]"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                asp-route-reservationTime="@ViewData["ReservationTime"]"
+                                asp-route-reservationDate="@ViewData["ReservationDate"]"
+                                asp-route-sort=@($"{@property}Desc") class="sort-icon"><span class="bi bi-sort-alpha-down-alt"></span></a>
+                        }
+                        else if (sort.Contains("Desc"))
+                        {
+                            <a asp-page="ViewAllReservation" asp-route-statusFilter="@ViewData["StatusFilter"]"
+                                asp-route-reservationDate="@ViewData["ReservationDate"]"
+                                asp-route-reservationTime="@ViewData["ReservationTime"]"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                asp-route-sort=@($"{@property}") class="sort-icon"><span class="bi bi-sort-alpha-down "></span></a>
+                        }
+                        else
+                        {
+                            <a asp-page="ViewAllReservation" asp-route-statusFilter="@ViewData["StatusFilter"]"
+                                asp-route-reservationDate="@ViewData["ReservationDate"]"
+                                asp-route-reservationTime="@ViewData["ReservationTime"]"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                asp-route-sort=@($"{@property}Desc") class="sort-icon"><span class="bi bi-sort-alpha-down-alt"></span></a>
+                        }
+                    </th>
+                }
+                else if(property == "NumberOfPersons")
+                {
+                    <th>
+                        @property
+                        @if (sort is null)
+                        {
+                            <a asp-page="ViewAllReservation" asp-route-statusFilter="@ViewData["StatusFilter"]"
+                                asp-route-reservationDate="@ViewData["ReservationDate"]"
+                                asp-route-reservationTime="@ViewData["ReservationTime"]"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                asp-route-sort=@($"{@property}") class="sort-icon"><span class="bi bi-sort-numeric-down"></span></a>
+                            <a asp-page="ViewAllReservation" asp-route-statusFilter="@ViewData["StatusFilter"]"
+                                asp-route-reservationDate="@ViewData["ReservationDate"]"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                asp-route-sort=@($"{@property}Desc") class="sort-icon"><i class="bi bi-sort-numeric-down-alt"></i></a>
+                        }
+                        else if (sort.Contains("Desc"))
+                        {
+                            <a asp-page="ViewAllReservation" asp-route-statusFilter="@ViewData["StatusFilter"]"
+                                asp-route-reservationDate="@ViewData["ReservationDate"]"
+                                asp-route-reservationTime="@ViewData["ReservationTime"]"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                asp-route-sort=@($"{@property}") class="sort-icon"><span class="bi bi-sort-numeric-down"></span></a>
+                        }
+                        else
+                        {
+                            <a asp-page="ViewAllReservation" asp-route-statusFilter="@ViewData["StatusFilter"]"
+                                asp-route-reservationDate="@ViewData["ReservationDate"]"
+                                asp-route-reservationTime="@ViewData["ReservationTime"]"
+                                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                asp-route-sort=@($"{@property}Desc") class="sort-icon"><i class="bi bi-sort-numeric-down-alt"></i></a>
+                        }
+                    </th>
+                }
+                else
+                {                
+                    <th>
+                        @property                     
+                    </th>
+                }                     
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Reservations.Count() > 0)
+        {
+            @foreach (var reservation in Model.Reservations)
+            {
+                <tr class="align-middle">
+                    <td>@reservation.NumberOfPersons</td>
+                    <td class="d-none d-lg-table-cell">@reservation.StartTime</td>
+                    <td class="d-none d-lg-table-cell">@reservation.Status</td>
+                    <td class="d-none d-lg-table-cell">@reservation.ReservationDetails</td>
+                    <td class="d-none d-lg-table-cell">@reservation.TableArea</td>
+                    <td class="d-none d-lg-table-cell">@reservation.SmokingArea</td>
+                    @if (User.IsInRole("Manager"))
+                    {
+                        <td><a class="btn btn-outline-primary" asp-page="EditReservation" asp-route-id="@reservation.Id"><i class="bi bi-info-lg"></i></a></td>
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div>
+    <ul class="pagination">
+        <li class="page-item">
+            <a asp-page="./ViewAllReservation"
+                asp-route-sort="@ViewData["CurrentSort"]"
+                asp-route-reservationDate="@ViewData["ReservationDate"]"
+                asp-route-reservationTime="@ViewData["ReservationTime"]"
+                asp-route-pageIndex="@(Model.Reservations.PageIndex - 1)"
+                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                asp-route-statusFilter="@ViewData["StatusFilter"]"        
+                class="page-link @prevDisabled">
+                Previous
+            </a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Reservations.PageIndex ? "active" : "")">
+                <a asp-page="./ViewAllReservation"
+                    asp-route-sort="@ViewData["CurrentSort"]"
+                    asp-route-reservationDate="@ViewData["ReservationDate"]"
+                    asp-route-reservationTime="@ViewData["ReservationTime"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                    asp-route-statusFilter="@ViewData["StatusFilter"]"
+                    asp-route-pageIndex="@i" class="page-link">@i
+                </a>
+            </li>
+        }
+        <li class="page-item">
+            <a asp-page="./ViewAllReservation"
+                asp-route-sort="@ViewData["CurrentSort"]"
+                asp-route-pageIndex="@(Model.Reservations.PageIndex +1)"
+                asp-route-reservationDate="@ViewData["ReservationDate"]"
+                asp-route-reservationTime="@ViewData["ReservationTime"]"
+                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                asp-route-statusFilter="@ViewData["StatusFilter"]"
+                class="page-link @nextDisabled">
+                Next
+            </a>
+        </li>
+    </ul>
+</div>
+<a class="btn btn-primary"  onclick="window.history.back()">
+    Back <i class='fas fa-angle-left'></i>
+</a>

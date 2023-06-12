@@ -119,7 +119,6 @@ namespace BookIt.DataAccess.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CustomerId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("EndTime")
@@ -380,9 +379,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
                 {
                     b.HasOne("BookIt.Core.Entities.Identity.ApplicationUser", "Customer")
                         .WithMany("CustomerReservations")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.Navigation("Customer");
                 });

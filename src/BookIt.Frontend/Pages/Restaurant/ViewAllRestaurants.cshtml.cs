@@ -9,7 +9,8 @@ using System.Data;
 
 namespace BookIt.Frontend.Pages.Restaurant
 {
-    [Authorize(Roles = "Administrator,Manager")]
+    //[Authorize(Roles = "Administrator,Manager,Customer")]
+    [Authorize]
     public class ViewAllRestaurantsModel : PageModel
     {
         public readonly IRestaurantService _restaurantService;

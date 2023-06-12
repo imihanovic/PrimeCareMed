@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using BookIt.Core.Enums;
 using BookIt.Core.Entities.Identity;
-using BookIt.Core.Entities;
 
 namespace BookIt.DataAccess.Persistence;
 
