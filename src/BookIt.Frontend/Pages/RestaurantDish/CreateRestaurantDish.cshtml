@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/restaurantDish/create/{id:Guid}"
 @model BookIt.Frontend.Pages.RestaurantDish.CreateRestaurantDishModel
 @{
     ViewData["Title"] = "Add dish to meni";
@@ -7,52 +7,25 @@
     <div>
         <div>
         <h1>@ViewData["Title"]</h1>
-        <h4></h4>
+        <h5>Restaurant: @ViewData["RestaurantName"] @ViewData["Address"]</h5>
+        <h5>Dish: @ViewData["DishName"] Category: @ViewData["DishCategory"]</h5>
         </div>
         <div>
-            <form id="createRestaurantForm" method="post">
+            <form id="createRestaurantDishForm" method="post">
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
-                <input asp-for="NewRestaurant.RestaurantName" class="form-control" aria-required="true" />
-                <label asp-for="NewRestaurant.RestaurantName"></label>
-                <span asp-validation-for="NewRestaurant.RestaurantName" class="text-danger"></span>
+                <input asp-for="NewRestaurantDish.Price" class="form-control" aria-required="true" type="number"/>
+                <label asp-for="NewRestaurantDish.Price"></label>
+                <span asp-validation-for="NewRestaurantDish.Price" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="NewRestaurant.RestaurantOwner" class="form-control" aria-required="true" />
-                <label asp-for="NewRestaurant.RestaurantOwner"></label>
-                <span asp-validation-for="NewRestaurant.RestaurantOwner" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="NewRestaurant.City" class="form-control" aria-required="true" />
-                <label asp-for="NewRestaurant.City"></label>
-                <span asp-validation-for="NewRestaurant.City" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="NewRestaurant.Address" class="form-control" aria-required="true" />
-                <label asp-for="NewRestaurant.Address"></label>
-                <span asp-validation-for="NewRestaurant.Address" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <select asp-for = "NewRestaurant.ManagerId" class="form-control">
-                    <option disabled selected>Select a manager</option>
-                    @foreach (var manager in Model.Managers)
-                    {
-                        <option value="@manager.Id">@manager.UserName</option>
-                    }
-                </select>
-                <label asp-for="NewRestaurant.ManagerId"></label>
-                </div>
-            <button id="createRestaurantSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Create restaurant</button>
+                <input asp-for="NewRestaurantDish.IsAvailable" class="form-control" aria-required="true" type="checkbox" />
+                <label asp-for="NewRestaurantDish.IsAvailable"></label>
+                <span asp-validation-for="NewRestaurantDish.IsAvailable" class="text-danger"></span>
+            </div>            
+            <button id="createRestaurantDishSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Add a dish to the menu</button>
             </form>
-            @if (ViewData["Message"] != null)
-            {
-                <script type="text/javascript">
-                    window.onload = function () {
-                        alert("@ViewData["Message"]");
-                    };
-                </script>
-            }
         </div>  
     </div>
 </div>

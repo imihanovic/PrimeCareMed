@@ -128,3 +128,7 @@
         </li>
     </ul>
 </div>
+@if (User.IsInRole("Manager"))
+{
+    <a class="btn btn-outline-primary" asp-page="ViewAllDishes">View all dishes</a>
+}

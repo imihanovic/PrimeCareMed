@@ -55,6 +55,9 @@ namespace BookIt.Frontend.Pages.RestaurantDish
         [BindProperty]
         public IEnumerable<DishModel> Dishes => _dishService.GetAllDishes();
 
+        [FromRoute]
+        public Guid DishId { get; set; }
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -70,8 +73,16 @@ namespace BookIt.Frontend.Pages.RestaurantDish
                 ViewData["RestaurantName"] = restaurant.RestaurantName;
                 ViewData["RestaurantOwner"] = restaurant.RestaurantOwner;
                 ViewData["Address"] = restaurant.Address;
-            }         
+            }
 
+            var dish = _dishService.GetAllDishes().FirstOrDefault(d => d.Id == DishId);
+            if(dish is not null)
+            {
+                ViewData["DishName"] = dish.DishName;
+                ViewData["DishCategory"] = dish.Category;
+                ViewData["DishDescription"] = dish.DishDescription;
+            }
+            
             try
             {
                 await _restaurantDishService.AddAsync(NewRestaurantDish);

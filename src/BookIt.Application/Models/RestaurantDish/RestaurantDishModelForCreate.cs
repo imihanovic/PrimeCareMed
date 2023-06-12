@@ -18,8 +18,8 @@ namespace BookIt.Application.Models.RestaurantDish
         public bool IsAvailable { get; set; }
 
         [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Address*")]
+        [DataType(DataType.Currency)]
+        [Display(Name = "Price*")]
         public string Price { get; set; }
 
         [Required]
