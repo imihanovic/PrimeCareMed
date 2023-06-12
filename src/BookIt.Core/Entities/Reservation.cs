@@ -19,7 +19,7 @@ namespace BookIt.Core.Entities
         
         public List<Table> Tables { get; set; } = new();
 
-        public string ReservationDetails { get; set; }
+        public string ReservationDetails { get; set; } 
 
     }
 }

@@ -8,6 +8,8 @@ namespace BookIt.DataAccess.Repositories
 
         Task<IEnumerable<Table>> GetAllTablesAsync();
 
+        Task<IEnumerable<Table>> GetAllTablesByRestaurantAsync(Guid restaurantId);
+
         Task<Table> GetTableByIdAsync(Guid id);
 
         Task<Table> UpdateAsync(Table table);
@@ -15,5 +17,6 @@ namespace BookIt.DataAccess.Repositories
         Task DeleteAsync(Guid id);
 
         Task<Restaurant> GetRestaurantByTableAsync(Guid tableId);
+
     }
 }

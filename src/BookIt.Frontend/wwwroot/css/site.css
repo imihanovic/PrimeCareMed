@@ -30,3 +30,7 @@ html {
     width: 40px;
     margin-right: 16px;
 }
+
+.date-reservation-display {
+    height : auto;
+}

@@ -17,16 +17,19 @@ namespace BookIt.Frontend.Pages.Tables
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserRepository _userRepository;
         private readonly ITableService _tableService;
+        private readonly IRestaurantRepository _restaurantRepository;
         private readonly IRestaurantService _restaurantService;
         private readonly IMapper _mapper;
         public CreateTableModel(UserManager<ApplicationUser> userManager,
             IMapper mapper,
             ITableService tableService,
+            IRestaurantRepository restaurantRepository,
             IRestaurantService restaurantService,
             IUserRepository userRepository)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _restaurantRepository = restaurantRepository;
             _restaurantService = restaurantService;
             _userRepository = userRepository;
             _tableService = tableService;
@@ -43,7 +46,12 @@ namespace BookIt.Frontend.Pages.Tables
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
 
-            if (!ModelState.IsValid) { return Page(); }
+            if(currentUserRole == "Manager")
+            {
+                var restaurant = _restaurantRepository.GetRestaurantByManagerIdAsync(currentUser.Id).Result;
+         
+                NewTable.RestaurantId = restaurant.Id.ToString();
+            }
 
             await _tableService.AddAsync(NewTable);
 

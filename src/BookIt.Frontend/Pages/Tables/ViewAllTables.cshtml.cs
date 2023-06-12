@@ -49,15 +49,25 @@ namespace BookIt.Frontend.Pages.Tables
             _userManager = userManager;
         }
 
-        public void OnGet(string sort, string areaFilter, string smokingFilter, int? pageIndex)
+        public IActionResult OnGet(string sort, string areaFilter, string smokingFilter, int? pageIndex)
         {
+
+            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
+
             TableModelProperties = _tableService.GetTableModelFields();
 
             int pageSize = 1;
 
             var restaurant = _restaurantRepository.GetRestaurantByIdAsync(Id).Result;
+
             RestaurantModel = _mapper.Map<RestaurantModel>(restaurant);
 
+            if (currentUser.Restaurant != restaurant && currentUserRole == "Manager")
+            {
+                return RedirectToPage("../Restaurant/ViewAllRestaurants");
+            }
+            
             var tables = _tableService.GetAllTables(Id);
 
             AllTables = tables;
@@ -73,6 +83,9 @@ namespace BookIt.Frontend.Pages.Tables
 
             Tables = PaginatedList<TableModel>.Create(tables, pageIndex ?? 1, pageSize);
 
-            TotalPages = (int)Math.Ceiling(decimal.Divide(tables.Count(), pageSize));        }
+            TotalPages = (int)Math.Ceiling(decimal.Divide(tables.Count(), pageSize));
+
+            return Page();
+        }
     }
 }

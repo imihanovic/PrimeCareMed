@@ -3,6 +3,7 @@ using System;
 using BookIt.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookIt.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230611185515_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,7 +199,7 @@ namespace BookIt.DataAccess.Persistence.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("RestaurantDishes");
+                    b.ToTable("RestaurantDish");
                 });
 
             modelBuilder.Entity("BookIt.Core.Entities.Table", b =>

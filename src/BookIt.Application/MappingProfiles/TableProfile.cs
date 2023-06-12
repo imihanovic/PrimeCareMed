@@ -14,6 +14,8 @@ namespace BookIt.Application.MappingProfiles
             CreateMap<Table, TableModelForUpdate>();
             CreateMap<TableModel, Table>();
             CreateMap<Table, TableModel>();
+            CreateMap<IEnumerable<TableModel>, IEnumerable<Table>>();
+            CreateMap<IEnumerable<Table>, IEnumerable<TableModel>>();
         }
     }
 }

@@ -1,0 +1,45 @@
+﻿@page "/reservations/edit/{id:Guid}"
+@using BookIt.Core.Enums
+@model BookIt.Frontend.Pages.Reservation.EditReservationModel
+@{
+    ViewData["Title"] = "Edit reservation";
+}
+
+<div class="container text-center d-flex align-items-center justify-content-center">
+    <div>
+        <div>
+        <h1>@ViewData["Title"]</h1>
+        <h6>On @ViewData["ReservationDate"] for @ViewData["NumberOfPersons"] persons</h6>
+        </div>
+        <div>
+            <form id="editTableForm" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <select asp-for = "EditReservation.Status" class="form-control">
+                    @foreach (var status in (ReservationStatus[])Enum.GetValues(typeof(ReservationStatus)))
+                    {
+                        <option value="@status.ToString()" selected="@(status.ToString()==Model.EditReservation.Status.ToString()?true:false)">@status.ToString()</option>
+                    }
+                </select>
+                <label asp-for="EditReservation.Status"></label>
+            </div>          
+            <div class="form-floating">
+                <input asp-for="EditReservation.ReservationDetails" class="form-control" aria-required="true"/>
+                <label asp-for="EditReservation.ReservationDetails"></label>
+                <span asp-validation-for="EditReservation.ReservationDetails" class="text-danger"></span>
+            </div>           
+            <div class="form-floating align-items-center justify-content-center mt-2">
+                <button asp-page-handler="edit" class="btn btn-outline-success col-5">
+                    Edit
+                </button>
+            </div>
+            </form>
+        </div>  
+    </div>
+</div>
+<a class="btn btn-primary"  onclick="window.history.back()">
+    Back <i class='fas fa-angle-left'></i>
+</a>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
