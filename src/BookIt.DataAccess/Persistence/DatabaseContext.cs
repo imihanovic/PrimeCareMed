@@ -21,6 +21,7 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<Reservation> Reservations { get; set; }
     public DbSet<Restaurant> Restaurants { get; set; }
     public DbSet<Dish> Dishes { get; set; }
+    public DbSet<RestaurantDish> RestaurantDishes { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder builder)
