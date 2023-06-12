@@ -33,7 +33,6 @@ namespace BookIt.DataAccess.Repositories.Impl
         {
             var editItem = await GetReservationByIdAsync(reservation.Id);
             editItem.Status = reservation.Status;
-            Console.WriteLine($"Reservation details after post: {reservation.ReservationDetails}");
             editItem.ReservationDetails = reservation.ReservationDetails;
             await _context.SaveChangesAsync();
             return editItem;

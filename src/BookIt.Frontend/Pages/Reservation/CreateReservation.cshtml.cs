@@ -74,6 +74,11 @@ namespace BookIt.Frontend.Pages.Reservation
             var tablesEntites = _tableRepository.GetAllTablesByRestaurantAsync(restaurantId).Result;
 
             var slotsToTableMap = new Dictionary<string, List<Table>>();
+
+            var currentdate = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd"); 
+            var currentHour = int.Parse(DateTime.Now.ToLocalTime().ToString("HH")) + 2;
+
+            
             foreach (var slot in timeSlots)
             {
                 var availableTableList = new List<Table>();
@@ -89,7 +94,7 @@ namespace BookIt.Frontend.Pages.Reservation
                         availableTableList.Add(table);
                     }
                 }                
-                if(availableTableList.Count > 0 && availableTableList.Select(t=> t.NumberOfSeats).Sum() >= numberOfPersons)
+                if(availableTableList.Count > 0 && availableTableList.Select(t=> t.NumberOfSeats).Sum() >= numberOfPersons && (DateTime.Parse(currentdate) < DateTime.Parse(reservationDate) || (currentdate == reservationDate && currentHour < hours)))
                 {
                     slotsToTableMap.Add(slot, availableTableList);
                 }

@@ -2,6 +2,7 @@
 using BookIt.Application.Models.Reservation;
 using BookIt.Application.Models.Table;
 using BookIt.Application.Services;
+using BookIt.Core.Entities;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -50,13 +51,21 @@ namespace BookIt.Frontend.Pages.Reservation
         [BindProperty]
         public ReservationModelForUpdate EditReservation { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
             var reservation = _reservationRepository.GetReservationByIdAsync(Id).Result;
+            var managerReservations = _reservationService.GetAllReservationsForManager(currentUser.Id).Select(r => r.Id);
+            if (!managerReservations.Contains(reservation.Id))
+            {
+                return RedirectToPage("ViewAllReservation");
+            }
             ViewData["ReservationDate"] = reservation.StartTime;
             ViewData["NumberOfPersons"] = reservation.NumberOfPersons;
             ViewData["RestaurantId"] = Id;
             EditReservation = _mapper.Map<ReservationModelForUpdate>(reservation);
+            return Page();
         }
 
         public IActionResult OnPostEdit()

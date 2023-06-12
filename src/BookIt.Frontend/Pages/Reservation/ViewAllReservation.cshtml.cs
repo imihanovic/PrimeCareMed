@@ -68,8 +68,6 @@ namespace BookIt.Frontend.Pages.Reservation
 
             IEnumerable<ReservationModel> reservations = list;
 
-            var returnedValues = new List<ReservationModel>();
-
 
             if (currentUserRole == "Manager")
             {
@@ -83,6 +81,8 @@ namespace BookIt.Frontend.Pages.Reservation
             {
                 reservations = _reservationService.GetAllReservations();
             }
+
+            await _reservationService.CheckReservationStatus(reservations);
 
             ViewData["CurrentSort"] = sort;
             reservations = _reservationService.ReservationSorting(reservations, sort);

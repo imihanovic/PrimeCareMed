@@ -30,5 +30,7 @@ namespace BookIt.Application.Services
 
         ReservationModel GetAreaAndSmokingForReservation(ReservationModel reservationDto, Reservation reservation);
 
+        Task CheckReservationStatus(IEnumerable<ReservationModel> reservations);
+
     }
 }
