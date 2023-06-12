@@ -2,6 +2,7 @@
 using BookIt.Application.Models.Reservation;
 using BookIt.Application.Models.User;
 using BookIt.Application.Services;
+using BookIt.Core.Entities;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +27,12 @@ namespace BookIt.Frontend.Pages.Reservation
 #nullable disable
         public List<string> ReservationModelProperties;
 
+        public string RestaurantId { get; set; }
+
         public List<string> Slots { get; set; } = new List<string> { "12:00", "14:00", "16:00", "18:00", "20:00", "22:00" };
+
+
+        public IEnumerable<Core.Entities.Restaurant> AllRestaurants => _restaurantRepository.GetAllRestaurantsAsync().Result;
 
         public int TotalPages { get; set; }
 
@@ -43,7 +49,9 @@ namespace BookIt.Frontend.Pages.Reservation
             _userManager = userManager;
         }
 
-        public async Task OnGetAsync(string sort, string currentFilter, string keyword, string statusFilter, string reservationDate, string reservationTime, int? pageIndex)
+        public async Task OnGetAsync(string sort, string currentFilter, string keyword, string statusFilter,
+                            string reservationDate, string reservationTime, string restaurantFilter,
+                            string tableArea, string smokingArea, int? pageIndex)
         {
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
@@ -72,6 +80,7 @@ namespace BookIt.Frontend.Pages.Reservation
             if (currentUserRole == "Manager")
             {
                 reservations = _reservationService.GetAllReservationsForManager(currentUser.Id);
+                RestaurantId = currentUser.Restaurant.Id.ToString();
             }
             else if (currentUserRole == "Customer")
             {
@@ -79,13 +88,28 @@ namespace BookIt.Frontend.Pages.Reservation
             }
             else
             {
-                reservations = _reservationService.GetAllReservations();
+                if(restaurantFilter is null)
+                {
+                    reservations = _reservationService.GetAllReservations();
+                }
+                else
+                {
+                    ViewData["RestaurantFilter"] = restaurantFilter;
+                    reservations = _reservationService.GetAllReservationsByRestaurant(restaurantFilter);
+                }
             }
 
             await _reservationService.CheckReservationStatus(reservations);
 
             ViewData["CurrentSort"] = sort;
             reservations = _reservationService.ReservationSorting(reservations, sort);
+
+
+            ViewData["TableArea"] = tableArea;
+            reservations = _reservationService.ReservationFilterByTableArea(reservations, tableArea);
+
+            ViewData["SmokingArea"] = smokingArea;
+            reservations = _reservationService.ReservationFilterBySmokingArea(reservations, smokingArea);
 
             ViewData["StatusFilter"] = statusFilter;
             reservations = _reservationService.ReservationFilterByStatus(reservations, statusFilter);

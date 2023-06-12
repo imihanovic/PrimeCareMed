@@ -99,6 +99,12 @@ namespace BookIt.Application.Services.Impl
             return MapAndAddAllReservations(reservationsFromDatabase);
         }
 
+        public IEnumerable<ReservationModel> GetAllReservationsByRestaurant(string restaurantId)
+        {
+            var reservationsFromDatabase = _reservationRepository.GetAllReservationsAsync().Result.Where(r => r.Tables.FirstOrDefault().Restaurant.Id.ToString() == restaurantId);
+            return MapAndAddAllReservations(reservationsFromDatabase);
+        }
+
         public Reservation EditReservationAsync(ReservationModelForUpdate reservationModel)
         {
             var reservation = _mapper.Map<Reservation>(reservationModel);
@@ -157,6 +163,28 @@ namespace BookIt.Application.Services.Impl
             {
                 var reservationTimeTrim = reservationTime.ToLower().Trim();
                 filteredReservations = reservations.Where(t => t.StartTime.ToLower().Contains(reservationTimeTrim));
+            }
+            return filteredReservations;
+        }
+
+        public IEnumerable<ReservationModel> ReservationFilterByTableArea(IEnumerable<ReservationModel> reservations, string tableArea)
+        {
+            IEnumerable<ReservationModel> filteredReservations = reservations;
+            if (!String.IsNullOrEmpty(tableArea))
+            {
+                var tableAreaTrim = tableArea.ToLower().Trim();
+                filteredReservations = reservations.Where(t => t.TableArea.ToLower() == tableAreaTrim);
+            }
+            return filteredReservations;
+        }
+
+        public IEnumerable<ReservationModel> ReservationFilterBySmokingArea(IEnumerable<ReservationModel> reservations, string smokingArea)
+        {
+            IEnumerable<ReservationModel> filteredReservations = reservations;
+            if (!String.IsNullOrEmpty(smokingArea))
+            {
+                var smokingAreaTrim = smokingArea.ToLower().Trim();
+                filteredReservations = reservations.Where(t => t.SmokingArea.ToLower() == smokingAreaTrim);
             }
             return filteredReservations;
         }

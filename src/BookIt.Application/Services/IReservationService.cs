@@ -32,5 +32,10 @@ namespace BookIt.Application.Services
 
         Task CheckReservationStatus(IEnumerable<ReservationModel> reservations);
 
+        IEnumerable<ReservationModel> GetAllReservationsByRestaurant(string restaurantId);
+
+        IEnumerable<ReservationModel> ReservationFilterByTableArea(IEnumerable<ReservationModel> reservations, string tableArea);
+
+        IEnumerable<ReservationModel> ReservationFilterBySmokingArea(IEnumerable<ReservationModel> reservations, string smokingArea);
     }
 }
