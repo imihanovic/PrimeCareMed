@@ -56,37 +56,38 @@ namespace BookIt.Frontend.Pages.RestaurantDish
         public IEnumerable<DishModel> Dishes => _dishService.GetAllDishes();
 
         [FromRoute]
-        public Guid DishId { get; set; }
+        public Guid Id { get; set; }
 
-
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnGet()
         {
+            var dish = _dishService.GetAllDishes().FirstOrDefault(r => r.Id == Id);
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
-
-            if (!ModelState.IsValid) { return Page(); }
-
-            var restaurant = currentUser.Restaurant;
-
-            if(restaurant is not  null)
-            {
-                ViewData["RestaurantName"] = restaurant.RestaurantName;
-                ViewData["RestaurantOwner"] = restaurant.RestaurantOwner;
-                ViewData["Address"] = restaurant.Address;
-            }
-
-            var dish = _dishService.GetAllDishes().FirstOrDefault(d => d.Id == DishId);
-            if(dish is not null)
+            if (dish != null)
             {
                 ViewData["DishName"] = dish.DishName;
                 ViewData["DishCategory"] = dish.Category;
-                ViewData["DishDescription"] = dish.DishDescription;
             }
-            
+
+            var restaurant = _restaurantRepository.GetRestaurantByManagerIdAsync(currentUser.Id).Result;
+            if (restaurant != null)
+            {
+                ViewData["RestaurantName"] = restaurant.RestaurantName;
+                ViewData["Address"] = restaurant.Address;
+            }
+            return Page();
+
+        }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            var restaurant = _restaurantRepository.GetRestaurantByManagerIdAsync(currentUser.Id).Result;
+            NewRestaurantDish.DishId = Id.ToString();
+            NewRestaurantDish.RestaurantId = restaurant.Id.ToString();
             try
             {
                 await _restaurantDishService.AddAsync(NewRestaurantDish);
-                return RedirectToPage("ViewAllRestaurantDishes");
+                return RedirectToPage("../Restaurant/ViewAllRestaurants");
             }
             catch (Exception ex)
             {

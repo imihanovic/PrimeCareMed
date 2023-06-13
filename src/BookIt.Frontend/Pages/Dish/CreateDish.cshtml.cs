@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using BookIt.Application.Models.Dish;
-using BookIt.Application.Models.Restaurant;
-using BookIt.Application.Models.User;
 using BookIt.Application.Services;
-using BookIt.Application.Services.Impl;
-using BookIt.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BookIt.Frontend.Pages.Dish
 {
+
+    [Authorize(Roles = "Administrator")]
     public class CreateDishModel : PageModel
     {
         private readonly IDishRepository _dishRepository;

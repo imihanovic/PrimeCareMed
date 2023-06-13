@@ -80,7 +80,6 @@ namespace BookIt.Application.Services.Impl
         public async Task DeleteDishAsync(Guid Id)
         {
             await _dishRepository.DeleteAsync(Id);
-
         }
     }
 }

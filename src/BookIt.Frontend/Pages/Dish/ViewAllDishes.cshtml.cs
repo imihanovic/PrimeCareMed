@@ -4,12 +4,14 @@ using BookIt.Application.Services;
 using BookIt.Application.Services.Impl;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BookIt.Frontend.Pages.Dish
 {
+    [Authorize(Roles = "Administrator, Manager")]
     public class ViewAllDishesModel : PageModel
     {
         public readonly IDishService _dishService;

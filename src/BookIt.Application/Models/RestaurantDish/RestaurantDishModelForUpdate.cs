@@ -13,13 +13,12 @@ namespace BookIt.Application.Models.RestaurantDish
         public string Id { get; set; }
 
         [Required]
-        [DataType(DataType.Text)]
         [Display(Name = "Is available?*")]
         public bool IsAvailable { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Address*")]
+        [Display(Name = "Price*")]
         public string Price { get; set; }
 
         [Required]

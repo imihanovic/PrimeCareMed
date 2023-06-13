@@ -31,7 +31,7 @@
                 <a asp-action="ViewAllDishes" class="btn btn-secondary clear-btn">Clear</a>
             </div>
             <div class="col-7 col-sm-4 text-end">
-                @if (User.Identity!.IsAuthenticated && (User.IsInRole("Administrator") || User.IsInRole("Manager")))
+                @if (User.Identity!.IsAuthenticated && (User.IsInRole("Administrator")))
                 {
                     <a class="btn btn-primary" asp-area="" asp-page="/Dish/CreateDish"><i class="fas fa-utensils"></i> Create new dish</a>
                 }
@@ -72,9 +72,7 @@
                     }
                     @if (User.IsInRole("Manager"))
                     {
-                        <td>
-                            <td><a class="btn btn-outline-primary" asp-page="/RestaurantDish/CreateRestaurantDish" asp-route-id="@dish.Id"><i class="bi bi-info-lg"></i></a></td>
-                        </td>
+                        <td><a class="btn btn-outline-primary" asp-page="/RestaurantDish/CreateRestaurantDish" asp-route-id="@dish.Id">Add dish to menu</a></td>
                     }
                 </tr>
             }

@@ -9,5 +9,7 @@ namespace BookIt.DataAccess.Repositories
         Task<IEnumerable<Dish>> GetAllDishesAsync();
 
         Task DeleteAsync(Guid id);
+
+        Task<IEnumerable<Dish>> GetAllDishesForRestaurantAsync(string restaurantId);
     }
 }

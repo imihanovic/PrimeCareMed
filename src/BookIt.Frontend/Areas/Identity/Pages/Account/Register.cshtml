@@ -56,7 +56,11 @@
                 <label asp-for="Input.ConfirmPassword"></label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mt-2">Register</button>
+            @if (!User.IsInRole("Administrator"))
+            {
+                <a type="button" class="btn btn-success" asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">You already have a user account</a>              
+            }
             </form>
         </div>  
     </div>

@@ -36,5 +36,12 @@ namespace BookIt.DataAccess.Repositories.Impl
             await _context.SaveChangesAsync();
             return editItem;
         }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var deleteItem = _context.RestaurantDishes.FirstOrDefault(r => r.Id == id);
+            _context.RestaurantDishes.Remove(deleteItem);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -4,6 +4,8 @@ using BookIt.Core.Entities.Identity;
 using BookIt.Core.Entities;
 using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
+using BookIt.Application.Models.Dish;
+
 namespace BookIt.Application.Services.Impl
 {
     public class RestaurantDishService : IRestaurantDishService
@@ -32,6 +34,10 @@ namespace BookIt.Application.Services.Impl
         public async Task<RestaurantDishModel> AddAsync(RestaurantDishModelForCreate createRestaurantDishModel)
         {
             var restaurantDish = _mapper.Map<RestaurantDish>(createRestaurantDishModel);
+            restaurantDish.Restaurant = await _restaurantRepository.GetRestaurantByIdAsync(Guid.Parse(createRestaurantDishModel.RestaurantId));
+            restaurantDish.Dish = _dishRepository.GetAllDishesAsync().Result.FirstOrDefault(d => d.Id == Guid.Parse(createRestaurantDishModel.DishId));
+            restaurantDish.IsAvailable = true;
+
             await _restaurantDishRepository.AddAsync(restaurantDish);
             return _mapper.Map<RestaurantDishModel>(restaurantDish);
         }
@@ -47,10 +53,13 @@ namespace BookIt.Application.Services.Impl
                 restaurantDishDto.RestaurantId = restaurantDish.Restaurant.Id.ToString();
                 restaurantDishDto.RestaurantOwner = restaurantDish.Restaurant.RestaurantOwner;
                 restaurantDishDto.RestaurantName = restaurantDish.Restaurant.RestaurantName;
+                restaurantDishDto.Address = restaurantDish.Restaurant.Address;
                 restaurantDishDto.DishId = restaurantDish.Dish.Id.ToString();
                 restaurantDishDto.DishName = restaurantDish.Dish.DishName;
                 restaurantDishDto.DishDescription = restaurantDish.Dish.DishDescription;
                 restaurantDishDto.Category = restaurantDish.Dish.Category.ToString();
+                restaurantDishDto.Price = restaurantDish.Price;
+                restaurantDishDto.IsAvailable = restaurantDish.IsAvailable;
                 restaurantDishes.Add(restaurantDishDto);
             }
             return restaurantDishes.AsEnumerable();
@@ -65,7 +74,7 @@ namespace BookIt.Application.Services.Impl
         public List<string> GetRestaurantModelFields()
         {
             var restaurantDishDto = new RestaurantDishModel();
-            return restaurantDishDto.GetType().GetProperties().Where(x => x.Name != "RestaurantId" && x.Name != "Id" && x.Name != "DishId" && x.Name != "DishDescription").Select(x => x.Name).ToList();
+            return restaurantDishDto.GetType().GetProperties().Where(x => x.Name != "RestaurantId" && x.Name != "Id" && x.Name != "DishId" && x.Name != "RestaurantOwner" && x.Name != "Address" && x.Name != "RestaurantName").Select(x => x.Name).ToList();
         }
 
         public IEnumerable<RestaurantDishModel> RestaurantSorting(IEnumerable<RestaurantDishModel> restaurantDishes, string sortOrder)
@@ -88,15 +97,31 @@ namespace BookIt.Application.Services.Impl
 
         public IEnumerable<RestaurantDishModel> RestaurantDishSearch(IEnumerable<RestaurantDishModel> restaurantDishes, string searchString)
         {
-            IEnumerable<RestaurantDishModel> searchedRestaurants = restaurantDishes;
+            IEnumerable<RestaurantDishModel> searchedRestaurantsDishes = restaurantDishes;
             if (!String.IsNullOrEmpty(searchString))
             {
                 var searchStrTrim = searchString.ToLower().Trim();
-                searchedRestaurants = restaurantDishes.Where(s => s.DishName.ToLower().Contains(searchStrTrim)
+                searchedRestaurantsDishes = restaurantDishes.Where(s => s.DishName.ToLower().Contains(searchStrTrim)
                                             || s.DishDescription.ToLower().Contains(searchStrTrim)
                                             );
             }
-            return searchedRestaurants;
+            return searchedRestaurantsDishes;
+        }
+
+        public IEnumerable<RestaurantDishModel> RestaurantDishFilter(IEnumerable<RestaurantDishModel> restaurantDishes, string category)
+        {
+            IEnumerable<RestaurantDishModel> filtratedDishes = restaurantDishes;
+            if (!String.IsNullOrEmpty(category))
+            {
+                var categoryTrim = category.ToLower().Trim();
+                filtratedDishes = restaurantDishes.Where(t => t.Category.ToLower() == categoryTrim);
+            }
+            return filtratedDishes;
+        }
+
+        public async Task DeleteRestaurantDishAsync(Guid Id)
+        {
+            await _restaurantDishRepository.DeleteAsync(Id);
         }
     }
 }

@@ -15,6 +15,10 @@ namespace BookIt.Application.Services
 
         IEnumerable<RestaurantDishModel> RestaurantDishSearch(IEnumerable<RestaurantDishModel> restaurantDishes, string searchString);
 
+        IEnumerable<RestaurantDishModel> RestaurantDishFilter(IEnumerable<RestaurantDishModel> restaurantDishes, string category);
+
         List<string> GetRestaurantModelFields();
+
+        Task DeleteRestaurantDishAsync(Guid Id);
     }
 }

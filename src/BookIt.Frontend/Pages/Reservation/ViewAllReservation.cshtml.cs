@@ -80,7 +80,7 @@ namespace BookIt.Frontend.Pages.Reservation
             if (currentUserRole == "Manager")
             {
                 reservations = _reservationService.GetAllReservationsForManager(currentUser.Id);
-                RestaurantId = currentUser.Restaurant.Id.ToString();
+                RestaurantId =  _restaurantRepository.GetRestaurantByManagerIdAsync(currentUser.Id).Result.Id.ToString();
             }
             else if (currentUserRole == "Customer")
             {

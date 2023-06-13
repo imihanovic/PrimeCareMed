@@ -1,4 +1,36 @@
-﻿@page
+﻿@page "/restaurantDish/edit/{id:Guid}"
+@using BookIt.Core.Enums
 @model BookIt.Frontend.Pages.RestaurantDish.EditRestaurantDishModel
 @{
+    ViewData["Title"] = "Edit menu item";
+}
+
+<div class="container text-center d-flex align-items-center justify-content-center">
+    <div>
+        <div>
+        <h1>@ViewData["Title"]</h1>
+        <h4>@ViewData["DishName"] </h4>
+        <h4>@ViewData["DishCategory"] </h4>
+        <h6>@ViewData["RestaurantName"] @ViewData["Address"]</h6>     
+        </div>
+        <div>
+            <form id="editRestaurantDishForm" method="post">
+            <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input asp-for="EditRestaurantDish.Price" class="form-control" aria-required="true" type="number"/>
+                    <label asp-for="EditRestaurantDish.Price"></label>
+                    <span asp-validation-for="EditRestaurantDish.Price" class="text-danger"></span>
+                </div>
+                <div class="form-floating align-items-center justify-content-center mt-2">
+                    <button asp-page-handler="edit" class="btn btn-outline-success col-5">
+                        Edit
+                    </button>
+                </div>
+            </form>
+        </div>  
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
