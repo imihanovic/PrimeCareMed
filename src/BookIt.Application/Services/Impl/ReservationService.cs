@@ -51,7 +51,7 @@ namespace BookIt.Application.Services.Impl
 
         public ReservationModel GetAreaAndSmokingForReservation (ReservationModel reservationDto, Reservation reservation)
         {
-            reservationDto.TableArea = reservation.Tables.FirstOrDefault().Area.ToString();
+             reservationDto.TableArea = reservation.Tables.FirstOrDefault().Area.ToString();
             reservationDto.SmokingArea = reservation.Tables.FirstOrDefault().Smoking.ToString();
 
             return reservationDto;
@@ -64,6 +64,8 @@ namespace BookIt.Application.Services.Impl
             {
                 var reservationDto = _mapper.Map<ReservationModel>(reservation);
                 reservationDto.StartTime = DateTime.Parse(reservationDto.StartTime).ToString("yyyy-MM-dd  HH:mm");
+                reservationDto.RestaurantName = reservation.Tables.FirstOrDefault().Restaurant.RestaurantName;
+                reservationDto.Address = reservation.Tables.FirstOrDefault().Restaurant.Address;
                 reservationDto = GetAreaAndSmokingForReservation(reservationDto, reservation);
                 reservations.Add(reservationDto);
             }
@@ -110,11 +112,15 @@ namespace BookIt.Application.Services.Impl
             var reservation = _mapper.Map<Reservation>(reservationModel);
             return _reservationRepository.UpdateAsync(reservation).Result;
         }
-
-        public List<string> GetReservationModelFields()
+        
+        public List<string> GetReservationModelFields(string userRole)
         {
             var reservationDto = new ReservationModel();
-            return reservationDto.GetType().GetProperties().Where( x => x.Name != "Id" && x.Name != "EndTime" && x.Name != "Customer").Select(x => x.Name).ToList();
+            if(userRole == "Customer" || userRole == "Administrator")
+            {
+                return reservationDto.GetType().GetProperties().Where(x => x.Name != "Id" && x.Name != "EndTime" && x.Name != "Customer").Select(x => x.Name).ToList();
+            }
+            return reservationDto.GetType().GetProperties().Where( x => x.Name != "Id" && x.Name != "EndTime" && x.Name != "Customer" && x.Name != "RestaurantName" && x.Name != "Address").Select(x => x.Name).ToList();
         }
 
         public IEnumerable<ReservationModel> ReservationSorting(IEnumerable<ReservationModel> reservations, string sortOrder)
@@ -192,10 +198,6 @@ namespace BookIt.Application.Services.Impl
         public IEnumerable<ReservationModel> ReservationSearch(IEnumerable<ReservationModel> reservations, string searchString)
         {
             IEnumerable<ReservationModel> searchedReservations = reservations;
-            foreach(var a in reservations.Select(r=> r.ReservationDetails))
-            {
-                Console.WriteLine(a);
-            }
             if (!String.IsNullOrEmpty(searchString))
             {
                 var searchStrTrim = searchString.ToLower();

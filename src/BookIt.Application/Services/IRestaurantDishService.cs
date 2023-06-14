@@ -17,7 +17,7 @@ namespace BookIt.Application.Services
 
         IEnumerable<RestaurantDishModel> RestaurantDishFilter(IEnumerable<RestaurantDishModel> restaurantDishes, string category);
 
-        List<string> GetRestaurantModelFields();
+        List<string> GetRestaurantModelFields(string userRole);
 
         Task DeleteRestaurantDishAsync(Guid Id);
     }

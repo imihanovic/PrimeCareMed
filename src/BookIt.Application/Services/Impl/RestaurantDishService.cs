@@ -71,10 +71,18 @@ namespace BookIt.Application.Services.Impl
             return _restaurantDishRepository.UpdateAsync(restaurantDish).Result;
         }
 
-        public List<string> GetRestaurantModelFields()
+        public List<string> GetRestaurantModelFields(string userRole)
         {
             var restaurantDishDto = new RestaurantDishModel();
-            return restaurantDishDto.GetType().GetProperties().Where(x => x.Name != "RestaurantId" && x.Name != "Id" && x.Name != "DishId" && x.Name != "RestaurantOwner" && x.Name != "Address" && x.Name != "RestaurantName").Select(x => x.Name).ToList();
+            if(userRole == "Administrator" || userRole == "Manager")
+            {
+                return restaurantDishDto.GetType().GetProperties().Where(x => x.Name != "RestaurantId" && x.Name != "Id" && x.Name != "DishId" && x.Name != "RestaurantOwner" && x.Name != "Address" && x.Name != "RestaurantName").Select(x => x.Name).ToList();
+            }
+            else
+            {
+                return restaurantDishDto.GetType().GetProperties().Where(x => x.Name != "RestaurantId" && x.Name != "Id" && x.Name != "DishId" && x.Name != "RestaurantOwner" && x.Name != "Address" && x.Name != "RestaurantName" && x.Name != "IsAvailable").Select(x => x.Name).ToList();
+            }
+            
         }
 
         public IEnumerable<RestaurantDishModel> RestaurantSorting(IEnumerable<RestaurantDishModel> restaurantDishes, string sortOrder)

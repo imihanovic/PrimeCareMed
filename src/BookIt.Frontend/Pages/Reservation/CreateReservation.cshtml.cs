@@ -8,9 +8,12 @@ using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace BookIt.Frontend.Pages.Reservation
 {
+    [Authorize(Roles = "Customer, Manager")]
     public class CreateReservationModel : PageModel
     {
         private readonly IReservationService _reservationService;

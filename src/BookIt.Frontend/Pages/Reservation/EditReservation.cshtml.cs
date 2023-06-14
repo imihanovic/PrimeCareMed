@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using BookIt.Application.Models.Reservation;
-using BookIt.Application.Models.Table;
 using BookIt.Application.Services;
-using BookIt.Core.Entities;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -17,31 +15,20 @@ namespace BookIt.Frontend.Pages.Reservation
     public class EditReservationModel : PageModel
     {
         private readonly IReservationService _reservationService;
-        private readonly IRestaurantService _restaurantService;
-        private readonly IUserRepository _userRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IReservationRepository _reservationRepository;
-        private readonly ITableRepository _tableRepository;
-        private readonly ITableService _tableService;
         private readonly IMapper _mapper;
-        public EditReservationModel(IRestaurantRepository restaurantRepository,
-            ITableRepository tableRepository,
-            IMapper mapper,
-            IRestaurantService restaurantService,
+        public EditReservationModel(IMapper mapper,
             UserManager<ApplicationUser> userManager,
             IReservationRepository reservationRepository,
-            IReservationService reservationService,
-            ITableService tableService,
-            IUserRepository userRepository)
+            IReservationService reservationService
+            )
         {
             _reservationService = reservationService;
             _mapper = mapper;
             _userManager = userManager;
-            _tableRepository = tableRepository;
-            _restaurantService = restaurantService;
-            _tableService = tableService;
             _reservationRepository = reservationRepository;
-            _userRepository = userRepository;
+           
         }
 
         [FromRoute]

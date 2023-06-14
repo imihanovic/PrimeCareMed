@@ -20,13 +20,15 @@ namespace BookIt.Frontend.Pages.Users
         private UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
+        private readonly IRestaurantRepository _restaurantRepository;
 
         public EditUserModel(IUserService userService,
             IUserRepository userRepository,
             IWebHostEnvironment environment,
             IMapper mapper,
             UserManager<ApplicationUser> userManager,
-            IUserStore<ApplicationUser> userStore)
+            IUserStore<ApplicationUser> userStore,
+            IRestaurantRepository restaurantRepository)
         {
             _userService = userService;
             _userRepository = userRepository;
@@ -35,6 +37,7 @@ namespace BookIt.Frontend.Pages.Users
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
+            _restaurantRepository = restaurantRepository;
         }
 
         [FromRoute]
@@ -69,8 +72,18 @@ namespace BookIt.Frontend.Pages.Users
 
         public IActionResult OnPostDelete()
         {
-            _userService.DeleteUser(Id);
-
+            var user = _userRepository.GetUserByIdAsync(Id).Result;
+            var role = _userManager.GetRolesAsync(user).Result.ToList().First();
+            var managerRestaurant = _restaurantRepository.GetRestaurantByManagerIdAsync(Id).Result;
+            if (role == "Manager" && managerRestaurant != null)
+            {
+                ViewData["Message"] = string.Format($"{user.UserName} is manager of a restaurant {managerRestaurant.RestaurantName} and cannot be deleted!");
+                return Page();
+            }
+            else
+            {
+                _userService.DeleteUser(Id);
+            }
             return RedirectToPage("ViewAllUsers");
 
         }

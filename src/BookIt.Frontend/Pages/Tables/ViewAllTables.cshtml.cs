@@ -3,8 +3,6 @@ using BookIt.Application.Models.Restaurant;
 using BookIt.Application.Models.Table;
 using BookIt.Application.Models.User;
 using BookIt.Application.Services;
-using BookIt.Application.Services.Impl;
-using BookIt.Core.Entities;
 using BookIt.Core.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using BookIt.DataAccess.Repositories;
@@ -57,7 +55,7 @@ namespace BookIt.Frontend.Pages.Tables
 
             TableModelProperties = _tableService.GetTableModelFields();
 
-            int pageSize = 1;
+            int pageSize = 9;
 
             var restaurant = _restaurantRepository.GetRestaurantByIdAsync(Id).Result;
 

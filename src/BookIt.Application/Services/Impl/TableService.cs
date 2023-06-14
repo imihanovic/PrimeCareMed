@@ -45,7 +45,7 @@ namespace BookIt.Application.Services.Impl
         public List<string> GetTableModelFields()
         {
             var tableDto = new TableModel();
-            return tableDto.GetType().GetProperties().Where(x => x.Name != "RestaurantId" && x.Name != "Id" && x.Name != "City" && x.Name != "Address" && x.Name != "RestaurantOwner" && x.Name != "RestaurantName").Select(x => x.Name).ToList();
+            return tableDto.GetType().GetProperties().Where(x => x.Name != "RestaurantId" && x.Name != "Id" && x.Name != "City" && x.Name != "Address" && x.Name != "RestaurantOwner" && x.Name != "RestaurantName" && x.Name != "NumberOfSeats").Select(x => x.Name).ToList();
         }
 
         public IEnumerable<TableModel> GetAllTables(Guid id)
@@ -78,10 +78,6 @@ namespace BookIt.Application.Services.Impl
                     return tables.OrderBy(t => t.TableName);
                 case "TableNameDesc":
                     return tables.OrderByDescending(t => t.TableName);
-                case "NumberOfSeats":
-                    return tables.OrderBy(t => t.NumberOfSeats);
-                case "NumberOfSeatsDesc":
-                    return tables.OrderByDescending(t => t.NumberOfSeats);
                 default:
                     return tables.OrderBy(t => t.TableName);
             }

@@ -177,6 +177,11 @@
                     <td class="d-none d-lg-table-cell">@reservation.StartTime</td>
                     <td class="d-none d-lg-table-cell">@reservation.Status</td>
                     <td class="d-none d-lg-table-cell">@reservation.ReservationDetails</td>
+                    @if(User.IsInRole("Administrator") || User.IsInRole("Customer"))
+                    {
+                        <td class="d-none d-lg-table-cell">@reservation.RestaurantName</td>
+                        <td class="d-none d-lg-table-cell">@reservation.Address</td>
+                    }
                     <td class="d-none d-lg-table-cell">@reservation.TableArea</td>
                     <td class="d-none d-lg-table-cell">@reservation.SmokingArea</td>
                     @if (User.IsInRole("Manager"))

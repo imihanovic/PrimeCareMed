@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
 using BookIt.Application.Models.Restaurant;
 using BookIt.Application.Models.Table;
-using BookIt.Application.Models.User;
 using BookIt.Application.Services;
-using BookIt.Core.Entities;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BookIt.Frontend.Pages.Tables
 {
+    [Authorize(Roles = "Administrator, Manager")]
     public class CreateTableModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;

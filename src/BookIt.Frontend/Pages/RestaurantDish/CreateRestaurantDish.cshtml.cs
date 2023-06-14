@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BookIt.Application.Models.Restaurant;
 using BookIt.Application.Models.User;
 using BookIt.Application.Models.Dish;
 using BookIt.Application.Services;
@@ -52,7 +51,7 @@ namespace BookIt.Frontend.Pages.RestaurantDish
         [BindProperty]
         public IEnumerable<ListUsersModel> Managers => _userService.GetAllManagers();
 
-        [BindProperty]
+        [BindProperty] 
         public IEnumerable<DishModel> Dishes => _dishService.GetAllDishes();
 
         [FromRoute]
@@ -87,7 +86,7 @@ namespace BookIt.Frontend.Pages.RestaurantDish
             try
             {
                 await _restaurantDishService.AddAsync(NewRestaurantDish);
-                return RedirectToPage("../Restaurant/ViewAllRestaurants");
+                return RedirectToPage("ViewAllRestaurantDishes", new { id = restaurant.Id.ToString()});
             }
             catch (Exception ex)
             {

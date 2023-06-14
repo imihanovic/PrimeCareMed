@@ -1,13 +1,9 @@
-﻿using AutoMapper;
-using BookIt.Application.Services;
+﻿using BookIt.Application.Services;
 using BookIt.Core.Entities.Identity;
-using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data;
 
 namespace BookIt.Frontend.Pages.Reservation
 {

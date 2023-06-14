@@ -86,33 +86,6 @@
                     }
                 </th>
             }
-            else if(property == "NumberOfSeats")
-            {
-                <th>
-                    @property
-                    @if (sort is null)
-                    {
-                        <a asp-page="ViewAllTables" asp-route-areaFilter="@ViewData["AreaFilter"]"
-                            asp-route-smokingFilter="@ViewData["SmokingFilter"]"
-                            asp-route-sort=@($"{@property}") class="sort-icon"><span class="bi bi-sort-numeric-down"></span></a>
-                        <a asp-page="ViewAllTables" asp-route-areaFilter="@ViewData["AreaFilter"]"
-                            asp-route-smokingFilter="@ViewData["SmokingFilter"]"
-                            asp-route-sort=@($"{@property}Desc") class="sort-icon"><i class="bi bi-sort-numeric-down-alt"></i></a>
-                    }
-                    else if (sort.Contains("Desc"))
-                    {
-                        <a asp-page="ViewAllTables" asp-route-areaFilter="@ViewData["AreaFilter"]"
-                            asp-route-smokingFilter="@ViewData["SmokingFilter"]"
-                            asp-route-sort=@($"{@property}") class="sort-icon"><span class="bi bi-sort-numeric-down"></span></a>
-                    }
-                    else
-                    {
-                        <a asp-page="ViewAllTables" asp-route-areaFilter="@ViewData["AreaFilter"]"
-                            asp-route-smokingFilter="@ViewData["SmokingFilter"]"
-                            asp-route-sort=@($"{@property}Desc") class="sort-icon"><i class="bi bi-sort-numeric-down-alt"></i></a>
-                    }
-                </th>
-            }
             else
             {                
                 <th>
@@ -129,7 +102,6 @@
         {
             <tr class="align-middle">
                 <td>@table.TableName</td>
-                <td>@table.NumberOfSeats</td>
                 <td>@table.Area</td>
                 <td>@table.Smoking</td>
                 <td><a class="btn btn-outline-primary" asp-page="EditTable" asp-route-id="@table.Id"><i class="bi bi-info-lg"></i></a></td>

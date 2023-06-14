@@ -53,7 +53,7 @@ namespace BookIt.DataAccess.Repositories.Impl
         public async Task<Restaurant> GetRestaurantByManagerIdAsync(string managerId)
         {
             var allRestaurants = await GetAllRestaurantsAsync();
-            var restaurant = allRestaurants.First(r => r.ManagerId == managerId);
+            var restaurant = allRestaurants.FirstOrDefault(r => r.ManagerId == managerId);
             return restaurant;
         }
     }

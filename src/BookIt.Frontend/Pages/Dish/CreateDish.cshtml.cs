@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace BookIt.Frontend.Pages.Dish
 {
 
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator, Manager")]
     public class CreateDishModel : PageModel
     {
         private readonly IDishRepository _dishRepository;

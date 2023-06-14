@@ -42,11 +42,6 @@ namespace BookIt.Frontend.Pages.Restaurant
         public void OnGet()
         {
             var restaurant = _restaurantRepository.GetRestaurantByIdAsync(Id).Result;
-            //var logedUserId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-            //if(User.IsInRole("Manager") && logedUserId.Value != restaurant.ManagerId)
-            //{
-            //    return RedirectToPage("/AccessDenied");
-            //}
             EditRestaurant = _mapper.Map<RestaurantModelForCreate>(restaurant);
         }
         public IActionResult OnPostEdit()

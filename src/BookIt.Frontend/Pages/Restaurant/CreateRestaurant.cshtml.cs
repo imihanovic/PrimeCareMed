@@ -6,7 +6,6 @@ using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data;
 
 namespace BookIt.Frontend.Pages.Restaurant
 {

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BookIt.Application.Models.RestaurantDish;
-using BookIt.Application.Models.Table;
 using BookIt.Application.Services;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
@@ -57,6 +56,7 @@ namespace BookIt.Frontend.Pages.RestaurantDish
             ViewData["DishId"] = dish.Id;
             ViewData["DishName"] = dish.DishName;
             ViewData["DishCategory"] = dish.Category;
+            ViewData["DishDescription"] = dish.DishDescription;
             ViewData["DishPrice"] = restaurantDish.Price;
             ViewData["IsAvailible"] = restaurantDish.IsAvailable;
 
@@ -66,12 +66,14 @@ namespace BookIt.Frontend.Pages.RestaurantDish
         }
         public IActionResult OnPostEdit()
         {
+            var restaurantDish = _restaurantDishRepository.GetRestaurantDishByIdAsync(Id).Result;
+            var restaurant = restaurantDish.Restaurant;
 
             EditRestaurantDish.Id = Id.ToString();
 
             _restaurantDishService.EditRestaurantDish(EditRestaurantDish);
 
-            return RedirectToPage("../Restaurant/ViewAllRestaurants");
+            return RedirectToPage("ViewAllRestaurantDishes", new { id = restaurant.Id.ToString()});
         }
     }
 }

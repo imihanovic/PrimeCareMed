@@ -54,7 +54,10 @@
                     <td class="d-none d-lg-table-cell">@dish.DishName</td>
                     <td class="d-none d-lg-table-cell">@dish.DishDescription</td>
                     <td class="d-none d-lg-table-cell">@dish.Category</td>
-                    <td class="d-none d-lg-table-cell">@dish.IsAvailable</td>
+                    @if (User.IsInRole("Manager") || User.IsInRole("Administrator"))
+                    {
+                        <td class="d-none d-lg-table-cell">@dish.IsAvailable</td>
+                    }
                     <td class="d-none d-lg-table-cell">@dish.Price</td>
                     @if (User.IsInRole("Manager"))
                     {
@@ -107,3 +110,6 @@
         </li>
     </ul>
 </div>
+<a asp-area="" asp-page="../Restaurant/ViewAllRestaurants" class="btn btn-primary" aria-current="page">
+    <i class="fas fa-utensils"></i> Back to restaurant
+</a>

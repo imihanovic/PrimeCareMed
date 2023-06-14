@@ -2,12 +2,20 @@
 @model BookIt.Frontend.Pages.Restaurant.ViewAllRestaurantsModel
 @{
     ViewData["Title"] = "Restaurants";
+    ViewData["ManagerTitle"] = "Restaurant";
     var sort = ViewData["CurrentSort"] as string;
     var keyword = ViewData["Keyword"] as string;
     var prevDisabled = !Model.Restaurants.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.Restaurants.HasNextPage ? "disabled" : "";
 }
-<h1>@ViewData["Title"]</h1>
+@if (User.IsInRole("Administrator") || User.IsInRole("Customer"))
+{
+    <h1>@ViewData["Title"]</h1>
+}
+else
+{
+    <h1>@ViewData["ManagerTitle"]</h1>
+}
 <hr/>
 @if (User.IsInRole("Administrator") || User.IsInRole("Customer"))
 {

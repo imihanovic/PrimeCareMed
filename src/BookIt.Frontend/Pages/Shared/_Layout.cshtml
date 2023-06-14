@@ -41,8 +41,32 @@
                         Users
                         </a>
                     </li> 
+                    <li class="nav-item" style="font-size:20px">
+                        <a asp-area="" asp-page="/Restaurant/ViewAllRestaurants" class="nav-link text-white" aria-current="page">
+                        <i class="fas fa-utensils"></i>
+                        Restaurants
+                        </a>
+                    </li>
                 }
-                else if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
+                @if (User.IsInRole("Manager"))
+                {
+                    <li class="nav-item" style="font-size:20px">
+                        <a asp-area="" asp-page="/Restaurant/ViewAllRestaurants" class="nav-link text-white" aria-current="page">
+                        <i class="fas fa-utensils"></i>
+                        Restaurant
+                        </a>
+                    </li>     
+                }
+                @if (User.IsInRole("Customer"))
+                {
+                    <li class="nav-item" style="font-size:20px">
+                        <a asp-area="" asp-page="/Restaurant/ViewAllRestaurants" class="nav-link text-white" aria-current="page">
+                        <i class="fas fa-utensils"></i>
+                        Restaurants
+                        </a>
+                    </li>     
+                }
+                @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
                 {
                     <li class="nav-item" style="font-size:20px">
                         <a asp-area="" asp-page="/Dish/ViewAllDishes" class="nav-link text-white" aria-current="page">
@@ -50,12 +74,6 @@
                         </a>
                     </li>
                 }
-                <li class="nav-item" style="font-size:20px">
-                    <a asp-area="" asp-page="/Restaurant/ViewAllRestaurants" class="nav-link text-white" aria-current="page">
-                    <i class="fas fa-utensils"></i>
-                    Restaurants
-                    </a>
-                </li>
                 <li class="nav-item" style="font-size:20px">
                     <a asp-area="" asp-page="/Reservation/ViewAllReservation" class="nav-link text-white" aria-current="page">
                     Reservations

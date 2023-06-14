@@ -12,12 +12,15 @@ namespace BookIt.Application.Services.Impl
     {
         private readonly IMapper _mapper;
         private readonly IDishRepository _dishRepository;
+        private readonly IRestaurantDishRepository _restaurantDishRepository;
 
         public DishService(IMapper mapper,
-            IDishRepository dishRepository)
+            IDishRepository dishRepository,
+            IRestaurantDishRepository restaurantDishRepository)
         {
             _mapper = mapper;
             _dishRepository = dishRepository;
+            _restaurantDishRepository = restaurantDishRepository;
             
         }
         public async Task<DishModel> AddAsync(DishModelForCreate createDishModel)
@@ -46,6 +49,24 @@ namespace BookIt.Application.Services.Impl
                 dishes.Add(dishDto);
             }
             return dishes.AsEnumerable();
+        }
+
+        public IEnumerable<DishModel> GetAllDishesNotOnTheMenu(IEnumerable<DishModel> dishModels, string restaurantId)
+        {
+            var dishesNotOnMenu = new List<DishModel>();
+            if (restaurantId == null)
+            {
+                return dishesNotOnMenu;
+            }
+            var restaurantDishes = _restaurantDishRepository.GetAllRestaurantDishesAsync(restaurantId).Result.Select(r => r.Dish.Id.ToString());
+            foreach(var dishModel in dishModels)
+            {
+                if (!restaurantDishes.Contains(dishModel.Id.ToString()))
+                {
+                    dishesNotOnMenu.Add(dishModel);
+                }
+            }
+            return dishesNotOnMenu.AsEnumerable();
         }
 
         public List<string> GetDishModelFields()

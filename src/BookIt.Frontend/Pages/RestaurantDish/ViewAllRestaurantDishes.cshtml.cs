@@ -1,5 +1,4 @@
-﻿using BookIt.Application.Models.Dish;
-using BookIt.Application.Models.User;
+﻿using BookIt.Application.Models.User;
 using BookIt.Application.Models.RestaurantDish;
 using BookIt.Application.Services;
 using BookIt.Core.Entities.Identity;
@@ -7,13 +6,16 @@ using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookIt.Frontend.Pages.RestaurantDish
 {
+    [Authorize]
     public class ViewAllRestaurantDishesModel : PageModel
     {
         public readonly IDishService _dishService;
         public readonly IDishRepository _dishRepository;
+        private readonly IRestaurantDishRepository _restaurantDishRepository;
         public readonly IRestaurantDishService _restaurantDishService;
         public readonly IRestaurantRepository _restaurantRepository;
         public readonly UserManager<ApplicationUser> _userManager;
@@ -30,12 +32,14 @@ namespace BookIt.Frontend.Pages.RestaurantDish
 
         public ViewAllRestaurantDishesModel(IDishService dishService,
             IDishRepository dishRepository,
+            IRestaurantDishRepository restaurantDishRepository,
             IRestaurantDishService restaurantDishService,
             IRestaurantRepository restaurantRepository,
             UserManager<ApplicationUser> userManager)
         {
             _dishService = dishService;
             _userManager = userManager;
+            _restaurantDishRepository = restaurantDishRepository;
             _restaurantRepository = restaurantRepository;
             _dishRepository = dishRepository;
             _restaurantDishService = restaurantDishService;
@@ -43,6 +47,9 @@ namespace BookIt.Frontend.Pages.RestaurantDish
 
         public void OnGet(string currentFilter, string keyword, string categoryFilter, int? pageIndex)
         {
+            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
+
             if (keyword != null)
             {
                 pageIndex = 1;
@@ -56,12 +63,17 @@ namespace BookIt.Frontend.Pages.RestaurantDish
             ViewData["RestaurantName"] = restaurant.RestaurantName;
             ViewData["Address"] = restaurant.Address;
 
-            RestaurantDishModelProperties = _restaurantDishService.GetRestaurantModelFields();
+            RestaurantDishModelProperties = _restaurantDishService.GetRestaurantModelFields(currentUserRole);
 
             ViewData["CurrentFilter"] = keyword;
-            int pageSize = 1;
+            int pageSize = 4;
 
             var restaurantDishes = _restaurantDishService.GetAllRestaurantDishesByRestaurantId(Id.ToString());
+
+            if (currentUserRole == "Customer")
+            {
+                restaurantDishes = restaurantDishes.Where(r => r.IsAvailable == true);
+            }
 
             ViewData["Keyword"] = keyword;
             restaurantDishes = _restaurantDishService.RestaurantDishSearch(restaurantDishes, keyword);
@@ -76,8 +88,11 @@ namespace BookIt.Frontend.Pages.RestaurantDish
         }
         public IActionResult OnPostDelete(Guid id)
         {
+            var restaurantDish = _restaurantDishRepository.GetRestaurantDishByIdAsync(Id).Result;
+            var restaurant = restaurantDish.Restaurant;
+
             _restaurantDishService.DeleteRestaurantDishAsync(id);
-            return RedirectToPage("../Restaurant/ViewAllRestaurants");
+            return RedirectToPage("ViewAllRestaurantDishes", new { id = restaurant.Id.ToString() });
         }
     }
 }

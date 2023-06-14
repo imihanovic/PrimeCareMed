@@ -33,10 +33,7 @@
                 <a asp-action="ViewAllUsers" class="btn btn-secondary clear-btn">Clear</a>
             </div>
             <div class="col-7 col-sm-4 text-end">
-                @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
-                {
-                    <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-person-fill-add"></i> Create new user</a>
-                }
+                <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-person-fill-add"></i> Create new user</a>
             </div>
         </div>
     </form>

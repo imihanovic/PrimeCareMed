@@ -17,5 +17,7 @@ namespace BookIt.Application.Services
         IEnumerable<DishModel> DishFilter(IEnumerable<DishModel> dishes, string category);
 
         Task DeleteDishAsync(Guid Id);
+
+        IEnumerable<DishModel> GetAllDishesNotOnTheMenu(IEnumerable<DishModel> dishModels, string restaurantId);
     }
 }

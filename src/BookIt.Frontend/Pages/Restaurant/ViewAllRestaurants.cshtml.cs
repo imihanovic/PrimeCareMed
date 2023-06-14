@@ -9,7 +9,6 @@ using System.Data;
 
 namespace BookIt.Frontend.Pages.Restaurant
 {
-    //[Authorize(Roles = "Administrator,Manager,Customer")]
     [Authorize]
     public class ViewAllRestaurantsModel : PageModel
     {
@@ -44,7 +43,7 @@ namespace BookIt.Frontend.Pages.Restaurant
             }
 
             ViewData["CurrentFilter"] = keyword;
-            int pageSize = 1;
+            int pageSize = 4;
 
             var restaurants = _restaurantService.GetAllRestaurants();
             if (this.User.IsInRole("Manager"))

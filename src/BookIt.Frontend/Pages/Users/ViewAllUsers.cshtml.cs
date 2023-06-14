@@ -40,7 +40,7 @@ namespace BookIt.Frontend.Pages.Users
             }
 
             ViewData["CurrentFilter"] = keyword;
-            int pageSize = 2;
+            int pageSize = 4;
 
             var users = _userService.GetAllUsers();
 

@@ -11,7 +11,7 @@ namespace BookIt.Application.Services
 
         Reservation EditReservationAsync(ReservationModelForUpdate reservationModel);
 
-        List<string> GetReservationModelFields();
+        List<string> GetReservationModelFields(string userRole);
 
         IEnumerable<ReservationModel> ReservationSorting(IEnumerable<ReservationModel> reservations, string sortOrder);
 

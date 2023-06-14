@@ -1,7 +1,6 @@
 ﻿using BookIt.Application.Models.Dish;
 using BookIt.Application.Models.User;
 using BookIt.Application.Services;
-using BookIt.Application.Services.Impl;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +16,7 @@ namespace BookIt.Frontend.Pages.Dish
         public readonly IDishService _dishService;
         public readonly IDishRepository _dishRepository;
         public readonly UserManager<ApplicationUser> _userManager;
+        public readonly IRestaurantRepository _restaurantRepository;
 #nullable enable
         public PaginatedList<DishModel> Dishes { get; set; }
 
@@ -26,14 +26,21 @@ namespace BookIt.Frontend.Pages.Dish
         public int TotalPages { get; set; }
 
         public ViewAllDishesModel(IDishService dishService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IDishRepository dishRepository,
+            IRestaurantRepository restaurantRepository)
         {
             _dishService = dishService;
             _userManager = userManager;
+            _dishRepository = dishRepository;
+            _restaurantRepository = restaurantRepository;
         }
 
         public void OnGet(string currentFilter, string keyword, string categoryFilter, int? pageIndex)
         {
+            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
+
             if (keyword != null)
             {
                 pageIndex = 1;
@@ -46,9 +53,19 @@ namespace BookIt.Frontend.Pages.Dish
             DishModelProperties = _dishService.GetDishModelFields();
 
             ViewData["CurrentFilter"] = keyword;
-            int pageSize = 1;
+            int pageSize = 4;
 
             var dishes = _dishService.GetAllDishes();
+
+            if(currentUserRole == "Manager")
+            {
+
+                var restaurant = _restaurantRepository.GetRestaurantByManagerIdAsync(currentUser.Id).Result;
+                if (restaurant != null)
+                {
+                    dishes = _dishService.GetAllDishesNotOnTheMenu(dishes, restaurant.Id.ToString());
+                }
+            }
 
             ViewData["Keyword"] = keyword;
             dishes = _dishService.DishSearch(dishes, keyword);

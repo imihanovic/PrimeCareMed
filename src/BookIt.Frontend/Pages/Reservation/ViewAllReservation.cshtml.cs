@@ -2,13 +2,11 @@
 using BookIt.Application.Models.Reservation;
 using BookIt.Application.Models.User;
 using BookIt.Application.Services;
-using BookIt.Core.Entities;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
 
 namespace BookIt.Frontend.Pages.Reservation
 {
@@ -68,9 +66,9 @@ namespace BookIt.Frontend.Pages.Reservation
 
             ViewData["CurrentFilter"] = keyword;
 
-            int pageSize = 2;
+            int pageSize = 9;
 
-            ReservationModelProperties = _reservationService.GetReservationModelFields();
+            ReservationModelProperties = _reservationService.GetReservationModelFields(currentUserRole);
 
             var list = new List<ReservationModel>();
 
@@ -80,24 +78,22 @@ namespace BookIt.Frontend.Pages.Reservation
             if (currentUserRole == "Manager")
             {
                 reservations = _reservationService.GetAllReservationsForManager(currentUser.Id);
-                RestaurantId =  _restaurantRepository.GetRestaurantByManagerIdAsync(currentUser.Id).Result.Id.ToString();
+                RestaurantId = _restaurantRepository.GetRestaurantByManagerIdAsync(currentUser.Id).Result.Id.ToString();
             }
             else if (currentUserRole == "Customer")
             {
                 reservations = _reservationService.GetAllReservationsForCustomer(currentUser.Id);
             }
+            else if (restaurantFilter is null)
+            {
+                reservations = _reservationService.GetAllReservations();
+            }
             else
             {
-                if(restaurantFilter is null)
-                {
-                    reservations = _reservationService.GetAllReservations();
-                }
-                else
-                {
-                    ViewData["RestaurantFilter"] = restaurantFilter;
-                    reservations = _reservationService.GetAllReservationsByRestaurant(restaurantFilter);
-                }
+                ViewData["RestaurantFilter"] = restaurantFilter;
+                reservations = _reservationService.GetAllReservationsByRestaurant(restaurantFilter);
             }
+            
 
             await _reservationService.CheckReservationStatus(reservations);
 

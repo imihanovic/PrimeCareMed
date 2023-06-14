@@ -1,16 +1,17 @@
 ﻿using AutoMapper;
 using BookIt.Application.Models.Table;
 using BookIt.Application.Services;
-using BookIt.Application.Services.Impl;
 using BookIt.Core.Entities;
 using BookIt.Core.Entities.Identity;
 using BookIt.DataAccess.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BookIt.Frontend.Pages.Tables
 {
+    [Authorize(Roles = "Manager")]
     public class EditTableModel : PageModel
     {
         private readonly ITableRepository _tableRepository;
