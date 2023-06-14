@@ -2,20 +2,12 @@
 @model BookIt.Frontend.Pages.Restaurant.ViewAllRestaurantsModel
 @{
     ViewData["Title"] = "Restaurants";
-    ViewData["ManagerTitle"] = "Restaurant";
     var sort = ViewData["CurrentSort"] as string;
     var keyword = ViewData["Keyword"] as string;
     var prevDisabled = !Model.Restaurants.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.Restaurants.HasNextPage ? "disabled" : "";
 }
-@if (User.IsInRole("Administrator") || User.IsInRole("Customer"))
-{
-    <h1>@ViewData["Title"]</h1>
-}
-else
-{
-    <h1>@ViewData["ManagerTitle"]</h1>
-}
+<h1>@ViewData["Title"]</h1>
 <hr/>
 @if (User.IsInRole("Administrator") || User.IsInRole("Customer"))
 {
@@ -42,7 +34,7 @@ else
     </div>
 }
 
-<table class="table table-striped table-bordered user-table">
+@*<table class="table table-striped table-bordered user-table">
     <thead>
         <tr>
             @foreach (var property in Model.RestaurantModelProperties)
@@ -86,37 +78,46 @@ else
             }
         </tr>
     </thead>
-    <tbody>
-        @if (Model.Restaurants.Count() > 0)
-        {
-            @foreach (var restaurant in Model.Restaurants)
-            {
-                <tr class="align-middle">
-                    <td class="d-none d-lg-table-cell">@restaurant.RestaurantOwner</td>
-                    <td class="d-none d-lg-table-cell">@restaurant.RestaurantName</td>
-                    <td class="d-none d-lg-table-cell">@restaurant.City</td>
-                    <td class="d-none d-lg-table-cell">@restaurant.Address</td>
-                    <td class="d-none d-lg-table-cell">@restaurant.ManagerUserName</td>
-                    @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
-                    {
-                        <td>
-                            <a asp-area="" asp-page="/Tables/ViewAllTables" asp-route-id="@restaurant.Id">Tables</a>
-                        </td>
-                    }                 
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <td><a class="btn btn-outline-primary" asp-page="EditRestaurant" asp-route-id="@restaurant.Id"><i class="bi bi-info-lg"></i></a></td>
-                    }
-                    @if (User.IsInRole("Manager") || User.IsInRole("Customer"))
-                    {
-                        <td><a class="btn btn-outline-primary" asp-page="../Reservation/CreateReservationDetails" asp-route-id="@restaurant.Id"><i class="bi bi-pencil-square"></i></a></td>
-                    }
-                    <td><a class="btn btn-outline-primary" asp-page="../RestaurantDish/ViewAllRestaurantDishes" asp-route-id="@restaurant.Id">Menu</a></td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+</table>*@
+
+@if (Model.Restaurants.Count() > 0)
+{
+	<div class="row row-card row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm">
+		@foreach (var restaurant in Model.Restaurants)
+		{
+			<div class="col mb-3">
+				<div class="card">
+					<div class="card-top">
+						<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="restauarnt-icon" viewBox="0 0 16 16">
+							<path id="path11774" d="M3.5,0l-1,5.5c-0.1464,0.805,1.7815,1.181,1.75,2L4,14c-0.0384,0.9993,1,1,1,1s1.0384-0.0007,1-1L5.75,7.5&#xA;&#x9;c-0.0314-0.8176,1.7334-1.1808,1.75-2L6.5,0H6l0.25,4L5.5,4.5L5.25,0h-0.5L4.5,4.5L3.75,4L4,0H3.5z M12,0&#xA;&#x9;c-0.7364,0-1.9642,0.6549-2.4551,1.6367C9.1358,2.3731,9,4.0182,9,5v2.5c0,0.8182,1.0909,1,1.5,1L10,14c-0.0905,0.9959,1,1,1,1&#xA;&#x9;s1,0,1-1V0z" />
+						</svg>
+					</div>
+					<div class="card-body text-center">
+						<h5 class="card-title">@restaurant.RestaurantName</h5>
+						<p class="text-secondary mb-1">@restaurant.City</p>
+						<p class="text-secondary mb-1">@restaurant.Address</p>
+                        <p class="text-secondary mb-1">@restaurant.ManagerUserName</p>
+					</div>
+					<div class="card-footer">
+						@if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
+						{
+							<a class="btn btn-outline-primary" asp-page="/Tables/ViewAllTables" asp-route-id="@restaurant.Id">Tables</a>
+						}
+						@if (User.IsInRole("Administrator"))
+						{
+							<a class="btn btn-outline-primary" asp-page="EditRestaurant" asp-route-id="@restaurant.Id"><i class="bi bi-info-lg"></i></a>
+						}
+						@if (User.IsInRole("Manager") || User.IsInRole("Customer"))
+						{
+							<a class="btn btn-outline-primary" asp-page="../Reservation/CreateReservationDetails" asp-route-id="@restaurant.Id"><i class="bi bi-pencil-square"></i></a>
+						}
+						<a class="btn btn-outline-primary" asp-page="../RestaurantDish/ViewAllRestaurantDishes" asp-route-id="@restaurant.Id">Menu</a>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+}
 
 @if (User.IsInRole("Administrator") || User.IsInRole("Customer"))
 {
