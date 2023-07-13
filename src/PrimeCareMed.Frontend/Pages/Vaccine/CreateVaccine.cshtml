@@ -1,0 +1,40 @@
+﻿@page
+@model PrimeCareMed.Frontend.Pages.Vaccine.CreateVaccineModel
+@{
+    ViewData["Title"] = "New Vaccine";
+}
+<div class="container text-center d-flex align-items-center justify-content-center">
+    <div>
+        <div>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div>
+            <form id="createVaccineForm" method="post">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input asp-for="NewVaccine.Name" class="form-control" aria-required="true" />
+                    <label asp-for="NewVaccine.Name"></label>
+                    <span asp-validation-for="NewVaccine.Name" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="NewVaccine.SideEffects" class="form-control" aria-required="true" />
+                    <label asp-for="NewVaccine.SideEffects"></label>
+                    <span asp-validation-for="NewVaccine.SideEffects" class="text-danger"></span>
+                </div>
+                <button id="createVaccineSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Add vaccine</button>
+            </form>
+            @if (ViewData["Message"] != null)
+            {
+                <script type="text/javascript">
+                    window.onload = function () {
+                        alert("@ViewData["Message"]");
+                    };
+                </script>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

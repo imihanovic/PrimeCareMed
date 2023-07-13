@@ -1,0 +1,151 @@
+﻿@page
+@model PrimeCareMed.Frontend.Pages.Appointment.WaitingRoomModel
+@{
+    ViewData["Title"] = "Waiting room";
+    //var keyword = ViewData["Keyword"] as string;
+    //var categoryFilter = ViewData["CategoryFilter"] as string;
+    //var prevDisabled = !Model.Offices.HasPreviousPage ? "disabled" : "";
+    //var nextDisabled = !Model.Offices.HasNextPage ? "disabled" : "";
+}
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="form-actions no-color col">
+    <form asp-action="ViewAllAppointments" method="get">
+        <div class="row">
+            <div class="col-4 col-sm-7">
+                @* <div class="input-group mb-3">*@
+                @* <input type="search" class="form-control" placeholder="Search..." name="keyword" value="@keyword">
+                <select class="form-select" aria-label="Example select with button addon" name="categoryFilter">
+                <option value="">All categories</option>
+                @foreach (var category in Enum.GetNames(typeof(DishCategory)))
+                {
+                <option value="@category" selected="@(category == categoryFilter)">@category</option>
+                }
+                </select>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                </div>*@
+            </div>
+            @*<div class="col-1">
+            <a asp-action="ViewAllDishes" class="btn btn-secondary clear-btn">Clear</a>
+            </div>*@
+            <div class="col-7 col-sm-4 text-end">
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    <a class="btn btn-primary" asp-area="" asp-page="/Appointment/CreateAppointment"><i class="fas fa-utensils"></i> New appointment</a>
+                }
+            </div>
+        </div>
+    </form>
+</div>
+
+<table class="table table-striped table-bordered user-table">
+    <thead>
+        <tr>
+            @foreach (var property in Model.AppointmentModelProperties)
+            {
+                <th>@property</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Appointments.Count() > 0)
+        {
+            @foreach (var appointment in Model.Appointments)
+            {
+                @if(appointment.Status == "Waiting")
+                {
+                    <tr class="align-middle" id="backgroundWaiting">
+                        <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
+                        <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
+                        <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                        <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy")</td>
+                        <td class="d-none d-lg-table-cell">@appointment.Cause</td>
+                        <td class="d-none d-lg-table-cell">@appointment.Conclusion</td>
+                        <td>
+                            <a class="btn btn-outline-primary" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                        </td>
+                    </tr>
+                }
+                else if(appointment.Status == "Pending")
+                {
+                    <tr class="align-middle" id="backgroundPending">
+                        <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
+                        <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
+                        <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                        <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy")</td>
+                        <td class="d-none d-lg-table-cell">@appointment.Cause</td>
+                        <td class="d-none d-lg-table-cell">@appointment.Conclusion</td>
+                        <td>
+                            <a class="btn btn-outline-primary" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr class="align-middle" id="backgroundDone">
+                        <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
+                        <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
+                        <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                        <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy")</td>
+                        <td class="d-none d-lg-table-cell">@appointment.Cause</td>
+                        <td class="d-none d-lg-table-cell">@appointment.Conclusion</td>
+                        <td>
+                            <a class="btn btn-outline-primary" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                        </td>
+                    </tr>
+                }
+
+                    
+                    @*@if (User.IsInRole("SysAdministrator"))
+            {
+            <td>
+            <form method="post">
+            <button type="submit" asp-page-handler="delete" asp-route-id="@office.Id" class="btn btn-outline-danger"
+            runat="server" CausesValidation="False"
+            onclick="return confirm('Are you certain you want to delete this office?');">
+            <i class="bi bi-trash3-fill"></i>
+            </button>
+            </form>
+            </td>
+            }*@
+
+                
+            }
+        }
+    </tbody>
+</table>
+
+@*<div>
+    <ul class="pagination">
+        <li class="page-item">
+            <a asp-page="./ViewAllDishes"
+                asp-route-pageIndex="@(Model.Dishes.PageIndex - 1)"
+                asp-route-categoryFilter="@ViewData["CategoryFilter"]"
+                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                class="page-link @prevDisabled">
+                Previous
+            </a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Dishes.PageIndex ? "active" : "")">
+                <a asp-page="./ViewAllDishes"
+                    asp-route-categoryFilter="@ViewData["CategoryFilter"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                    asp-route-pageIndex="@i" class="page-link">@i
+                </a>
+            </li>
+        }
+        <li class="page-item">
+            <a asp-page="./ViewAllDishes"
+                asp-route-pageIndex="@(Model.Dishes.PageIndex +1)"
+                asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                asp-route-categoryFilter="@ViewData["CategoryFilter"]"
+                class="page-link @nextDisabled">
+                Next
+            </a>
+        </li>
+    </ul>
+</div>*@
+

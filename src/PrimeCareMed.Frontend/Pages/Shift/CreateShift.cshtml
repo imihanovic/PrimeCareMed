@@ -1,0 +1,77 @@
+﻿@page
+@model PrimeCareMed.Frontend.Pages.Shift.CreateShiftModel
+@{
+    ViewData["Title"] = "New session";
+}
+@{
+    Layout = null;
+}
+<div class="container text-center d-flex align-items-center justify-content-center">
+    <div>
+        <div>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div>
+            <form id="createShiftForm" method="post">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <select asp-for="NewShift.OfficeId" class="form-control">
+                        <option disabled selected>Select office</option>
+                        @foreach (var office in Model.Offices)
+                        {
+                            <option value="@office.Id">@office.Address @office.City</option>
+                        }
+                    </select>
+                    <label asp-for="NewShift.OfficeId"></label>
+                </div>
+                @if (!User.IsInRole("Doctor"))
+                {
+                    <div class="form-floating">
+                        <select asp-for="NewShift.DoctorId" class="form-control">
+                            <option disabled selected>Select doctor</option>
+                            @foreach (var doctor in Model.Doctors)
+                            {
+                                <option value="@doctor.Id">@doctor.FirstName @doctor.LastName</option>
+                            }
+                        </select>
+                        <label asp-for="NewShift.DoctorId"></label>
+                    </div>
+                }
+                else if(!User.IsInRole("Nurse"))
+                {
+                    <div class="form-floating">
+                        <select asp-for="NewShift.NurseId" class="form-control">
+                            <option disabled selected>Select nurse</option>
+                            @foreach (var nurse in Model.Nurses)
+                            {
+                                <option value="@nurse.Id">@nurse.FirstName @nurse.LastName</option>
+                            }
+                        </select>
+                        <label asp-for="NewShift.NurseId"></label>
+                    </div>
+                }
+                @if (User.IsInRole("Doctor"))
+                {
+                    <input type="hidden" name="NewShift.DoctorId" value="@Model.CurrentUser.Id" />
+                }
+                else if (User.IsInRole("Nurse"))
+                {
+                    <input type="hidden" name="NewShift.NurseId" value="@Model.CurrentUser.Id" />
+                }
+                <button id="createShiftSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Create new shift</button>
+            </form>
+            @if (ViewData["Message"] != null)
+            {
+                <script type="text/javascript">
+                    window.onload = function () {
+                        alert("@ViewData["Message"]");
+                    };
+                </script>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

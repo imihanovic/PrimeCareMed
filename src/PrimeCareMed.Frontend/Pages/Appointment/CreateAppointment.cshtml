@@ -1,0 +1,71 @@
+﻿@page
+@model PrimeCareMed.Frontend.Pages.Appointment.CreateAppointmentModel
+@{
+    ViewData["Title"] = "New appointment";
+}
+<div class="container text-center d-flex align-items-center justify-content-center">
+    <div>
+        <div>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div>
+            <form id="createOfficeForm" method="post">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @if (User.IsInRole("Doctor"))
+                {
+                    <input type="hidden" name="NewAppointment.Status" value="Pending" />
+                }
+                else
+                {
+                    <input type="hidden" name="NewAppointment.Status" value="Waiting" />
+                }
+                <div class="form-floating">
+                    <input asp-for="NewAppointment.Cause" class="form-control" aria-required="true" />
+                    <label asp-for="NewAppointment.Cause"></label>
+                    <span asp-validation-for="NewAppointment.Cause" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+
+                    <select asp-for="NewAppointment.PatientId" class="form-select" id="single-select-field" data-placeholder="Choose one thing">
+                        <option></option>
+                        @foreach (var patient in Model.Patients)
+                        {
+                            <option value="@patient.Id">@patient.Mbo @patient.FirstName @patient.LastName (@patient.DateOfBirth.ToString("dd.MM.yyyy"))</option>
+                        }
+                    </select>
+                </div>
+                
+                @if (User.IsInRole("SysAdministrator"))
+                {
+                    <div class="form-floating">
+                        <select asp-for="NewAppointment.ShiftId" class="form-control">
+                            
+                            <option></option>
+                            @foreach (var shift in Model.Shifts)
+                            {
+                                <option value="@shift.Id">@shift.OfficeAddress @shift.OfficeCity <br> @shift.DoctorLastName - @shift.NurseLastName</option>
+                            }
+                        </select>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" name="NewAppointment.ShiftId" value="@Model.CurrentShiftId" />
+                }
+                <button id="createOfficeSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Confirm appointment</button>
+            </form>
+            @if (ViewData["Message"] != null)
+            {
+                <script type="text/javascript">
+                    window.onload = function () {
+                        alert("@ViewData["Message"]");
+                    };
+                </script>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

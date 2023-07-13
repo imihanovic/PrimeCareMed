@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\BookIt.API\BookIt.API.csproj" />
+        <ProjectReference Include="..\..\src\BookIt.API\PrimeCareMed.API.csproj" />
     </ItemGroup>
 
 </Project>

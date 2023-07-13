@@ -4,10 +4,10 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "composeLaunchAction": "LaunchBrowser",
-      "composeLaunchServiceName": "bookit.frontend",
+      "composeLaunchServiceName": "primecaremed.frontend",
       "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}",
       "serviceActions": {
-        "bookit.api": "StartDebugging",
+        "primecaremed.api": "StartWithoutDebugging",
         "pgadmin4": "StartWithoutDebugging",
         "postgres": "StartWithoutDebugging"
       }

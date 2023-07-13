@@ -2,20 +2,20 @@
 
 services:
     
-  bookit.frontend:
-    image: ${DOCKER_REGISTRY-}bookitfrontend
+  primecaremed.frontend:
+    image: ${DOCKER_REGISTRY-}primecaremedfrontend
     build:
       context: .
-      dockerfile: src/BookIt.Frontend/Dockerfile
+      dockerfile: src/PrimeCareMed.Frontend/Dockerfile
     environment:
       CONNECTION_STRING: "Host=postgres;Port=5432;Database=postgres;Username=admin;Password=root;Integrated Security=true;Pooling=true;"
 
 
-  bookit.api:
-    image: ${DOCKER_REGISTRY-}bookitapi
+  primecaremed.api:
+    image: ${DOCKER_REGISTRY-}primecaremedapi
     build:
       context: .
-      dockerfile: src/BookIt.API/Dockerfile
+      dockerfile: src/PrimeCareMed.API/Dockerfile
     environment:
        CONNECTION_STRING: "Host=postgres;Port=5432;Database=postgres;Username=admin;Password=root;Integrated Security=true;Pooling=true;"
 

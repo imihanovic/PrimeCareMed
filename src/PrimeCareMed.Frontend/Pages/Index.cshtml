@@ -1,0 +1,24 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@using PrimeCareMed.Core.Entities.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@model IndexModel
+@{
+    ViewData["Title"] = "Prime Care Med";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <div class="row ms-4">
+            <div class="col text-center">
+                <a class="btn btn-outline-primary" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </div>
+        </div>
+    }
+</div>

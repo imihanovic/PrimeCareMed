@@ -1,0 +1,120 @@
+﻿@page
+@model PrimeCareMed.Frontend.Pages.Shift.ChooseShiftModel
+@{
+    ViewData["Title"] = "Shifts";
+    //var sort = ViewData["CurrentSort"] as string;
+    //var areaFilter = ViewData["AreaFilter"] as string;
+    //var smokingFilter = ViewData["SmokingFilter"] as string;
+    //var prevDisabled = !Model.Tables.HasPreviousPage ? "disabled" : "";
+    //var nextDisabled = !Model.Tables.HasNextPage ? "disabled" : "";
+}
+@{
+    Layout = null;
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-8">
+        
+    </div>
+</div>
+<hr />
+
+<div class="search-user form-actions no-color col">
+    <form asp-action="ViewAllTables" method="get">
+        <div class="row">
+            @*<div class="col-4 col-sm-7">
+            <div class="input-group mb-3">
+            <select class="form-select" aria-label="Example select with button addon" name="areaFilter">
+            <option disabled selected>Select table area</option>
+            @foreach (var area in Enum.GetNames(typeof(TableArea)))
+            {
+            <option value="@area" selected="@(area == areaFilter)">@area</option>
+            }
+            </select>
+            <select class="form-select" aria-label="Example select with button addon" name="smokingFilter">
+            <option disabled selected>Select smoking status</option>
+            @foreach (var smoking in Enum.GetNames(typeof(TableSmoking)))
+            {
+            <option value="@smoking" selected="@(smoking == smokingFilter)">@smoking</option>
+            }
+            </select>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-filter"></i></button>
+            </div>
+            </div>
+            <div class="col-1">
+            <a asp-action="ViewAllUsers" class="btn btn-secondary clear-btn">Clear</a>
+            </div>*@
+            <div class="col-7 col-sm-4 text-end">
+                <a class="btn btn-primary" asp-area="" asp-page="CreateShift">Create new shift</a>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="align-middle">
+    @if (Model.Shifts.Count() > 0)
+    {
+        @foreach (var shift in Model.Shifts)
+        {
+                
+            @if(User.IsInRole("Doctor"))
+            {
+                <form method="post"> 
+                <button type="submit" asp-route-name="@shift.Id" class="shiftButton" text-align="center" asp-route-value="@shift.Id">
+                    @shift.OfficeAddress @shift.OfficeCity <br>
+                    @shift.NurseFirstName @shift.NurseLastName
+                </button>
+                </form>
+            }
+            else
+            {
+                <form method="post">
+                <button type="submit" asp-route-name="@shift.Id" class="shiftButton" text-align="center" asp-route-value="@shift.Id">
+                    @shift.OfficeAddress @shift.OfficeCity <br>
+                    @shift.DoctorFirstName @shift.DoctorLastName
+                </button>
+                </form>
+            }            
+         }
+     }
+</div>
+@*
+<div>
+    <ul class="pagination">
+        <li class="page-item">
+            <a asp-page="./ViewAllTables"
+               asp-route-sort="@ViewData["CurrentSort"]"
+               asp-route-pageIndex="@(Model.Tables.PageIndex - 1)"
+               asp-route-smokingFilter="@ViewData["SmokingFilter"]"
+               asp-route-areaFilter="@ViewData["AreaFilter"]"
+               class="page-link @prevDisabled">
+                Previous
+            </a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Tables.PageIndex ? "active" : "")">
+                <a asp-page="./ViewAllTables"
+               asp-route-sort="@ViewData["CurrentSort"]"
+               asp-route-smokingFilter="@ViewData["SmokingFilter"]"
+               asp-route-areaFilter="@ViewData["AreaFilter"]"
+               asp-route-pageIndex="@i" class="page-link">
+                    @i
+                </a>
+            </li>
+        }
+        <li class="page-item">
+            <a asp-page="./ViewAllTables"
+               asp-route-sort="@ViewData["CurrentSort"]"
+               asp-route-pageIndex="@(Model.Tables.PageIndex +1)"
+               asp-route-smokingFilter="@ViewData["SmokingFilter"]"
+               asp-route-areaFilter="@ViewData["AreaFilter"]"
+               class="page-link @nextDisabled">
+                Next
+            </a>
+        </li>
+    </ul>
+</div>*@
+<a asp-area="" asp-page="/GeneralMedicineOffice/ViewAllOffices" class="btn btn-primary mt-1" aria-current="page">
+    <i class="fas fa-utensils"></i> Back to offices
+</a>
