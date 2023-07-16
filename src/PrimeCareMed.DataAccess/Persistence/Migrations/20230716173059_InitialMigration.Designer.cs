@@ -12,8 +12,8 @@ using PrimeCareMed.DataAccess.Persistence;
 namespace PrimeCareMed.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230709000745_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230716173059_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -174,7 +174,7 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Property<Guid?>("PatientId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ShiftId")
+                    b.Property<Guid?>("SessionId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Status")
@@ -184,7 +184,7 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("ShiftId");
+                    b.HasIndex("SessionId");
 
                     b.ToTable("Appointment");
                 });
@@ -199,6 +199,9 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -423,7 +426,29 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
                     b.HasIndex("VaccineId");
 
-                    b.ToTable("PatientsVaccine");
+                    b.ToTable("PatientsVaccines");
+                });
+
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Session", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ShiftEndTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ShiftId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ShiftStartTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShiftId");
+
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Shift", b =>
@@ -528,15 +553,13 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId");
 
-                    b.HasOne("PrimeCareMed.Core.Entities.Shift", "Shift")
+                    b.HasOne("PrimeCareMed.Core.Entities.Session", "Session")
                         .WithMany("Appointments")
-                        .HasForeignKey("ShiftId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SessionId");
 
                     b.Navigation("Patient");
 
-                    b.Navigation("Shift");
+                    b.Navigation("Session");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.MedicalReport", b =>
@@ -578,6 +601,17 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Navigation("Appointment");
 
                     b.Navigation("Vaccine");
+                });
+
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Session", b =>
+                {
+                    b.HasOne("PrimeCareMed.Core.Entities.Shift", "Shift")
+                        .WithMany("Sessions")
+                        .HasForeignKey("ShiftId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shift");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Shift", b =>
@@ -638,9 +672,14 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Navigation("Appointments");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.Shift", b =>
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Session", b =>
                 {
                     b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Shift", b =>
+                {
+                    b.Navigation("Sessions");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Vaccine", b =>

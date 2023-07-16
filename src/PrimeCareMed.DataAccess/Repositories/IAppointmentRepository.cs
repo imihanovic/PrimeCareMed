@@ -11,7 +11,6 @@ namespace PrimeCareMed.DataAccess.Repositories
     {
         Task<IEnumerable<Appointment>> GetAllAppointmentsForOfficeAsync(string Id);
         Task<IEnumerable<Appointment>> GetAllAppointmentsForDoctorAsync(string Id);
-        Task<IEnumerable<Appointment>> GetAllWaitingRoomAppointmentsAsync(string Id);
         Task<IEnumerable<Appointment>> GetAllAppointmentsAsync();
         Task<Appointment> AddAsync(Appointment appointment);
         Task DeleteAsync(Guid id);

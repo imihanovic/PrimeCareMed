@@ -6,24 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace PrimeCareMed.Application.Models.GeneralMedicineOffice
+namespace PrimeCareMed.Application.Models.MedicalReport
 {
-    public class OfficeModelForCreate
+    public class MedicalReportModelForCreate
     {
+        
         public string Id { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Name")]
-        public string Name { get; set; }
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Address")]
-        public string Address { get; set; }
+        [Display(Name = "Description")]
+        public string Description { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "City")]
-        public string City { get; set; }
+        [Display(Name = "Date")]
+        public DateTime MedicalReportDate { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Appointment")]
+        public string AppointmentId { get; set; }
+
     }
 }

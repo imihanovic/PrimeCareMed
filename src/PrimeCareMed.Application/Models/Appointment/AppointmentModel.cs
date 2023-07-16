@@ -13,7 +13,6 @@ namespace PrimeCareMed.Application.Models.Appointment
         public string PatientLastName { get; set; }
         public DateTime AppointmentDate { get; set; }
         public string Cause { get; set; }
-        public string Conclusion { get; set; }
         public string Status { get; set; }
     }
 }

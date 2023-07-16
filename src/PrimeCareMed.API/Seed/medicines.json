@@ -1,12 +1,34 @@
 ﻿[
   {
-    "Address": "Kopilica ul., 21000 Split",
-    "lattitude": 43.515938,
-    "longitude": 16.448714
+    "Name": "Aspirin",
+    "Description": "Used to treat pain, and reduce fever or inflammation. It can treat or prevent heart attacks, strokes, and chest pain."
   },
   {
-    "Address": "Trg dr. Franje Tuđmana, 21000 Split",
-    "lattitude": 43.508638,
-    "longitude": 16.437797
+    "Name": "Ibuprofen",
+    "Description": "Used to reduce fever and treat pain or inflammation caused by many conditions such as headache, toothache, back pain, arthritis, menstrual cramps, or minor injury."
+  },
+  {
+    "Name": "Clindamycin",
+    "Description": "Treats serious infections caused by bacteria."
+  },
+  {
+    "Name": "Diltiazem",
+    "Description": "Treats hypertension or symptoms of angina (chest pain)."
+  },
+  {
+    "Name": "Claritin",
+    "Description": "An antihistamine that reduces the effects of natural chemical histamine in the body. Treats allergy symptoms."
+  },
+  {
+    "Name": "Methamphetamine",
+    "Description": "A central nervous system stimulant. It is used to treat ADHD."
+  },
+  {
+    "Name": "Voltaren",
+    "Description": "Reduces substances in the body that cause pain and inflammation."
+  },
+  {
+    "Name": "Ketoprofen",
+    "Description": "Used to treat pain or inflammation caused by arthritis."
   }
 ]

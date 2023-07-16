@@ -10,11 +10,11 @@ namespace PrimeCareMed.Core.Entities
 {
     public class Session : BaseEntity
     {
-            public Shift Shift { get; set; }
-            public DateTime ShiftStartTime { get; set; }
-            public DateTime ShiftEndTime { get; set; }
+        public Shift Shift { get; set; }
+        public DateTime ShiftStartTime { get; set; }
 #nullable enable
-            public ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
+        public DateTime? ShiftEndTime { get; set; }
+        public ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
 #nullable disable
     }
 }

@@ -28,13 +28,15 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         private readonly IAppointmentService _appointmentService;
         private readonly IPatientService _patientService;
         private readonly IShiftService _shiftService;
+        private readonly ISessionRepository _sessionRepository;
         public CreateAppointmentModel(IMedicineRepository medicineRepository,
             IMapper mapper,
             IUserService userService,
             IUserRepository userRepository,
             IAppointmentService appointmentService,
             IPatientService patientService,
-            IShiftService shiftService
+            IShiftService shiftService,
+            ISessionRepository sessionRepository
             )
         {
             _medicineRepository = medicineRepository;
@@ -44,6 +46,7 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             _appointmentService = appointmentService;
             _patientService = patientService;
             _shiftService = shiftService;
+            _sessionRepository = sessionRepository;
 
         }
         [BindProperty]
@@ -56,20 +59,25 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         public ShiftModel CurrentShift { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public string CurrentShiftId { get; set; }
+        public string CurrentSessionId { get; set; }
 
         [BindProperty]
         public IEnumerable<ShiftModel> Shifts => _shiftService.GetAllShifts();
         public IActionResult OnGet()
         {
-            var cookie = Request.Cookies["myCookie"];
+            var cookie = Request.Cookies["sessionCookie"];
             if(cookie != null)
             {
-                CurrentShift = _shiftService.GetShiftById(cookie);
-                CurrentShiftId = cookie;
+                var session = _sessionRepository.GetSessionByIdAsync(Guid.Parse(cookie)).Result;
+                CurrentShift = _shiftService.GetShiftById(session.Shift.Id.ToString());
+                CurrentSessionId = cookie;
+                Patients = _patientService.GetAllAvailablePatients(session.Id.ToString());
             }
-            Console.WriteLine($"{cookie}");
-            Patients = _patientService.GetAllAvailablePatients(cookie);
+            else
+            {
+                Patients = _patientService.GetAllPatients();
+            }
+            Console.WriteLine($"KUKI KOD PACIJENATA{cookie}");
             return Page();
         }
         public async Task<IActionResult> OnPostAsync()

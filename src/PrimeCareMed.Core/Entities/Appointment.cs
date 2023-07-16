@@ -9,7 +9,7 @@ namespace PrimeCareMed.Core.Entities
         public DateTime AppointmentDate { get; set; }
         public string Cause { get; set; }
         public AppointmentStatus Status { get; set; }
-        public Shift Shift { get; set; }
+        public Session Session { get; set; }
         public Patient Patient { get; set; }
 
 #nullable enable

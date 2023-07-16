@@ -18,8 +18,8 @@ namespace PrimeCareMed.Application.Services
         Task DeleteMedicineAsync(Guid Id);
         IEnumerable<PatientModel> GetAllPatientsNotInWaitingRoom(IEnumerable<PatientModel> patientModels, string shiftId);
         IEnumerable<AppointmentModel> GetAllAppointmentsForDoctor(string Id);
-        IEnumerable<AppointmentModel> GetAllAppointmentsInWaitingRoom(string cookie);
         AppointmentDetailsModel GetAppointmentDetailsById(Guid Id);
         IEnumerable<AppointmentModel> GetAllAppointments();
+        IEnumerable<AppointmentModel> GetAllAppointmentsInWaitingRoom(string cookie);
     }
 }

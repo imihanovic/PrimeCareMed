@@ -13,12 +13,13 @@ namespace PrimeCareMed.Application.Services
         Task<ShiftModel> AddAsync(ShiftModelForCreate createShiftModel);
         List<string> GetShiftModelFields();
         IEnumerable<ShiftModel> GetAllShiftsForOffice(Guid Id);
-        Task DeleteMedicineAsync(Guid Id);
+        Task DeleteShiftAsync(Guid Id);
         IEnumerable<ShiftModel> GetAllShiftsForDoctor(string Id);
         IEnumerable<ShiftModel> GetAllShiftsForNurse(string Id);
         IEnumerable<ShiftModel> GetShiftsEnumerable(IEnumerable<Shift> shiftsFromDB);
-        Task<bool> CheckIfShiftExists(string officeId, string nurseId, string doctorId);
+        bool CheckIfShiftExists(string officeId, string nurseId, string doctorId);
         IEnumerable<ShiftModel> GetAllShifts();
         ShiftModel GetShiftById(string Id);
+        IEnumerable<ShiftModel> GetAllAvailableShifts(IEnumerable<ShiftModel> shifts, string currentUserId, string currentUserRole);
     }
 }

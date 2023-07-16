@@ -14,16 +14,19 @@ using PrimeCareMed.DataAccess.Repositories;
 using System.Data;
 using static System.Net.Mime.MediaTypeNames;
 using System.Net;
+using Newtonsoft.Json.Linq;
+using PrimeCareMed.Core.Entities;
 
 namespace PrimeCareMed.Frontend.Pages.Shift
 {
     [Authorize(Roles = "Doctor,Nurse,SysAdministrator")]
     public class ChooseShiftModel : PageModel
     {
-        public readonly IShiftService _sessionService;
+        public readonly IShiftService _shiftService;
         public readonly IOfficeService _officeService;
-        public readonly IShiftRepository _sessionRepository;
+        public readonly IShiftRepository _shiftRepository;
         public readonly IOfficeRepository _officeRepository;
+        public readonly ISessionRepository _sessionRepository;
         public readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 #nullable enable
@@ -41,14 +44,16 @@ namespace PrimeCareMed.Frontend.Pages.Shift
             IShiftRepository shiftRepository,
             IMapper mapper,
             UserManager<ApplicationUser> userManager,
-            IOfficeRepository officeRepository)
+            IOfficeRepository officeRepository,
+            ISessionRepository sessionRepository)
         {
-            _sessionService = shiftService;
-            _sessionRepository = shiftRepository;
+            _shiftService = shiftService;
+            _shiftRepository = shiftRepository;
             _officeService = officeService;
             _mapper = mapper;
             _userManager = userManager;
             _officeRepository = officeRepository;
+            _sessionRepository = sessionRepository;
         }
 
         public IActionResult OnGet()
@@ -56,22 +61,60 @@ namespace PrimeCareMed.Frontend.Pages.Shift
 
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
-
+            var cookie = Request.Cookies["shiftCookie"];
+            Console.WriteLine($"Prije {cookie}");
             int pageSize = 9;
-            if(currentUserRole == "Doctor")
+            var doctorSession = _sessionRepository.CheckIfOpenSessionExistsForDoctor(currentUser.Id);
+            var nurseSession = _sessionRepository.CheckIfOpenSessionExistsForNurse(currentUser.Id);
+
+            // PROVJERIT MED SESTRU I DOKTORA U TRENUTNOM COOKIJU!!
+            if (currentUserRole == "Doctor")
             {
-                Shifts = _sessionService.GetAllShiftsForDoctor(currentUser.Id);
+                if(doctorSession is null)
+                {
+                    Shifts = _shiftService.GetAllAvailableShifts(Shifts, currentUser.Id, currentUserRole);
+                }
+                else
+                {
+                    HttpContext.Response.Cookies.Append(
+                     "sessionCookie", doctorSession.Id.ToString(),
+                     new CookieOptions() { SameSite = SameSiteMode.Lax });
+                    HttpContext.Response.Cookies.Append(
+                    "shiftCookie", doctorSession.Shift.Office.Name + " " + doctorSession.Shift.Office.City,
+                    new CookieOptions() { SameSite = SameSiteMode.Lax });
+                    HttpContext.Response.Cookies.Append(
+                     "shiftCookieDetails", doctorSession.Shift.Nurse.FirstName + " " + doctorSession.Shift.Nurse.LastName,
+                     new CookieOptions() { SameSite = SameSiteMode.Lax });
+                    return Redirect("../Index");
+                }
             }
             else if(currentUserRole == "Nurse")
             {
-                Shifts = _sessionService.GetAllShiftsForNurse(currentUser.Id);
+                if (nurseSession is null)
+                {
+                    Shifts = _shiftService.GetAllAvailableShifts(Shifts, currentUser.Id, currentUserRole);
+                }
+                else
+                {
+                    HttpContext.Response.Cookies.Append(
+                     "sessionCookie", nurseSession.Id.ToString(),
+                     new CookieOptions() { SameSite = SameSiteMode.Lax });
+
+                    HttpContext.Response.Cookies.Append(
+                     "shiftCookie", nurseSession.Shift.Office.Name,
+                     new CookieOptions() { SameSite = SameSiteMode.Lax });
+                    HttpContext.Response.Cookies.Append(
+                     "shiftCookieDetails", nurseSession.Shift.Doctor.FirstName + " " + nurseSession.Shift.Doctor.LastName,
+                     new CookieOptions() { SameSite = SameSiteMode.Lax });
+                    return Redirect("../Index");
+                }   
             }
             else
             {
                 return Redirect("../Index");
             }
-            var cookie = Request.Cookies["myCookie"];
-            Console.WriteLine($"Prije {cookie}");
+            // AKO JE DOCTOR IL MED SESTRA I NEMA COOKIJA
+            
             //AllTables = tables;
 
             //ViewData["CurrentSort"] = sort;
@@ -91,14 +134,34 @@ namespace PrimeCareMed.Frontend.Pages.Shift
         }
         public ActionResult OnPost(string name, string value)
         {
-            //Console.WriteLine($"COOKIE {name}");
-            //Console.WriteLine($"COOKIE {value}");
-            //var newShiftSession = ;
+            var shift = _shiftRepository.GetShiftByIdAsync(value).Result;
+            var session = new Session();
+            session.Shift = shift;
+            session.ShiftStartTime = DateTime.UtcNow.ToUniversalTime();
+
+            var newSession = _sessionRepository.AddAsync(session).Result;
             HttpContext.Response.Cookies.Append(
-                     "myCookie", value,
+                     "sessionCookie", newSession.Id.ToString(),
                      new CookieOptions() { SameSite = SameSiteMode.Lax });
-            //var cookie = Request.Cookies["myCookie"];
-            //Console.WriteLine($"COOKIE {cookie}");
+
+            if (User.IsInRole("Doctor"))
+            {
+                HttpContext.Response.Cookies.Append(
+                "shiftCookie", shift.Office.Name + " " + shift.Office.City,
+                new CookieOptions() { SameSite = SameSiteMode.Lax });
+                HttpContext.Response.Cookies.Append(
+                 "shiftCookieDetails", shift.Nurse.FirstName + " " + shift.Nurse.LastName,
+                 new CookieOptions() { SameSite = SameSiteMode.Lax });
+            }
+            else if (User.IsInRole("Nurse"))
+            {
+                HttpContext.Response.Cookies.Append(
+                "shiftCookie", shift.Office.Name + " " + shift.Office.City,
+                new CookieOptions() { SameSite = SameSiteMode.Lax });
+                HttpContext.Response.Cookies.Append(
+                 "shiftCookieDetails", shift.Doctor.FirstName + " " + shift.Doctor.LastName,
+                 new CookieOptions() { SameSite = SameSiteMode.Lax });
+            }
             return Redirect("../Index");
         }
     }

@@ -56,6 +56,7 @@ builder.Services.AddScoped<IShiftService, ShiftService>();
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

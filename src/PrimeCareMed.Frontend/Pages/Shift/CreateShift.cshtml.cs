@@ -58,7 +58,7 @@ namespace PrimeCareMed.Frontend.Pages.Shift
             
             if (!ModelState.IsValid) { return Page(); }
             
-            else if (await _shiftSessionService.CheckIfShiftExists(NewShift.OfficeId, NewShift.NurseId, NewShift.DoctorId))
+            else if (_shiftSessionService.CheckIfShiftExists(NewShift.OfficeId, NewShift.NurseId, NewShift.DoctorId))
             {
                 
                 ViewData["Message"] = string.Format("Shift session already exists");

@@ -28,6 +28,7 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<PatientsVaccine> PatientsVaccines { get; set; }
     public DbSet<MedicinePrescription> MedicinePrescription { get; set; }
     public DbSet<Appointment> Appointment { get; set; }
+    public DbSet<Session> Sessions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -58,40 +59,15 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
         .IsRequired();
 
         builder.Entity<Shift>()
-        .HasMany(e => e.Appointments)
+        .HasMany(e => e.Sessions)
         .WithOne(e => e.Shift)
         .IsRequired();
-
-        //builder.Entity<Patient>()
-        //.HasMany(e => e.Appointments)
-        //.WithOne(e => e.Patient)
-        //.IsRequired();
 
         builder.Entity<Appointment>()
         .HasOne(e => e.MedicalReport)
         .WithOne(e => e.Appointment)
         .HasForeignKey<MedicalReport>(e=>e.AppointmentId)
         .IsRequired();
-
-        //builder.Entity<Medicine>()
-        //.HasMany(e => e.MedicinePrescriptions)
-        //.WithOne(e => e.Medicine)
-        //.IsRequired();
-
-        //builder.Entity<Appointment>()
-        //.HasMany(e => e.MedicinePrescriptions)
-        //.WithOne(e => e.Appointment)
-        //.IsRequired();
-
-        //builder.Entity<Vaccine>()
-        //.HasMany(e => e.PatientsVaccines)
-        //.WithOne(e => e.Vaccine)
-        //.IsRequired();
-
-        //builder.Entity<Appointment>()
-        //.HasMany(e => e.PatientsVaccines)
-        //.WithOne(e => e.Appointment)
-        //.IsRequired();
 
     }
 

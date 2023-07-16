@@ -12,5 +12,6 @@ namespace PrimeCareMed.Application.Models.Shift
         public string NurseLastName { get; set; }
         public string OfficeAddress { get; set; }
         public string OfficeCity { get; set; }
+        public object OfficeName { get; set; }
     }
 }

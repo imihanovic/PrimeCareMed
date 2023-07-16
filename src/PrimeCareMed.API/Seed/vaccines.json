@@ -1,0 +1,32 @@
+﻿[
+  {
+    "Name": "Tirzepatide",
+    "Description": "Used for type 2 diabetes to lower blood sugar.",
+    "SideEffects": "Nausea, decreased appetite, constipation"
+  },
+  {
+    "Name": "Epinephrine",
+    "Description": "Treats severe allergic reactions (anaphylaxis) and low blood presure caused by septic shock.",
+    "SideEffects": "Breathing problems, pounding heartbeat, pale skin, nausea, dizziness, weakness, headache"
+  },
+  {
+    "Name": "Dopamine",
+    "Description": "Improves the pumping strength of the heart and improves blood flow to the kidneys.",
+    "SideEffects": "Chills, nausea, headache"
+  },
+  {
+    "Name": "Lorazepam",
+    "Description": "Used to treat anxiety, seizures.",
+    "SideEffects": "Headache, dizziness, sleepiness"
+  },
+  {
+    "Name": "Calcium Gluconate",
+    "Description": "Used to treat or prevent low calcium levels.",
+    "SideEffects": "Constipation. dizziness"
+  },
+  {
+    "Name": "Fentanyl",
+    "Description": "Used to ease the pain.",
+    "SideEffects": "Sweating, dry mouth, weakness, nausea"
+  }
+]

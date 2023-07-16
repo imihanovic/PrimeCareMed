@@ -3,6 +3,7 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +36,23 @@
         <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
             <a asp-area="" asp-page="/Index" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <span class="fs-4">PrimeCareMed </span>
-            </a>
+            </a> <br>
+                @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                {
+                    @foreach (var cookie in HttpContextAccessor.HttpContext.Request.Cookies)
+                    {
+                        @if (@cookie.Key == "shiftCookieDetails")
+                        {
+                            <a class="">@cookie.Value</a>
+
+                            <br />
+                        }
+                        else if(@cookie.Key == "shiftCookie")
+                        {
+                            <a class="">@cookie.Value</a>
+                        }
+                    }
+                }
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item" style="font-size:20px">

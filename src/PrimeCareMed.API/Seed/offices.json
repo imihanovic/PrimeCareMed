@@ -1,0 +1,27 @@
+﻿[
+  {
+    "Name": "Health Center Kastela",
+    "Address": "Kneza Trpimira 1",
+    "City": "Kastel Sucurac"
+  },
+  {
+    "Name": "Health Center Split",
+    "Address": "Vukovarska ulica 8",
+    "City": "Split"
+  },
+  {
+    "Name": "Health Center Sibenik",
+    "Address": "Ulica kralja Zvonimira 23",
+    "City": "Sibenik"
+  },
+  {
+    "Name": "Health Center Brodarica",
+    "Address": "Ul. Krapanjskih Spuzvara 94",
+    "City": "Brodarica"
+  },
+  {
+    "Name": "Health Center Mertojak",
+    "Address": "Doverska ulica 2",
+    "City": "Split"
+  }
+]
