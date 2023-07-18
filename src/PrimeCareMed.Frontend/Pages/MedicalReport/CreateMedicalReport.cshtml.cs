@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Routing;
+using PrimeCareMed.Application.Models.MedicalReport;
 using PrimeCareMed.Application.Models.Medicine;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.DataAccess.Repositories;
@@ -16,39 +18,25 @@ namespace PrimeCareMed.Frontend.Pages.MedicalReport
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly IMedicineService _medicineService;
+        private readonly IMedicalReportService _medicalReportService;
         public CreateMedicalReportModel(IMedicineRepository medicineRepository,
             IMapper mapper,
             IUserService userService,
             IUserRepository userRepository,
-            IMedicineService medicineService)
+            IMedicalReportService medicalReportService)
         {
             _medicineRepository = medicineRepository;
             _mapper = mapper;
             _userService = userService;
             _userRepository = userRepository;
-            _medicineService = medicineService;
+            _medicalReportService = medicalReportService;
 
         }
+        [FromRoute]
+        public Guid Id { get; set; }
+
         [BindProperty]
-        public MedicineModelForCreate NewMedicalReport { get; set; }
+        public MedicalReportModelForCreate NewMedicalReport { get; set; }
 
-        //public async Task<IActionResult> OnPostAsync()
-        //{
-        //    //if (!ModelState.IsValid) { return Page(); }
-
-        //    //try
-        //    //{
-        //    //    await _medicineService.AddAsync(NewMedicine);
-        //    //    return RedirectToPage("ViewAllMedicines");
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    Console.WriteLine(ex.Message);
-        //    //}
-        //    //return Page();
-        //}
-
-        
     }
 }

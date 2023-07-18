@@ -12,7 +12,7 @@ using PrimeCareMed.DataAccess.Persistence;
 namespace PrimeCareMed.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230716173059_InitialMigration")]
+    [Migration("20230716220342_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

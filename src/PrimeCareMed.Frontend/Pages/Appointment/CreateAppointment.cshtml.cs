@@ -77,7 +77,6 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             {
                 Patients = _patientService.GetAllPatients();
             }
-            Console.WriteLine($"KUKI KOD PACIJENATA{cookie}");
             return Page();
         }
         public async Task<IActionResult> OnPostAsync()

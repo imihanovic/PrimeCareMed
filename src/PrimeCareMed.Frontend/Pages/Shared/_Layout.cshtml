@@ -43,13 +43,13 @@
                     {
                         @if (@cookie.Key == "shiftCookieDetails")
                         {
-                            <a class="">@cookie.Value</a>
+                            <a class="text-white">@cookie.Value.ToString()</a>
 
                             <br />
                         }
                         else if(@cookie.Key == "shiftCookie")
                         {
-                            <a class="">@cookie.Value</a>
+                            <a class="text-white">@cookie.Value.ToString()</a>
                         }
                     }
                 }

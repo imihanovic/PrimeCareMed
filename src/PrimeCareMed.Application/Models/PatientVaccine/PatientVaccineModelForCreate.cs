@@ -6,21 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace PrimeCareMed.Application.Models.MedicinePrescription
+namespace PrimeCareMed.Application.Models.PatientVaccine
 {
-    public class MedicinePrescriptionModelForCreate
+    public class PatientVaccineModelForCreate
     {
         public string Id { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Medicine")]
-        public string MedicineId { get; set; }
+        [Display(Name = "Description")]
+        public string VaccineId { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Description")]
-        public string Description { get; set; }
-
+        public string Dosage { get; set; }
     }
 }

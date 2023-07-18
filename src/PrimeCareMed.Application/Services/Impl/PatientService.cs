@@ -34,7 +34,6 @@ namespace PrimeCareMed.Application.Services.Impl
 
             });
             var patient = config.CreateMapper().Map<Patient>(createPatientModel);
-            Console.WriteLine($"DATUM SERVICE {patient.DateOfBirth}");
             await _patientRepository.AddAsync(patient);
             return _mapper.Map<PatientModel>(patient);
         }

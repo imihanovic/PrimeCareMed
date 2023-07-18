@@ -38,7 +38,7 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             var cookie = Request.Cookies["sessionCookie"];
             if (cookie != null)
             {
-                appointments = _appointmentService.GetAllAppointmentsInWaitingRoom(cookie).OrderBy(x=>x.Status).ToList();
+                appointments = _appointmentService.GetAllAppointmentsInWaitingRoom(cookie).OrderBy(x=>x.Status.GetTypeCode()).ToList();
             }
             else
             {

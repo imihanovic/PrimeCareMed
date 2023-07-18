@@ -18,5 +18,8 @@ namespace PrimeCareMed.Application.Models.Appointment
         public string Status { get; set; }
         public string PatientOib { get; set; }
         public string PatientGender { get; set; }
+#nullable enable
+        public string? MedicalReport { get; set; }
+#nullable disable
     }
 }

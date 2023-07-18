@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/medicalreport/{id:Guid}"
 @model PrimeCareMed.Frontend.Pages.MedicalReport.CreateMedicalReportModel
 @{
     ViewData["Title"] = "Medical Report";
@@ -9,20 +9,14 @@
             <h1>@ViewData["Title"]</h1>
         </div>
         <div>
-            <form id="createMedicineForm" method="post">
+            <form id="createMedicineForm" asp-page="../Appointment/ViewAppointmentDetails" asp-route-id="@Model.Id" asp-page-handler="report" method="post">
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                @*<div class="form-floating">
-                    <input asp-for="NewMedicine.Name" class="form-control" aria-required="true" />
-                    <label asp-for="NewMedicine.Name"></label>
-                    <span asp-validation-for="NewMedicine.Name" class="text-danger"></span>
+                 <div class="form-floating">
+                    <input id="description" type="text" name="description" class="form-control"/>
+                    <label for="description">Description</label>
                 </div>
-                <div class="form-floating">
-                    <input asp-for="NewMedicine.Description" class="form-control" aria-required="true" />
-                    <label asp-for="NewMedicine.Description"></label>
-                    <span asp-validation-for="NewMedicine.Description" class="text-danger"></span>
-                </div>*@
-                <button id="createMedicineSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Add medicine</button>
+                <button id="createMedicalReportSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Save medical report</button>
             </form>
             @if (ViewData["Message"] != null)
             {
