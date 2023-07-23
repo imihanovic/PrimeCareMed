@@ -11,5 +11,6 @@ namespace PrimeCareMed.Application.Services
         IEnumerable<OfficeModel> GetAllOffices();
         GeneralMedicineOffice EditOfficeAsync(OfficeModelForCreate officeModel);
         Task DeleteOfficeAsync(Guid Id);
+        OfficeModelForCreate GetOfficeById(string Id);
     }
 }

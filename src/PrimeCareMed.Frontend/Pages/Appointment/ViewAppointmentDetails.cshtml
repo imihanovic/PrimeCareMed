@@ -43,18 +43,41 @@
                             <b>
                                 Medical report <br />
                             </b>
-                            @Model.MedicalReport.Description
+                            @Model.MedicalReport.Description<text>&nbsp;</text>
                         </font>
                        <a class="btn btn-outline-success" asp-area="" asp-page="/MedicalReport/CreateMedicalReport" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Edit</a><br />
-                    }
-                    <button asp-page-handler="vaccine" class="btn btn-outline-success col-5"
-                            runat="server" CausesValidation="False">
-                        <i class="bi bi-trash3-fill"> Add vaccine</i>
-                    </button>
-                    <a class="btn btn-outline-success" asp-area="" asp-page="/MedicalReport/CreateMedicalReport" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> New vaccine</a><br />
-                    <br />
+                    }<br />
+                    <div class="row justify-content-around">
+                        <div class="col-4">
+                            @if (Model.PatientVaccines is not null)
+                            {
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                           <th>Name</th>
+                                           <th>Dosage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var vaccine in Model.PatientVaccines)
+                                        {
+                                            <tr class="align-middle">
+                                                <td class="d-none d-lg-table-cell">@vaccine.VaccineName</td>
+                                                <td class="d-none d-lg-table-cell">@vaccine.Dosage mg</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            <a class="btn btn-outline-success" asp-area="" asp-page="/PatientVaccines/CreatePatientVaccine" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Vaccine</a>
+                        </div>
+                        <div class="col-4">
+                            Medicines
+                        </div>
+                    </div>
                     <a class="btn btn-outline-success" asp-area="" asp-page="/MedicinePrescription/CreateMedicinePrescription" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Medicine prescription</a>
                 </div>
+
             </form>
             @if (ViewData["Message"] != null)
             {
@@ -67,9 +90,6 @@
         </div>
     </div>
 </div>
-<a asp-area="" asp-page="/Appointment/WaitingRoom" class="btn btn-primary" aria-current="page">
-    <i class="fas fa-utensils"></i> WaitingRoom
-</a>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

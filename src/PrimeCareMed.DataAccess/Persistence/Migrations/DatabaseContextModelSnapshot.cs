@@ -166,13 +166,13 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Property<string>("Cause")
                         .HasColumnType("text");
 
-                    b.Property<string>("Conclusion")
+                    b.Property<string>("MedicalReport")
                         .HasColumnType("text");
 
                     b.Property<Guid?>("PatientId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("SessionId")
+                    b.Property<Guid>("ShiftId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Status")
@@ -182,7 +182,7 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("SessionId");
+                    b.HasIndex("ShiftId");
 
                     b.ToTable("Appointment");
                 });
@@ -287,29 +287,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.MedicalReport", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AppointmentId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("ReportDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppointmentId")
-                        .IsUnique();
-
-                    b.ToTable("MedicalReports");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Medicine", b =>
@@ -427,28 +404,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.ToTable("PatientsVaccines");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.Session", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("ShiftEndTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("ShiftId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ShiftStartTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShiftId");
-
-                    b.ToTable("Sessions");
-                });
-
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Shift", b =>
                 {
                     b.Property<Guid>("Id")
@@ -465,6 +420,12 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
                     b.Property<Guid>("OfficeId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ShiftEndTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ShiftStartTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -551,24 +512,15 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId");
 
-                    b.HasOne("PrimeCareMed.Core.Entities.Session", "Session")
+                    b.HasOne("PrimeCareMed.Core.Entities.Shift", "Shift")
                         .WithMany("Appointments")
-                        .HasForeignKey("SessionId");
-
-                    b.Navigation("Patient");
-
-                    b.Navigation("Session");
-                });
-
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.MedicalReport", b =>
-                {
-                    b.HasOne("PrimeCareMed.Core.Entities.Appointment", "Appointment")
-                        .WithOne("MedicalReport")
-                        .HasForeignKey("PrimeCareMed.Core.Entities.MedicalReport", "AppointmentId")
+                        .HasForeignKey("ShiftId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Appointment");
+                    b.Navigation("Patient");
+
+                    b.Navigation("Shift");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.MedicinePrescription", b =>
@@ -601,17 +553,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Navigation("Vaccine");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.Session", b =>
-                {
-                    b.HasOne("PrimeCareMed.Core.Entities.Shift", "Shift")
-                        .WithMany("Sessions")
-                        .HasForeignKey("ShiftId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Shift");
-                });
-
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Shift", b =>
                 {
                     b.HasOne("PrimeCareMed.Core.Entities.Identity.ApplicationUser", "Doctor")
@@ -641,8 +582,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Appointment", b =>
                 {
-                    b.Navigation("MedicalReport");
-
                     b.Navigation("MedicinePrescriptions");
 
                     b.Navigation("PatientsVaccines");
@@ -670,14 +609,9 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Navigation("Appointments");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.Session", b =>
-                {
-                    b.Navigation("Appointments");
-                });
-
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Shift", b =>
                 {
-                    b.Navigation("Sessions");
+                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Vaccine", b =>

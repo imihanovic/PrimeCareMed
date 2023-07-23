@@ -12,17 +12,20 @@ namespace PrimeCareMed.Application.Services.Impl
         private readonly IMedicinePrescriptionRepository _medicinePrescriptionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IMedicineRepository _medicineRepository;
 
         public MedicinePrescriptionService(IMapper mapper,
             IMedicinePrescriptionRepository medicinePrescriptionRepository,
             IUserRepository userRepository,
-            IAppointmentRepository appointmentRepository
+            IAppointmentRepository appointmentRepository,
+            IMedicineRepository medicineRepository
             )
         {
             _mapper = mapper;
             _medicinePrescriptionRepository = medicinePrescriptionRepository;
             _userRepository = userRepository;
             _appointmentRepository = appointmentRepository;
+            _medicineRepository = medicineRepository;
         }
 
         public async Task<MedicinePrescriptionModel> AddAsync(MedicinePrescriptionModelForCreate createReportModel, Guid appointmentId)
@@ -35,6 +38,7 @@ namespace PrimeCareMed.Application.Services.Impl
             var prescription = config.CreateMapper().Map<MedicinePrescription>(createReportModel);
             prescription.DatePrescribed = DateTime.Now.ToUniversalTime();
             prescription.Appointment = _appointmentRepository.GetAppointmentByIdAsync(appointmentId).Result;
+            prescription.Medicine = _medicineRepository.GetMedicineByIdAsync(Guid.Parse(createReportModel.MedicineId)).Result;
             await _medicinePrescriptionRepository.AddAsync(prescription);
             return _mapper.Map<MedicinePrescriptionModel>(prescription);
         }
@@ -68,5 +72,10 @@ namespace PrimeCareMed.Application.Services.Impl
         {
             await _medicinePrescriptionRepository.DeleteAsync(Id);
         }
+
+        //public IEnumerable<MedicineModel> GetActiveMedicineForPatient(Guid Id)
+        //{
+        //    var medicines = _medicinePrescriptionRepository.GetAllMedicalPrecriptionsForAppointmentAsync
+        //}
     }
 }

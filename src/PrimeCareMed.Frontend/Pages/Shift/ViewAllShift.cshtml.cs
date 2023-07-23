@@ -20,9 +20,9 @@ namespace PrimeCareMed.Frontend.Pages.Shift
     {
         
         
-        public readonly IShiftService _sessionService;
+        public readonly IShiftService _shiftService;
         public readonly IOfficeService _officeService;
-        public readonly IShiftRepository _sessionRepository;
+        public readonly IShiftRepository _shiftRepository;
         public readonly IOfficeRepository _officeRepository;
         public readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
@@ -47,8 +47,8 @@ namespace PrimeCareMed.Frontend.Pages.Shift
             UserManager<ApplicationUser> userManager,
             IOfficeRepository officeRepository)
         {
-            _sessionService = shiftService;
-            _sessionRepository = shiftRepository;
+            _shiftService = shiftService;
+            _shiftRepository = shiftRepository;
             _officeService = officeService;
             _mapper = mapper;
             _userManager = userManager;
@@ -67,7 +67,7 @@ namespace PrimeCareMed.Frontend.Pages.Shift
 
             OfficeModel = _mapper.Map<OfficeModel>(office);
 
-            var shifts = _sessionService.GetAllShiftsForOffice(Id);
+            var shifts = _shiftService.GetAllShiftsForOffice(Id);
             Shifts = shifts.ToList();
 
             //AllTables = tables;

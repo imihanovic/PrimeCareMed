@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Appointment;
 using PrimeCareMed.Application.Models.MedicalReport;
-using PrimeCareMed.Application.Models.Patient;
+using PrimeCareMed.Application.Models.MedicinePrescription;
+using PrimeCareMed.Application.Models.PatientVaccine;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
@@ -16,15 +17,22 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
     {
         public readonly IAppointmentService _appointmentService;
         public readonly IAppointmentRepository _appointmentRepository;
-        public readonly IMedicalReportService _reportService;
-        public readonly IMedicalReportRepository _reportRepository;
         public readonly UserManager<ApplicationUser> _userManager;
+        public readonly IPatientVaccineService _patientVaccineService;
+        public readonly IMedicinePrescriptionService _medicinePrescriptionService;
+        public readonly IPatientVaccineRepository _patientVaccineRepository;
 
         [BindProperty]
         public AppointmentDetailsModel Appointment { get; set; }
 #nullable enable
         [BindProperty]
         public MedicalReportModel? MedicalReport { get; set; }
+
+        [BindProperty]
+        public IEnumerable<PatientVaccineModel>? PatientVaccines { get; set; }
+
+        [BindProperty]
+        public IEnumerable<MedicinePrescriptionModel>? MedicinePrescriptions { get; set; }
 #nullable disable
 
         [FromRoute]
@@ -34,15 +42,17 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         public ViewAppointmentDetailsModel(IAppointmentService appointmentService,
             UserManager<ApplicationUser> userManager,
             IAppointmentRepository appointmentRepository,
-            IMedicalReportService reportService,
-            IMedicalReportRepository reportRepository
+            IPatientVaccineService patientVaccineService,
+            IMedicinePrescriptionService medicinePrescriptionService, 
+            IPatientVaccineRepository patientVaccineRepository
             )
         {
             _appointmentService = appointmentService;
             _userManager = userManager;
             _appointmentRepository = appointmentRepository;
-            _reportService = reportService;
-            _reportRepository = reportRepository;
+            _patientVaccineService = patientVaccineService;
+            _medicinePrescriptionService = medicinePrescriptionService;
+            _patientVaccineRepository = patientVaccineRepository;
 
         }
         public void OnGet()
@@ -50,9 +60,10 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
             Appointment = _appointmentService.GetAppointmentDetailsById(Id);
-            if(_reportRepository.CheckIfReportForAppointmentExists(Id))
+            if (_patientVaccineRepository.CheckPatientsVaccinesForAppointmentAsync(Id))
             {
-                MedicalReport = _reportService.GetReportForAppointment(Id);
+                Console.WriteLine("IMA VAKCINA");
+                PatientVaccines = _patientVaccineService.GetPatientVaccineForAppointment(Id);
             }
             if (currentUserRole == "Doctor")
             {
@@ -61,23 +72,6 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
                 _appointmentRepository.UpdateAsync(appointmentDB);
             }    
         }
-        public async Task<IActionResult> OnPostReport(string description)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-            try
-            {
-                var a = new MedicalReportModelForCreate();
-                a.Description = description;
-                await _reportService.AddAsync(a, Id);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return Page();
-        }
+        
     }
 }

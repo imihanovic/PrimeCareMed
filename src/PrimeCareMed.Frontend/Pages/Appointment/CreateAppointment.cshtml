@@ -39,7 +39,7 @@
                 @if (User.IsInRole("SysAdministrator"))
                 {
                     <div class="form-floating">
-                        <select asp-for="NewAppointment.SessionId" class="form-control">
+                        <select asp-for="NewAppointment.ShiftId" class="form-control">
                             
                             <option></option>
                             @foreach (var shift in Model.Shifts)
@@ -51,7 +51,7 @@
                 }
                 else
                 {
-                    <input type="hidden" name="NewAppointment.SessionId" value="@Model.CurrentSessionId" />
+                    <input type="hidden" name="NewAppointment.ShiftId" value="@Model.CurrentShiftId" />
                 }
                 <button id="createOfficeSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Confirm appointment</button>
             </form>

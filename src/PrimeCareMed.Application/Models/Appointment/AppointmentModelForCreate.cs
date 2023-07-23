@@ -22,8 +22,8 @@ namespace PrimeCareMed.Application.Models.Appointment
 
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Shift session")]
-        public string SessionId { get; set; }
+        [Display(Name = "Shift")]
+        public string ShiftId { get; set; }
 
         [Required]
         [DataType(DataType.Text)]

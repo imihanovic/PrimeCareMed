@@ -23,20 +23,20 @@ namespace PrimeCareMed.Application.Services.Impl
         private readonly IMapper _mapper;
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IUserRepository _userRepository;
-        private readonly ISessionRepository _sessionRepository;
+        private readonly IShiftRepository _shiftRepository;
         private readonly IPatientRepository _patientRepository;
 
         public AppointmentService(IMapper mapper,
             IAppointmentRepository appointmentRepository,
             IUserRepository userRepository,
-            ISessionRepository sessionRepository,
+            IShiftRepository shiftRepository,
             IPatientRepository patientRepository
             )
         {
             _mapper = mapper;
             _appointmentRepository = appointmentRepository;
             _userRepository = userRepository;
-            _sessionRepository = sessionRepository;
+            _shiftRepository = shiftRepository;
             _patientRepository = patientRepository;
         }
 
@@ -49,9 +49,9 @@ namespace PrimeCareMed.Application.Services.Impl
             //});
             //var appointment = config.CreateMapper().Map<Appointment>(createAppointmentModel);
             var appointment = new Appointment();
-            appointment.AppointmentDate = DateTime.Now.ToUniversalTime();
+            appointment.AppointmentDate = DateTime.Now.ToUniversalTime().AddHours(2);
             appointment.Cause = createAppointmentModel.Cause;
-            appointment.Session = _sessionRepository.GetSessionByIdAsync(Guid.Parse(createAppointmentModel.SessionId)).Result;
+            appointment.Shift = _shiftRepository.GetShiftByIdAsync(createAppointmentModel.ShiftId).Result;
             appointment.Patient = _patientRepository.GetPatientByIdAsync(Guid.Parse(createAppointmentModel.PatientId)).Result;
             appointment.Status = Enum.Parse<AppointmentStatus>(createAppointmentModel.Status);
             await _appointmentRepository.AddAsync(appointment);
@@ -63,14 +63,15 @@ namespace PrimeCareMed.Application.Services.Impl
             var appointmentDto = new AppointmentModel();
             return appointmentDto.GetType().GetProperties().Where(x => x.Name != "Id" && x.Name != "Status").Select(x => x.Name).ToList();
         }
-        public IEnumerable<PatientModel> GetAllPatientsNotInWaitingRoom(IEnumerable<PatientModel> patientModels, string sessionId)
+        public IEnumerable<PatientModel> GetAllPatientsNotInWaitingRoom(IEnumerable<PatientModel> patientModels, string shiftId)
         {
+            Console.WriteLine($"POSTOJI ULAZ U SERVIS");
             var availablePatients = new List<PatientModel>();
-            if (sessionId == null)
+            if (shiftId == null)
             {
                 return availablePatients.AsEnumerable();
             }
-            var patientAppointments = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r=>r.Status.ToString() != "Done" && r.Session.Id.ToString()==sessionId).Select(r => r.Patient.Id.ToString());
+            var patientAppointments = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r=>r.Status.ToString() != "Done" && r.Shift.Id.ToString()==shiftId).Select(r => r.Patient.Id.ToString());
             foreach (var patientModel in patientModels)
             {
                 if (!patientAppointments.Contains(patientModel.Id.ToString()))
@@ -84,8 +85,8 @@ namespace PrimeCareMed.Application.Services.Impl
         public IEnumerable<AppointmentModel> GetAllAppointmentsForDoctor(string Id)
         {
             
-            var session = _sessionRepository.GetSessionByIdAsync(Guid.Parse(Id)).Result;
-            var doctorId = session.Shift.Doctor.Id;
+            var shift = _shiftRepository.GetShiftByIdAsync(Id).Result;
+            var doctorId = shift.Doctor.Id;
             var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsForDoctorAsync(doctorId).Result;
 
             var appointments = new List<AppointmentModel>();
@@ -142,7 +143,7 @@ namespace PrimeCareMed.Application.Services.Impl
 
         public IEnumerable<AppointmentModel> GetAllAppointmentsInWaitingRoom(string cookie)
         {
-            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r => r.Session.Id.ToString() == cookie && r.Status.ToString()!="Done").ToList();
+            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r => r.Shift.Id.ToString() == cookie && r.Status.ToString()!="Done").ToList();
             var appointments = new List<AppointmentModel>();
             foreach (var appointment in appointmentsFromDB)
             {
@@ -172,5 +173,15 @@ namespace PrimeCareMed.Application.Services.Impl
             var appointment = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
             return _mapper.Map<AppointmentDetailsModel>(appointment);
         }
+        public IEnumerable<Medicine> GetAppointmentMedicines(Guid Id)
+        {
+            var appointment = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
+            return appointment.MedicinePrescriptions.Select(r=>r.Medicine);
+        }
+        //public IEnumerable<PatientsVaccine> GetAppointmentVaccines(Guid Id)
+        //{
+        //    var appointment = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
+        //    var b = appointment.PatientsVaccines;
+        //}
     }
 }

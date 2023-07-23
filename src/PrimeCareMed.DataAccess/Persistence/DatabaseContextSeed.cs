@@ -31,7 +31,7 @@ public static class DatabaseContextSeed
             await userManager.CreateAsync(user, "Admin123.?");
             await userManager.AddToRoleAsync(user, "Administrator");
 
-            await userManager.CreateAsync(user1, "SysAdmin123.?");
+            await userManager.CreateAsync(user1, "Admin123.?");
             await userManager.AddToRoleAsync(user1, "SysAdministrator");
         }
         if (!context.Medicines.Any())

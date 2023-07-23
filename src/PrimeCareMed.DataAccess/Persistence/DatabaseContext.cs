@@ -23,12 +23,10 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<GeneralMedicineOffice> GeneralMedicineOffices { get; set; }
     public DbSet<Vaccine> Vaccines { get; set; }
     public DbSet<Patient> Patients { get; set; }
-    public DbSet<MedicalReport> MedicalReports { get; set; }
     public DbSet<Shift> Shift { get; set; }
     public DbSet<PatientsVaccine> PatientsVaccines { get; set; }
     public DbSet<MedicinePrescription> MedicinePrescription { get; set; }
     public DbSet<Appointment> Appointment { get; set; }
-    public DbSet<Session> Sessions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -59,15 +57,10 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
         .IsRequired();
 
         builder.Entity<Shift>()
-        .HasMany(e => e.Sessions)
+        .HasMany(e => e.Appointments)
         .WithOne(e => e.Shift)
         .IsRequired();
 
-        builder.Entity<Appointment>()
-        .HasOne(e => e.MedicalReport)
-        .WithOne(e => e.Appointment)
-        .HasForeignKey<MedicalReport>(e=>e.AppointmentId)
-        .IsRequired();
 
     }
 

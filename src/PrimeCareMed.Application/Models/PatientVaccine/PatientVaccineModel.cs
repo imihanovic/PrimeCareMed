@@ -2,8 +2,8 @@
 {
     public class PatientVaccineModel : BaseResponseModel
     {
-        public string MedicineName { get; set; }
+        public string VaccineName { get; set; }
+        public string Dosage { get; set; }
         public DateTime VaccineDate { get; set; }
-        public string Description { get; set; }
     }
 }

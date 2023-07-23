@@ -20,6 +20,6 @@ namespace PrimeCareMed.Application.Services
         bool CheckIfShiftExists(string officeId, string nurseId, string doctorId);
         IEnumerable<ShiftModel> GetAllShifts();
         ShiftModel GetShiftById(string Id);
-        IEnumerable<ShiftModel> GetAllAvailableShifts(IEnumerable<ShiftModel> shifts, string currentUserId, string currentUserRole);
+        //IEnumerable<ShiftModel> GetAllAvailableShifts(IEnumerable<ShiftModel> shifts, string currentUserId, string currentUserRole);
     }
 }

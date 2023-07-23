@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace PrimeCareMed.DataAccess.Persistence.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitalMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -227,7 +227,9 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     DoctorId = table.Column<string>(type: "text", nullable: false),
                     NurseId = table.Column<string>(type: "text", nullable: false),
-                    OfficeId = table.Column<Guid>(type: "uuid", nullable: false)
+                    OfficeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ShiftStartTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ShiftEndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -253,26 +255,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sessions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ShiftId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ShiftStartTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ShiftEndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sessions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Sessions_Shift_ShiftId",
-                        column: x => x.ShiftId,
-                        principalTable: "Shift",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Appointment",
                 columns: table => new
                 {
@@ -280,9 +262,9 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     AppointmentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Cause = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false),
-                    SessionId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ShiftId = table.Column<Guid>(type: "uuid", nullable: false),
                     PatientId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Conclusion = table.Column<string>(type: "text", nullable: true)
+                    MedicalReport = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -293,28 +275,9 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                         principalTable: "Patients",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Appointment_Sessions_SessionId",
-                        column: x => x.SessionId,
-                        principalTable: "Sessions",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MedicalReports",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    ReportDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    AppointmentId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MedicalReports", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MedicalReports_Appointment_AppointmentId",
-                        column: x => x.AppointmentId,
-                        principalTable: "Appointment",
+                        name: "FK_Appointment_Shift_ShiftId",
+                        column: x => x.ShiftId,
+                        principalTable: "Shift",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -376,9 +339,9 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 column: "PatientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointment_SessionId",
+                name: "IX_Appointment_ShiftId",
                 table: "Appointment",
-                column: "SessionId");
+                column: "ShiftId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -418,12 +381,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_MedicalReports_AppointmentId",
-                table: "MedicalReports",
-                column: "AppointmentId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MedicinePrescription_AppointmentId",
                 table: "MedicinePrescription",
                 column: "AppointmentId");
@@ -454,11 +411,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 name: "IX_PatientsVaccines_VaccineId",
                 table: "PatientsVaccines",
                 column: "VaccineId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Sessions_ShiftId",
-                table: "Sessions",
-                column: "ShiftId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shift_DoctorId",
@@ -494,9 +446,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "MedicalReports");
-
-            migrationBuilder.DropTable(
                 name: "MedicinePrescription");
 
             migrationBuilder.DropTable(
@@ -516,9 +465,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Patients");
-
-            migrationBuilder.DropTable(
-                name: "Sessions");
 
             migrationBuilder.DropTable(
                 name: "Shift");

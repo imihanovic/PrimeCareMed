@@ -30,28 +30,65 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>*@
 </head>
 <body>
+    
     <div class="vh-100 d-flex">
         @if (SignInManager.IsSignedIn(User))
         {
         <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
             <a asp-area="" asp-page="/Index" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <span class="fs-4">PrimeCareMed </span>
+                <span class="fs-4">PrimeCareMed</span>
             </a> <br>
-                @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                @if (User.IsInRole("Doctor"))
                 {
-                    @foreach (var cookie in HttpContextAccessor.HttpContext.Request.Cookies)
+                    @if (Model.GetType().GetProperty("OfficeString") == null)
                     {
-                        @if (@cookie.Key == "shiftCookieDetails")
+                        @foreach (var cookie in HttpContextAccessor.HttpContext.Request.Cookies)
                         {
-                            <a class="text-white">@cookie.Value.ToString()</a>
+                            @if (@cookie.Key == "shiftCookie")
+                            {
+                                <a class="text-white text-decoration-none">@cookie.Value.ToString()</a>
 
-                            <br />
-                        }
-                        else if(@cookie.Key == "shiftCookie")
-                        {
-                            <a class="text-white">@cookie.Value.ToString()</a>
+                                <br />
+                            }
+                            else if (@cookie.Key == "shiftCookieDetails")
+                            {
+                                <a class="text-white text-decoration-none">@cookie.Value.ToString()</a>
+                            }
                         }
                     }
+                    else
+                    {
+                        <a class="text-white text-decoration-none">@Model.OfficeString</a>
+                        <br />
+                        <a class="text-white text-decoration-none">@Model.NurseString</a>
+                    }
+                    
+                }
+                else if (User.IsInRole("Nurse"))
+                {
+                    @if (@Model.OfficeString is null)
+                    {
+                        @foreach (var cookie in HttpContextAccessor.HttpContext.Request.Cookies)
+                        {
+                            @if (@cookie.Key == "shiftCookieDetails")
+                            {
+                                <a class="text-white">@cookie.Value.ToString()</a>
+
+                                <br />
+                            }
+                            else if (@cookie.Key == "shiftCookie")
+                            {
+                                <a class="text-white">@cookie.Value.ToString()</a>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <a class="text-white">@Model.OfficeString</a>
+                        <br />
+                        <a class="text-white">@Model.DoctorString</a>
+                    }
+                        
                 }
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
@@ -124,6 +161,9 @@
             </ul>
             <hr>
             <div class="dropdown">
+                <form id="logoutForm" class="form-inline" asp-area="" asp-page="/Shift/CreateShift" asp-page-handler="endShift" class="nav-link text-white" aria-current="page">
+                    <button id="endShift" type="submit" class="dropdown-item">EndShift</button>
+                </form>
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="https://icon-library.com/images/person-png-icon/person-png-icon-29.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
                     <strong>@UserManager.GetUserName(User)</strong>

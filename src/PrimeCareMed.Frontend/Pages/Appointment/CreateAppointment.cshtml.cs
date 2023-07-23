@@ -28,15 +28,13 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         private readonly IAppointmentService _appointmentService;
         private readonly IPatientService _patientService;
         private readonly IShiftService _shiftService;
-        private readonly ISessionRepository _sessionRepository;
         public CreateAppointmentModel(IMedicineRepository medicineRepository,
             IMapper mapper,
             IUserService userService,
             IUserRepository userRepository,
             IAppointmentService appointmentService,
             IPatientService patientService,
-            IShiftService shiftService,
-            ISessionRepository sessionRepository
+            IShiftService shiftService
             )
         {
             _medicineRepository = medicineRepository;
@@ -46,7 +44,6 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             _appointmentService = appointmentService;
             _patientService = patientService;
             _shiftService = shiftService;
-            _sessionRepository = sessionRepository;
 
         }
         [BindProperty]
@@ -59,7 +56,7 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         public ShiftModel CurrentShift { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public string CurrentSessionId { get; set; }
+        public string CurrentShiftId { get; set; }
 
         [BindProperty]
         public IEnumerable<ShiftModel> Shifts => _shiftService.GetAllShifts();
@@ -68,10 +65,13 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             var cookie = Request.Cookies["sessionCookie"];
             if(cookie != null)
             {
-                var session = _sessionRepository.GetSessionByIdAsync(Guid.Parse(cookie)).Result;
-                CurrentShift = _shiftService.GetShiftById(session.Shift.Id.ToString());
-                CurrentSessionId = cookie;
-                Patients = _patientService.GetAllAvailablePatients(session.Id.ToString());
+                Console.WriteLine($"POSTOJI COOKIE");
+                var shift = _shiftService.GetShiftById(cookie);
+                Console.WriteLine($"POSTOJI SMJENA PO ID");
+                CurrentShift = shift;
+                Console.WriteLine($"DOHVAĆEN CURRENT SHIFT");
+                CurrentShiftId = cookie;
+                Patients = _patientService.GetAllAvailablePatients(cookie);
             }
             else
             {

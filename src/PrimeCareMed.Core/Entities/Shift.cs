@@ -13,8 +13,11 @@ namespace PrimeCareMed.Core.Entities
         public ApplicationUser Doctor { get; set; }
         public ApplicationUser Nurse { get; set; }
         public GeneralMedicineOffice Office { get; set; }
+        public DateTime ShiftStartTime { get; set; }
 #nullable enable
-        public ICollection<Session>? Sessions { get; set; } = new List<Session>();
+        public DateTime? ShiftEndTime { get; set; }
+        public ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
 #nullable disable
+        public Shift() { }
     }
 }

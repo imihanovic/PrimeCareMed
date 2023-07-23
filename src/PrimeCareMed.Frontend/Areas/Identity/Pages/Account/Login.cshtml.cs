@@ -84,7 +84,7 @@ namespace PrimeCareMed.Frontend.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return Redirect("~/Shift/ChooseShift");
+                    return Redirect("~/Shift/CreateShift");
                 }
                 if (result.RequiresTwoFactor)
                 {

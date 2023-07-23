@@ -49,6 +49,7 @@
         </tr>
     </thead>
     <tbody>
+        <form method="post">
         @if (Model.Appointments.Count() > 0)
         {
             @foreach (var appointment in Model.Appointments)
@@ -110,6 +111,7 @@
                 
             }
         }
+        </form>
     </tbody>
 </table>
 

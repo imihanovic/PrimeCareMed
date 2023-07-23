@@ -64,10 +64,11 @@ namespace PrimeCareMed.Application.Services.Impl
             }
             return patients.AsEnumerable();
         }
-        public IEnumerable<PatientModel> GetAllAvailablePatients(string sessionId)
+        public IEnumerable<PatientModel> GetAllAvailablePatients(string shiftId)
         {
+            Console.WriteLine($"POSTOJI shiftID u patientService {shiftId}");
             var allPatients = GetAllPatients();
-            return _appointmentService.GetAllPatientsNotInWaitingRoom(allPatients, sessionId);
+            return _appointmentService.GetAllPatientsNotInWaitingRoom(allPatients, shiftId);
         }
         public Patient EditPatientAsync(PatientModelForCreate patientModel)
         {

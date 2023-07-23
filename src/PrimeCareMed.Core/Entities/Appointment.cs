@@ -9,12 +9,11 @@ namespace PrimeCareMed.Core.Entities
         public DateTime AppointmentDate { get; set; }
         public string Cause { get; set; }
         public AppointmentStatus Status { get; set; }
-        public Session Session { get; set; }
+        public Shift Shift { get; set; }
         public Patient Patient { get; set; }
 
 #nullable enable
-        public string? Conclusion { get; set; }
-        public MedicalReport? MedicalReport { get; set; }
+        public string? MedicalReport { get; set; }
         public ICollection<PatientsVaccine>? PatientsVaccines { get; set; } = new List<PatientsVaccine>();
         public ICollection<MedicinePrescription>? MedicinePrescriptions { get; set; } = new List<MedicinePrescription>();
 #nullable disable

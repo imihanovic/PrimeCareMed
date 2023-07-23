@@ -24,11 +24,31 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         {
             return await _context.Shift.OrderBy(r => r.Id).Include(r=>r.Nurse).Include(r => r.Doctor).Include(r => r.Office).ToListAsync();
         }
-        public async Task<Shift> AddAsync(Shift shiftSession)
+        public async Task<Shift> AddAsync(Shift shiftShift)
         {
-            await _context.Shift.AddAsync(shiftSession);
+            Console.WriteLine($"ADDASYNC U REPU");
+            await _context.Shift.AddAsync(shiftShift);
             await _context.SaveChangesAsync();
-            return shiftSession;
+            Console.WriteLine($"ADDASYNC U REPU NAKON CONTEXTA");
+            return shiftShift;
+        }
+        public async Task<Shift> UpdateAsync(Shift shift)
+        {
+            var editItem = await GetShiftByIdAsync(shift.Id.ToString());
+            editItem.ShiftEndTime = DateTime.Now.ToUniversalTime();
+            await _context.SaveChangesAsync();
+            return editItem;
+        }
+        public Shift CheckIfOpenShiftExistsForDoctor(string Id)
+        {
+            var all = GetAllShiftsAsync().Result;
+            return all.Where(r => r.Doctor.Id == Id && r.ShiftEndTime == null).FirstOrDefault();
+        }
+        public Shift CheckIfOpenShiftExistsForNurse(string Id)
+        {
+            var all = GetAllShiftsAsync().Result;
+            return all.Where(r => r.Nurse.Id == Id && r.ShiftEndTime == null).FirstOrDefault();
+
         }
         public async Task DeleteAsync(Guid id)
         {

@@ -1,17 +1,7 @@
 ﻿using AutoMapper;
-using Org.BouncyCastle.Asn1.Ocsp;
-using PrimeCareMed.Application.Models.Medicine;
-using PrimeCareMed.Application.Models.Patient;
 using PrimeCareMed.Application.Models.Shift;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
-using PrimeCareMed.DataAccess.Repositories.Impl;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -21,20 +11,17 @@ namespace PrimeCareMed.Application.Services.Impl
         private readonly IShiftRepository _shiftRepository;
         private readonly IUserRepository _userRepository;
         private readonly IOfficeRepository _officeRepository;
-        private readonly ISessionRepository _sessionRepository;
 
         public ShiftService(IMapper mapper,
             IShiftRepository shiftRepository,
             IUserRepository userRepository,
-            IOfficeRepository officeRepository,
-            ISessionRepository sessionRepository
+            IOfficeRepository officeRepository
             )
         {
             _mapper = mapper;
             _shiftRepository = shiftRepository;
             _userRepository = userRepository;
             _officeRepository = officeRepository;
-            _sessionRepository = sessionRepository;
         }
 
         public async Task<ShiftModel> AddAsync(ShiftModelForCreate createShiftModel)
@@ -43,8 +30,15 @@ namespace PrimeCareMed.Application.Services.Impl
             shift.Nurse = _userRepository.GetUserByIdAsync(createShiftModel.NurseId).Result;
             shift.Doctor = _userRepository.GetUserByIdAsync(createShiftModel.DoctorId).Result;
             shift.Office = _officeRepository.GetOfficeByIdAsync(createShiftModel.OfficeId).Result;
+            shift.ShiftStartTime = DateTime.Now.ToUniversalTime().AddHours(2);
             await _shiftRepository.AddAsync(shift);
             return _mapper.Map<ShiftModel>(shift);
+        }
+
+        public Shift EditShiftAsync(Shift shift)
+        {
+            shift.ShiftEndTime = DateTime.Now.ToUniversalTime();
+            return _shiftRepository.UpdateAsync(shift).Result;
         }
 
         public List<string> GetShiftModelFields()
@@ -106,52 +100,53 @@ namespace PrimeCareMed.Application.Services.Impl
             var shift = _shiftRepository.GetAllShiftsAsync().Result.Where(r => r.Office.Id.ToString() == officeId && r.Nurse.Id == nurseId && r.Doctor.Id == doctorId).FirstOrDefault();
             return shift != null ? true : false;
         }
-        public IEnumerable<ShiftModel> GetAllAvailableShifts(IEnumerable<ShiftModel> shifts, string currentUserId, string currentUserRole)
-        {
-            var availableShifts = new List<ShiftModel>();
 
-            var allShifts = new List<Shift>();
-            var activeSessions = new List<string>();
-            if (currentUserRole == "Doctor")
-            {
-                allShifts = _shiftRepository.GetAllShiftsForDoctor(currentUserId).Result.ToList();
-                activeSessions = _sessionRepository.GetAllCurrentSessions().Result.Select(r => r.Shift.Nurse.Id).ToList();
-                foreach (var shift in allShifts)
-                {
-                    if (!activeSessions.Contains(shift.Nurse.Id))
-                    {
-                        var shiftDto = _mapper.Map<ShiftModel>(shift);
-                        shiftDto.DoctorFirstName = shift.Doctor.FirstName;
-                        shiftDto.DoctorLastName = shift.Doctor.LastName;
-                        shiftDto.NurseFirstName = shift.Nurse.FirstName;
-                        shiftDto.NurseLastName = shift.Nurse.LastName;
-                        shiftDto.OfficeAddress = shift.Office.Address;
-                        shiftDto.OfficeCity = shift.Office.City;
-                        availableShifts.Add(shiftDto);
-                    }
-                }
-            }
-            else if (currentUserRole == "Nurse")
-            {
-                allShifts = _shiftRepository.GetAllShiftsForNurse(currentUserId).Result.ToList();
-                activeSessions = _sessionRepository.GetAllCurrentSessions().Result.Select(r => r.Shift.Doctor.Id).ToList();
-                foreach (var shift in allShifts)
-                {
-                    if (!activeSessions.Contains(shift.Doctor.Id))
-                    {
-                        var shiftDto = _mapper.Map<ShiftModel>(shift);
-                        shiftDto.DoctorFirstName = shift.Doctor.FirstName;
-                        shiftDto.DoctorLastName = shift.Doctor.LastName;
-                        shiftDto.NurseFirstName = shift.Nurse.FirstName;
-                        shiftDto.NurseLastName = shift.Nurse.LastName;
-                        shiftDto.OfficeAddress = shift.Office.Address;
-                        shiftDto.OfficeCity = shift.Office.City;
-                        availableShifts.Add(shiftDto);
-                    }
-                }
-            }
+    //    public IEnumerable<ShiftModel> GetAllAvailableShifts(IEnumerable<ShiftModel> shifts, string currentUserId, string currentUserRole)
+    //    {
+    //        var availableShifts = new List<ShiftModel>();
+
+    //        var allShifts = new List<Shift>();
+    //        var activeShifts = new List<string>();
+    //        if (currentUserRole == "Doctor")
+    //        {
+    //            allShifts = _shiftRepository.GetAllShiftsForDoctor(currentUserId).Result.ToList();
+    //            activeShifts = _shiftRepository.GetAllCurrentShifts().Result.Select(r => r.Shift.Nurse.Id).ToList();
+    //            foreach (var shift in allShifts)
+    //            {
+    //                if (!activeShifts.Contains(shift.Nurse.Id))
+    //                {
+    //                    var shiftDto = _mapper.Map<ShiftModel>(shift);
+    //                    shiftDto.DoctorFirstName = shift.Doctor.FirstName;
+    //                    shiftDto.DoctorLastName = shift.Doctor.LastName;
+    //                    shiftDto.NurseFirstName = shift.Nurse.FirstName;
+    //                    shiftDto.NurseLastName = shift.Nurse.LastName;
+    //                    shiftDto.OfficeAddress = shift.Office.Address;
+    //                    shiftDto.OfficeCity = shift.Office.City;
+    //                    availableShifts.Add(shiftDto);
+    //                }
+    //            }
+    //        }
+    //        else if (currentUserRole == "Nurse")
+    //        {
+    //            allShifts = _shiftRepository.GetAllShiftsForNurse(currentUserId).Result.ToList();
+    //            activeShifts = _shiftRepository.GetAllCurrentShifts().Result.Select(r => r.Shift.Doctor.Id).ToList();
+    //            foreach (var shift in allShifts)
+    //            {
+    //                if (!activeShifts.Contains(shift.Doctor.Id))
+    //                {
+    //                    var shiftDto = _mapper.Map<ShiftModel>(shift);
+    //                    shiftDto.DoctorFirstName = shift.Doctor.FirstName;
+    //                    shiftDto.DoctorLastName = shift.Doctor.LastName;
+    //                    shiftDto.NurseFirstName = shift.Nurse.FirstName;
+    //                    shiftDto.NurseLastName = shift.Nurse.LastName;
+    //                    shiftDto.OfficeAddress = shift.Office.Address;
+    //                    shiftDto.OfficeCity = shift.Office.City;
+    //                    availableShifts.Add(shiftDto);
+    //                }
+    //            }
+    //        }
             
-            return availableShifts.AsEnumerable();
-        }
+    //        return availableShifts.AsEnumerable();
+    //    }
     }
 }

@@ -18,16 +18,16 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         public Task<IEnumerable<Appointment>> GetAllAppointmentsForOfficeAsync(string Id)
         {
             var appointments = GetAllAppointmentsAsync();
-            return (Task<IEnumerable<Appointment>>)appointments.Result.Where(r => r.Session.Shift.Office.Id.ToString() == Id);
+            return (Task<IEnumerable<Appointment>>)appointments.Result.Where(r => r.Shift.Office.Id.ToString() == Id);
         }
         public Task<IEnumerable<Appointment>> GetAllAppointmentsForDoctorAsync(string Id)
         {
             var appointments = GetAllAppointmentsAsync();
-            return (Task<IEnumerable<Appointment>>)appointments.Result.Where(r => r.Session.Shift.Doctor.Id == Id);
+            return (Task<IEnumerable<Appointment>>)appointments.Result.Where(r => r.Shift.Doctor.Id == Id);
         }
         public async Task<IEnumerable<Appointment>> GetAllAppointmentsAsync()
         {
-            return await _context.Appointment.OrderBy(r => r.Id).Include(r => r.Session).ThenInclude(r => r.Shift).ThenInclude(r => r.Office).Include(r => r.Session).ThenInclude(r => r.Shift).ThenInclude(r => r.Doctor).Include(r => r.Patient).ToListAsync();
+            return await _context.Appointment.OrderBy(r => r.Id).Include(r => r.Shift).ThenInclude(r => r.Office).Include(r => r.Shift).ThenInclude(r => r.Doctor).Include(r => r.Patient).ToListAsync();
         }
         public async Task<Appointment> AddAsync(Appointment appointment)
         {
@@ -53,7 +53,7 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         }
         public async Task<Appointment> GetAppointmentByIdAsync(Guid id)
         {
-            return await _context.Appointment.Include(r=>r.Session.Shift).Include(r=>r.Patient).FirstOrDefaultAsync(t => t.Id == id);
+            return await _context.Appointment.Include(r=>r.Shift).Include(r=>r.Patient).Include(r=>r.PatientsVaccines).ThenInclude(r=>r.Vaccine).Include(r=>r.MedicinePrescriptions).ThenInclude(r=>r.Medicine).FirstOrDefaultAsync(t => t.Id == id);
         }
     }
 }

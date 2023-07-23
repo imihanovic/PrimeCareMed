@@ -14,12 +14,11 @@ namespace PrimeCareMed.Application.Models.PatientVaccine
 
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Description")]
         public string VaccineId { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Description")]
+        [Display(Name = "Dosage (mg)")]
         public string Dosage { get; set; }
     }
 }

@@ -63,6 +63,11 @@ namespace PrimeCareMed.Application.Services.Impl
             var office = _mapper.Map<GeneralMedicineOffice>(officeModel);
             return _officeRepository.UpdateAsync(office).Result;
         }
+        public OfficeModelForCreate GetOfficeById(string Id)
+        {
+            var officeFromDB = _officeRepository.GetOfficeByIdAsync(Id).Result;
+            return _mapper.Map<OfficeModelForCreate>(officeFromDB);
+        }
 
         public async Task DeleteOfficeAsync(Guid Id)
         {
