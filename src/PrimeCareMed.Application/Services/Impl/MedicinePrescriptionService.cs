@@ -3,6 +3,8 @@ using PrimeCareMed.Application.Models.MedicinePrescription;
 using PrimeCareMed.Application.Models.Medicine;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
+using PrimeCareMed.Application.Models.PatientVaccine;
+using PrimeCareMed.DataAccess.Repositories.Impl;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -27,7 +29,22 @@ namespace PrimeCareMed.Application.Services.Impl
             _appointmentRepository = appointmentRepository;
             _medicineRepository = medicineRepository;
         }
+        public IEnumerable<MedicinePrescriptionModel> GetMedicinePrescriptionsForAppointment(Guid id)
+        {
+            var medicinePrescriptionsDB = _medicinePrescriptionRepository.GetAllMedicalPrecriptionsForAppointmentAsync(id).Result;
+            List<MedicinePrescriptionModel> medicinePrescriptions = new List<MedicinePrescriptionModel>();
+            foreach (var prescription in medicinePrescriptionsDB)
+            {
+                var prescriptionDto = _mapper.Map<MedicinePrescriptionModel>(prescription);
+                prescriptionDto.MedicineName = prescription.Medicine.Name;
+                prescriptionDto.Description = prescription.Description;
+                prescriptionDto.DatePrescribed = prescription.DatePrescribed;
 
+                medicinePrescriptions.Add(prescriptionDto);
+
+            }
+            return medicinePrescriptions.AsEnumerable();
+        }
         public async Task<MedicinePrescriptionModel> AddAsync(MedicinePrescriptionModelForCreate createReportModel, Guid appointmentId)
         {
             var config = new MapperConfiguration(cfg => {
@@ -47,19 +64,6 @@ namespace PrimeCareMed.Application.Services.Impl
         {
             var medicineDto = new MedicineModel();
             return medicineDto.GetType().GetProperties().Where(x => x.Name != "Id").Select(x => x.Name).ToList();
-        }
-        public IEnumerable<MedicinePrescriptionModel> GetAllMedicinePrecriptionsForAppointment(Guid Id)
-        {
-            var medicinesFromDB = _medicinePrescriptionRepository.GetAllMedicalPrecriptionsForAppointmentAsync(Id).Result;
-
-            List<MedicinePrescriptionModel> medicines = new List<MedicinePrescriptionModel>();
-            foreach (var medicine in medicinesFromDB)
-            {
-                var medicineDto = _mapper.Map<MedicinePrescriptionModel>(medicine);
-                medicines.Add(medicineDto);
-
-            }
-            return medicines.AsEnumerable();
         }
         public MedicinePrescription EditMedicinePrescriptionAsync(MedicinePrescriptionModelForCreate prescriptionModel)
         {

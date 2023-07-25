@@ -33,6 +33,10 @@ namespace PrimeCareMed.Application.Models.Appointment
         [DataType(DataType.Text)]
         [Display(Name = "Patient")]
         public string PatientId { get; set; }
-
+#nullable enable
+        [DataType(DataType.Text)]
+        [Display(Name = "Medical report")]
+        public string? MedicalReport { get; set; }
+#nullable disable
     }
 }

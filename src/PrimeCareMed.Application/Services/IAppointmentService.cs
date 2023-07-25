@@ -15,7 +15,7 @@ namespace PrimeCareMed.Application.Services
         List<string> GetAppointmentModelFields();
         IEnumerable<AppointmentModel> GetAllAppointments(string Id);
         Appointment EditAppointmentAsync(AppointmentModelForCreate appointmentModel);
-        Task DeleteMedicineAsync(Guid Id);
+        Task DeleteAppointmentAsync(Guid Id);
         IEnumerable<PatientModel> GetAllPatientsNotInWaitingRoom(IEnumerable<PatientModel> patientModels, string shiftId);
         IEnumerable<AppointmentModel> GetAllAppointmentsForDoctor(string Id);
         AppointmentDetailsModel GetAppointmentDetailsById(Guid Id);

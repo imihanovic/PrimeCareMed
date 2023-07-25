@@ -25,8 +25,6 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         [BindProperty]
         public AppointmentDetailsModel Appointment { get; set; }
 #nullable enable
-        [BindProperty]
-        public MedicalReportModel? MedicalReport { get; set; }
 
         [BindProperty]
         public IEnumerable<PatientVaccineModel>? PatientVaccines { get; set; }
@@ -64,6 +62,10 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             {
                 Console.WriteLine("IMA VAKCINA");
                 PatientVaccines = _patientVaccineService.GetPatientVaccineForAppointment(Id);
+            }
+            if (_patientVaccineRepository.CheckPatientsVaccinesForAppointmentAsync(Id))
+            {
+                MedicinePrescriptions = _medicinePrescriptionService.GetMedicinePrescriptionsForAppointment(Id);
             }
             if (currentUserRole == "Doctor")
             {

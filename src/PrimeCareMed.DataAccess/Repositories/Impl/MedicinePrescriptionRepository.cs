@@ -18,13 +18,18 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         }
         public async Task<IEnumerable<MedicinePrescription>> GetAllMedicalPrecriptionsForAppointmentAsync(Guid Id)
         {
-            return await _context.MedicinePrescription.Include(r => r.Appointment).Where(r => r.Appointment.Id == Id).ToListAsync();
+            return await _context.MedicinePrescription.OrderByDescending(r=>r.DatePrescribed).Include(r => r.Medicine).Where(r => r.Appointment.Id == Id).ToListAsync();
         }
         public async Task<MedicinePrescription> AddAsync(MedicinePrescription prescription)
         {
             await _context.MedicinePrescription.AddAsync(prescription);
             await _context.SaveChangesAsync();
             return prescription;
+        }
+        public bool CheckMedicinePrescriptionForAppointmentAsync(Guid id)
+        {
+            var a = _context.MedicinePrescription.OrderByDescending(r => r.DatePrescribed).Include(r => r.Medicine).Where(r => r.Appointment.Id == id).FirstOrDefault();
+            return a != null ? true : false;
         }
         public async Task DeleteAsync(Guid id)
         {

@@ -44,10 +44,7 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         public async Task<Appointment> UpdateAsync(Appointment appointment)
         {
             var editItem = await GetAppointmentByIdAsync(appointment.Id);
-            editItem.Status = appointment.Status;
             editItem.MedicalReport = appointment.MedicalReport;
-            editItem.PatientsVaccines = appointment.PatientsVaccines;
-            editItem.MedicinePrescriptions = appointment.MedicinePrescriptions;
             await _context.SaveChangesAsync();
             return editItem;
         }

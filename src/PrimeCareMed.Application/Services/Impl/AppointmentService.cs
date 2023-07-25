@@ -164,7 +164,7 @@ namespace PrimeCareMed.Application.Services.Impl
             return _appointmentRepository.UpdateAsync(appointment).Result;
         }
 
-        public async Task DeleteMedicineAsync(Guid Id)
+        public async Task DeleteAppointmentAsync(Guid Id)
         {
             await _appointmentRepository.DeleteAsync(Id);
         }

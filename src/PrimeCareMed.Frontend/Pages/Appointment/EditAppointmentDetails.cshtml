@@ -1,0 +1,35 @@
+﻿@page "/appointment/edit/{id:Guid}"
+@model PrimeCareMed.Frontend.Pages.Appointment.EditAppointmentDetailsModel
+@{
+    ViewData["Title"] = "Medical report";
+}
+<div class="container text-center d-flex align-items-center justify-content-center">
+    <div>
+        <div>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div>
+            <form id="editAppointmentForm" method="post">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input asp-for="EditAppointment.MedicalReport" class="form-control" aria-required="true" />
+                    <label asp-for="EditAppointment.MedicalReport"></label>
+                    <span asp-validation-for="EditAppointment.MedicalReport" class="text-danger"></span>
+                </div>
+                <button id="editAppointmentSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Confirm medical report</button>
+            </form>
+            @if (ViewData["Message"] != null)
+            {
+                <script type="text/javascript">
+                    window.onload = function () {
+                        alert("@ViewData["Message"]");
+                    };
+                </script>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
