@@ -87,7 +87,7 @@ namespace PrimeCareMed.Application.Services.Impl
             
             var shift = _shiftRepository.GetShiftByIdAsync(Id).Result;
             var doctorId = shift.Doctor.Id;
-            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsForDoctorAsync(doctorId).Result;
+            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsForDoctorAsync(doctorId);
 
             var appointments = new List<AppointmentModel>();
             foreach (var appointment in appointmentsFromDB)
@@ -101,7 +101,7 @@ namespace PrimeCareMed.Application.Services.Impl
                 appointments.Add(appointmentDto);
 
             }
-            return appointments.AsEnumerable();
+            return appointments.AsEnumerable().OrderByDescending(r=>r.AppointmentDate);
         }
         public IEnumerable<AppointmentModel> GetAllAppointments(string Id)
         {
@@ -120,7 +120,7 @@ namespace PrimeCareMed.Application.Services.Impl
                 appointments.Add(appointmentDto);
 
             }
-            return appointments.AsEnumerable();
+            return appointments.AsEnumerable().OrderByDescending(r => r.AppointmentDate);
         }
         public IEnumerable<AppointmentModel> GetAllAppointments()
         {
@@ -138,12 +138,29 @@ namespace PrimeCareMed.Application.Services.Impl
                 appointments.Add(appointmentDto);
 
             }
-            return appointments.AsEnumerable();
+            return appointments.AsEnumerable().OrderByDescending(r => r.AppointmentDate);
         }
 
         public IEnumerable<AppointmentModel> GetAllAppointmentsInWaitingRoom(string cookie)
         {
             var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r => r.Shift.Id.ToString() == cookie && r.Status.ToString()!="Done").ToList();
+            var appointments = new List<AppointmentModel>();
+            foreach (var appointment in appointmentsFromDB)
+            {
+                var appointmentDto = _mapper.Map<AppointmentModel>(appointment);
+                appointmentDto.AppointmentDate = appointment.AppointmentDate;
+                appointmentDto.Cause = appointment.Cause;
+                appointmentDto.PatientFirstName = appointment.Patient.FirstName;
+                appointmentDto.PatientLastName = appointment.Patient.LastName;
+                appointmentDto.PatientMbo = appointment.Patient.Mbo;
+                appointments.Add(appointmentDto);
+
+            }
+            return appointments.AsEnumerable();
+        }
+        public IEnumerable<AppointmentModel> GetAllAppointmentsForShift(Guid Id)
+        {
+            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r => r.Shift.Id == Id).ToList();
             var appointments = new List<AppointmentModel>();
             foreach (var appointment in appointmentsFromDB)
             {

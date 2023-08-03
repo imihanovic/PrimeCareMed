@@ -48,9 +48,9 @@ namespace PrimeCareMed.Frontend.Pages.Shift
         [BindProperty]
         public ShiftModelForCreate NewShift { get; set; }
         [BindProperty]
-        public IEnumerable<ListUsersModel> Doctors => _userService.GetAllUsers().Where(r => r.UserRole == "Doctor");
+        public IEnumerable<ListUsersModel> Doctors => _shiftService.GetAllAvailableDoctors();
         [BindProperty]
-        public IEnumerable<ListUsersModel> Nurses => _userService.GetAllUsers().Where(r => r.UserRole == "Nurse");
+        public IEnumerable<ListUsersModel> Nurses => _shiftService.GetAllAvailableNurses();
         [BindProperty]
         public IEnumerable<OfficeModel> Offices => _officeService.GetAllOffices();
         [BindProperty]

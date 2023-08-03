@@ -17,9 +17,6 @@ public interface IUserService
     List<string> GetUserModelFields();
 
     IEnumerable<ListUsersModel> GetAllUsers();
-
-    IEnumerable<ListUsersModel> GetAllManagers();
-
     IEnumerable<ListUsersModel> UserSorting(IEnumerable<ListUsersModel> Users, string sortOrder);
 
     IEnumerable<ListUsersModel> UserSearch(IEnumerable<ListUsersModel> users, string searchString);

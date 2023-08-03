@@ -11,5 +11,8 @@ namespace PrimeCareMed.Application.Services
         Patient EditPatientAsync(PatientModelForCreate patientModel);
         Task DeletePatientAsync(Guid Id);
         IEnumerable<PatientModel> GetAllAvailablePatients(string shiftId);
+        IEnumerable<PatientModel> PatientFilter(IEnumerable<PatientModel> patients, string role);
+        IEnumerable<PatientModel> PatientSearch(IEnumerable<PatientModel> patients, string searchString);
+        IEnumerable<PatientModel> PatientSorting(IEnumerable<PatientModel> patients, string sortOrder);
     }
 }

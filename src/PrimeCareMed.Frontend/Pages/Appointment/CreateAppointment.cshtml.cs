@@ -59,7 +59,7 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         public string CurrentShiftId { get; set; }
 
         [BindProperty]
-        public IEnumerable<ShiftModel> Shifts => _shiftService.GetAllShifts();
+        public IEnumerable<ShiftModel> Shifts => _shiftService.GetAllShifts().Where(r=>r.ShiftEndTime is null);
         public IActionResult OnGet()
         {
             var cookie = Request.Cookies["sessionCookie"];

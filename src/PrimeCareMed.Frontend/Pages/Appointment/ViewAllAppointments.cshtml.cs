@@ -35,14 +35,14 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
             AppointmentModelProperties = _appointmentService.GetAppointmentModelFields();
             var appointments = new List<AppointmentModel>();
-            var cookie = Request.Cookies["shift"];
+            var cookie = Request.Cookies["sessionCookie"];
             if (currentUserRole == "Doctor" || currentUserRole == "Nurse")
             {
-                appointments = (List<AppointmentModel>)_appointmentService.GetAllAppointmentsForDoctor(cookie);
+                appointments = _appointmentService.GetAllAppointmentsForDoctor(cookie).ToList();
             }
             else
             {
-                appointments = (List<AppointmentModel>)_appointmentService.GetAllAppointments();
+                appointments = _appointmentService.GetAllAppointments().ToList();
             }
             Appointments = appointments;
             //ViewData["Keyword"] = keyword;

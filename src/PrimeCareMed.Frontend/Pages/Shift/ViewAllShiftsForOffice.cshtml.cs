@@ -8,7 +8,6 @@ using PrimeCareMed.Application.Models.GeneralMedicineOffice;
 using PrimeCareMed.Application.Models.Shift;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.Core.Entities;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
 using System.Data;
@@ -16,10 +15,10 @@ using System.Data;
 namespace PrimeCareMed.Frontend.Pages.Shift
 {
     [Authorize(Roles = "Administrator,SysAdministrator")]
-    public class ViewAllShiftsModel : PageModel
+    public class ViewAllShiftsForOfficeModel : PageModel
     {
         
-        
+
         public readonly IShiftService _shiftService;
         public readonly IOfficeService _officeService;
         public readonly IShiftRepository _shiftRepository;
@@ -27,20 +26,20 @@ namespace PrimeCareMed.Frontend.Pages.Shift
         public readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 #nullable enable
-        public PaginatedList<TableModel> Tables { get; set; }
+        //public PaginatedList<TableModel> Tables { get; set; }
 
 #nullable disable
-        public List<string> TableModelProperties;
+        public List<string> ShiftModelProperties => _shiftService.GetShiftModelFields();
 
         [FromRoute]
         public Guid Id { get; set; }
 
-        public IEnumerable<ShiftModel> Shifts { get; set; }
-        public OfficeModel OfficeModel { get; set; }
+        public IEnumerable<ShiftModel> Shifts => _shiftService.GetAllShiftsForOffice(Id).OrderByDescending(r => r.ShiftStartTime);
+        public OfficeModel OfficeModel => _officeService.GetAllOffices().FirstOrDefault(r=>r.Id==Id);
 
         public int TotalPages { get; set; }
 
-        public ViewAllShiftsModel(IShiftService shiftService,
+        public ViewAllShiftsForOfficeModel(IShiftService shiftService,
             IOfficeService officeService,
             IShiftRepository shiftRepository,
             IMapper mapper,
@@ -60,16 +59,11 @@ namespace PrimeCareMed.Frontend.Pages.Shift
 
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
-
-            int pageSize = 9;
-
-            var office = _officeRepository.GetOfficeByIdAsync(Id.ToString()).Result;
-
-            OfficeModel = _mapper.Map<OfficeModel>(office);
-
-            var shifts = _shiftService.GetAllShiftsForOffice(Id);
-            Shifts = shifts.ToList();
-
+            foreach(var sh in Shifts)
+            {
+                Console.WriteLine($"ENDTIME{sh.DoctorLastName}");
+                Console.WriteLine($"ENDTIME{sh.ShiftEndTime}");
+            }
             //AllTables = tables;
 
             //ViewData["CurrentSort"] = sort;
@@ -87,6 +81,5 @@ namespace PrimeCareMed.Frontend.Pages.Shift
 
             return Page();
         }
-    
     }
 }

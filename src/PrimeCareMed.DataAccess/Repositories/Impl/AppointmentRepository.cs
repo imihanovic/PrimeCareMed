@@ -20,10 +20,10 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
             var appointments = GetAllAppointmentsAsync();
             return (Task<IEnumerable<Appointment>>)appointments.Result.Where(r => r.Shift.Office.Id.ToString() == Id);
         }
-        public Task<IEnumerable<Appointment>> GetAllAppointmentsForDoctorAsync(string Id)
+        public IEnumerable<Appointment> GetAllAppointmentsForDoctorAsync(string Id)
         {
-            var appointments = GetAllAppointmentsAsync();
-            return (Task<IEnumerable<Appointment>>)appointments.Result.Where(r => r.Shift.Doctor.Id == Id);
+            var appointments = GetAllAppointmentsAsync().Result;
+            return appointments.Where(r => r.Shift.Doctor.Id == Id);
         }
         public async Task<IEnumerable<Appointment>> GetAllAppointmentsAsync()
         {

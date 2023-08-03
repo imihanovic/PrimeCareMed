@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PrimeCareMed.Application.Models.Shift;
+using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
 
@@ -11,17 +12,20 @@ namespace PrimeCareMed.Application.Services.Impl
         private readonly IShiftRepository _shiftRepository;
         private readonly IUserRepository _userRepository;
         private readonly IOfficeRepository _officeRepository;
+        private readonly IUserService _userService;
 
         public ShiftService(IMapper mapper,
             IShiftRepository shiftRepository,
             IUserRepository userRepository,
-            IOfficeRepository officeRepository
+            IOfficeRepository officeRepository,
+            IUserService userService
             )
         {
             _mapper = mapper;
             _shiftRepository = shiftRepository;
             _userRepository = userRepository;
             _officeRepository = officeRepository;
+            _userService = userService;
         }
 
         public async Task<ShiftModel> AddAsync(ShiftModelForCreate createShiftModel)
@@ -34,7 +38,49 @@ namespace PrimeCareMed.Application.Services.Impl
             await _shiftRepository.AddAsync(shift);
             return _mapper.Map<ShiftModel>(shift);
         }
+        public IEnumerable<ListUsersModel> GetAllAvailableDoctors()
+        {
+            var doctorsFromDB = _userService.GetAllUsers().Where(r => r.UserRole == "Doctor").ToList();
+            var availableDoctors = new List<ListUsersModel>();
+            foreach (var user in doctorsFromDB)
+            {
+                try
+                {
+                    var doctorsShift = _shiftRepository.CheckIfOpenShiftExistsForDoctor(user.Id.ToString());
+                    if (doctorsShift is null)
+                    {
+                        availableDoctors.Add(user);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return availableDoctors.AsEnumerable();
+        }
 
+        public IEnumerable<ListUsersModel> GetAllAvailableNurses()
+        {
+            var nursesFromDB = _userService.GetAllUsers().Where(r => r.UserRole == "Nurse").ToList();
+            var availableNurses = new List<ListUsersModel>();
+            foreach (var user in nursesFromDB)
+            {
+                try
+                {
+                    var doctorsShift = _shiftRepository.CheckIfOpenShiftExistsForNurse(user.Id.ToString());
+                    if (doctorsShift is null)
+                    {
+                        availableNurses.Add(user);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return availableNurses.AsEnumerable();
+        }
         public Shift EditShiftAsync(Shift shift)
         {
             shift.ShiftEndTime = DateTime.Now.ToUniversalTime();

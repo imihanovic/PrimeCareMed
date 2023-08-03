@@ -18,7 +18,7 @@ namespace PrimeCareMed.Frontend.Pages.Patients
         private readonly IPatientService _patientService;
 
 #nullable enable
-        public List<PatientModel> Patients { get; set; }
+        public PaginatedList<PatientModel> Patients { get; set; }
 #nullable disable
 
         public List<string> PatientModelProperties;
@@ -30,42 +30,41 @@ namespace PrimeCareMed.Frontend.Pages.Patients
             _userManager = userManager;
             _patientService = patientService;
         }
-        public IActionResult OnGet()
+        public void OnGet(string sort, string currentFilter, string keyword, string genderFilter, int? pageIndex)
         {
-            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
-            var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
 
             PatientModelProperties = _patientService.GetPatientModelFields();
 
-            //int pageSize = 9;
+            if (keyword != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                keyword = currentFilter;
+            }
 
-            //var restaurant = _restaurantRepository.GetRestaurantByIdAsync(Id).Result;
-
-            //RestaurantModel = _mapper.Map<RestaurantModel>(restaurant);
-
-            //if (currentUser.Restaurant != restaurant && currentUserRole == "Manager")
-            //{
-            //    return RedirectToPage("../Restaurant/ViewAllRestaurants");
-            //}
+            ViewData["CurrentFilter"] = keyword;
+            int pageSize = 7;
 
             var patients = _patientService.GetAllPatients();
 
-            //ViewData["CurrentSort"] = sort;
-            //tables = _tableService.TableSorting(tables, sort);
+            ViewData["CurrentSort"] = sort;
+            // SORTIRANJE PACIJENATA
+            patients = _patientService.PatientSorting(patients, sort);
 
-            //ViewData["AreaFilter"] = areaFilter;
-            //tables = _tableService.TableFilterByArea(tables, areaFilter);
+            ViewData["Keyword"] = keyword;
+            patients = _patientService.PatientSearch(patients, keyword);
 
-            //ViewData["SmokingFilter"] = smokingFilter;
-            //tables = _tableService.TableFilterBySmoking(tables, smokingFilter);
+            ViewData["GenderFilter"] = genderFilter;
+            patients = _patientService.PatientFilter(patients, genderFilter);
 
-            Patients = patients.ToList();
+            Patients = PaginatedList<PatientModel>.Create(patients, pageIndex ?? 1, pageSize);
 
-            //Tables = PaginatedList<TableModel>.Create(tables, pageIndex ?? 1, pageSize);
+            TotalPages = (int)Math.Ceiling(decimal.Divide(patients.Count(), pageSize));
+            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
 
-            //TotalPages = (int)Math.Ceiling(decimal.Divide(tables.Count(), pageSize));
-
-            return Page();
         }
         public IActionResult OnPostDelete(Guid id)
         {

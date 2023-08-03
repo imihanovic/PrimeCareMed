@@ -15,7 +15,7 @@ namespace PrimeCareMed.Application.Models.Shift
         public object OfficeName { get; set; }
         public DateTime ShiftStartTime { get; set; }
 #nullable enable
-        public DateTime? EndStartTime { get; set; }
+        public DateTime? ShiftEndTime { get; set; }
 #nullable disable
     }
 }

@@ -20,6 +20,7 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         public readonly UserManager<ApplicationUser> _userManager;
         public readonly IPatientVaccineService _patientVaccineService;
         public readonly IMedicinePrescriptionService _medicinePrescriptionService;
+        public readonly IMedicinePrescriptionRepository _medicinePrescriptionRepository;
         public readonly IPatientVaccineRepository _patientVaccineRepository;
 
         [BindProperty]
@@ -42,8 +43,8 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             IAppointmentRepository appointmentRepository,
             IPatientVaccineService patientVaccineService,
             IMedicinePrescriptionService medicinePrescriptionService, 
-            IPatientVaccineRepository patientVaccineRepository
-            )
+            IPatientVaccineRepository patientVaccineRepository,
+            IMedicinePrescriptionRepository medicinePrescriptionRepository)
         {
             _appointmentService = appointmentService;
             _userManager = userManager;
@@ -51,7 +52,7 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             _patientVaccineService = patientVaccineService;
             _medicinePrescriptionService = medicinePrescriptionService;
             _patientVaccineRepository = patientVaccineRepository;
-
+            _medicinePrescriptionRepository = medicinePrescriptionRepository;
         }
         public void OnGet()
         {
@@ -60,10 +61,9 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             Appointment = _appointmentService.GetAppointmentDetailsById(Id);
             if (_patientVaccineRepository.CheckPatientsVaccinesForAppointmentAsync(Id))
             {
-                Console.WriteLine("IMA VAKCINA");
                 PatientVaccines = _patientVaccineService.GetPatientVaccineForAppointment(Id);
             }
-            if (_patientVaccineRepository.CheckPatientsVaccinesForAppointmentAsync(Id))
+            if (_medicinePrescriptionRepository.CheckMedicinePrescriptionForAppointmentAsync(Id))
             {
                 MedicinePrescriptions = _medicinePrescriptionService.GetMedicinePrescriptionsForAppointment(Id);
             }

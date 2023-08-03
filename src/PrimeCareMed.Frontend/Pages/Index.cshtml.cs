@@ -58,7 +58,7 @@ namespace PrimeCareMed.Frontend.Pages
                     "shiftCookieOffice", nurseShift.Office.Name + " " + nurseShift.Office.City,
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
                     HttpContext.Response.Cookies.Append(
-                    "shiftCookieDetails", nurseShift.Nurse.FirstName + " " + nurseShift.Nurse.LastName,
+                    "shiftCookieDetails", nurseShift.Doctor.FirstName + " " + nurseShift.Doctor.LastName,
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
                 }
             }

@@ -44,9 +44,6 @@ namespace PrimeCareMed.Frontend.Pages.Users
         [BindProperty]
         public UpdateUserModel EditUser { get; set; }
 
-        [BindProperty]
-        public IEnumerable<ListUsersModel> Managers => _userService.GetAllManagers();
-
         public void OnGet()
         {
             var user = _userRepository.GetUserByIdAsync(Id).Result;

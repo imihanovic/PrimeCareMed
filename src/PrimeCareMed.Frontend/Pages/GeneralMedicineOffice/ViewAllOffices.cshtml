@@ -54,18 +54,22 @@
             @foreach (var office in Model.Offices)
             {
                 <tr class="align-middle">
+                    <td class="d-none d-lg-table-cell">@office.Name</td>
                     <td class="d-none d-lg-table-cell">@office.Address</td>
                     <td class="d-none d-lg-table-cell">@office.City</td>
                 
                     @if (User.IsInRole("SysAdministrator"))
                     {
                         <td>
+                            <a class="btn btn-outline-primary" asp-page="../Shift/ViewAllShiftsForOffice" asp-route-id="@office.Id">Shifts</a>
+                        </td>     
+                        <td>
                         <form method="post">
                             <button type="submit" asp-page-handler="delete" asp-route-id="@office.Id" class="btn btn-outline-danger"
                                 runat="server" CausesValidation="False"
                                 onclick="return confirm('Are you certain you want to delete this office?');">
                                 <i class="bi bi-trash3-fill"></i>
-                            </button>
+                         </button>
                          </form>
                         </td>
                     }
