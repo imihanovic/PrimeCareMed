@@ -32,10 +32,10 @@
     <div class="vh-100 d-flex">
         @if (SignInManager.IsSignedIn(User))
         {
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
-            <a asp-area="" asp-page="/Index" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <span class="fs-4 font-weight-bold">PrimeCareMed</span>
-            </a> <br>
+        <div class="d-flex flex-column flex-shrink-0 p-3" style="width: 280px; background-color:#002133;">
+            <a asp-area="" asp-page="/Index" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-1 font-weight-bold" style="font-family: Garamond, serif;">PrimeCareMed</span>
+            </a>
                 @if (User.IsInRole("Doctor"))
                 {
                     @if (_action != "/Index")
@@ -44,21 +44,18 @@
                         {
                             @if (@cookie.Key == "shiftCookie")
                             {
-                                <a class="text-white text-decoration-none">@cookie.Value.ToString()</a>
-
-                                <br />
+                                <a class="text-white fs-5 text-decoration-none" style="font-family: Garamond, serif;">@cookie.Value.ToString()</a>
                             }
                             else if (@cookie.Key == "shiftCookieDetails")
                             {
-                                <a class="text-white text-decoration-none">@cookie.Value.ToString()</a>
+                                <a class="text-white fs-5 text-decoration-none" style="font-family: Garamond, serif;">@cookie.Value.ToString()</a>
                             }
                         }
                     }
                     else
                     {
-                        <a class="text-white text-decoration-none">@Model.OfficeString</a>
-                        <br />
-                        <a class="text-white text-decoration-none">@Model.NurseString</a>
+                        <a class="text-white fs-5 text-decoration-none" style="font-family: Garamond, serif;">@Model.OfficeString</a>
+                        <a class="text-white fs-5 text-decoration-none" style="font-family: Garamond, serif;">@Model.NurseString</a>
                     }
 
                 }
@@ -70,24 +67,25 @@
                         {
                             @if (@cookie.Key == "shiftCookieDetails")
                             {
-                                <a class="text-white">@cookie.Value.ToString()</a>
-
-                                <br />
+                                <a class="text-white" style="font-family: Garamond, serif;">@cookie.Value.ToString()</a>
                             }
                             else if (@cookie.Key == "shiftCookie")
                             {
-                                <a class="text-white">@cookie.Value.ToString()</a>
+                                <a class="text-white" style="font-family: Garamond, serif;">@cookie.Value.ToString()</a>
                             }
                         }
                     }
                     else
                     {
-                        <a class="text-white">@Model.OfficeString</a>
-                        <br />
-                        <a class="text-white">@Model.DoctorString</a>
-                    }     
+                        <a class="text-white" style="font-family: Garamond, serif;">@Model.OfficeString</a>
+                        <a class="text-white" style="font-family: Garamond, serif;">@Model.DoctorString</a>
+                    }
                 }
-            <hr>
+                else
+                {
+                    
+                }
+            <hr style="color:#fff; background-color:#fff;">
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item" style="font-size:20px">
                     <a asp-area="" asp-page="/Index" class="nav-link text-white" aria-current="page">
@@ -120,7 +118,9 @@
                     </li>
                     <li class="nav-item" style="font-size:20px">
                         <a asp-area="" asp-page="/Medicine/ViewAllMedicines" class="nav-link text-white" aria-current="page">
-                            <i class="bi bi-bag-plus-fill"></i>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512" fill="white">
+                                    <path d="M0 32C0 14.3 14.3 0 32 0H352c17.7 0 32 14.3 32 32V64c0 17.7-14.3 32-32 32H32C14.3 96 0 81.7 0 64V32zm32 96H352V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zM160 240v48H112c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h48v48c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V352h48c8.8 0 16-7.2 16-16V304c0-8.8-7.2-16-16-16H224V240c0-8.8-7.2-16-16-16H176c-8.8 0-16 7.2-16 16z" />
+                                </svg>
                             Medicines
                         </a>
                     </li>
@@ -155,12 +155,12 @@
             </ul>
             <hr>
             <div class="dropdown">
-                @if (User.IsInRole("Doctor"))
+                @*@if (User.IsInRole("Doctor"))
                 {
                     <form id="logoutForm" class="form-inline" asp-area="" asp-page="/Shift/CreateShift" asp-page-handler="endShift" class="nav-link text-white" aria-current="page">
-                        <button id="endShift" type="submit" class="dropdown-item">EndShift</button>
+                        <button id="endShift" type="submit" class="text-white">End Shift</button>
                     </form>
-                }
+                }*@
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="https://icon-library.com/images/person-png-icon/person-png-icon-29.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
                     <strong>@UserManager.GetUserName(User)</strong>
@@ -168,6 +168,9 @@
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                     <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
                         <button id="logout" type="submit" class="dropdown-item">Logout</button>
+                    </form>
+                    <form id="endShiftForm" class="form-inline" asp-area="" asp-page="/Shift/CreateShift" asp-page-handler="endShift">
+                        <button id="endShift" type="submit" class="dropdown-item">End Shift</button>
                     </form>
                 </ul>
             </div>

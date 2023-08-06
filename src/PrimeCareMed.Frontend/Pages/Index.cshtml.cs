@@ -25,7 +25,7 @@ namespace PrimeCareMed.Frontend.Pages
         public string? DoctorString { get; set; }
         [BindProperty]
         public string? NurseString { get; set; }
-        public void OnGet()
+        public IActionResult OnGet()
         {
             try
             {
@@ -35,13 +35,13 @@ namespace PrimeCareMed.Frontend.Pages
                 var nurseShift = _shiftRepository.CheckIfOpenShiftExistsForNurse(currentUser.Id);
                 if (doctorShift is not null)
                 {
-                    OfficeString = doctorShift.Office.Name + " " + doctorShift.Office.City;
+                    OfficeString = doctorShift.Office.Name + ", " + doctorShift.Office.City;
                     NurseString = doctorShift.Nurse.FirstName + " " + doctorShift.Nurse.LastName;
                     HttpContext.Response.Cookies.Append(
                     "sessionCookie", doctorShift.Id.ToString(),
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
                     HttpContext.Response.Cookies.Append(
-                    "shiftCookieOffice", doctorShift.Office.Name + " " + doctorShift.Office.City,
+                    "shiftCookieOffice", doctorShift.Office.Name + ", " + doctorShift.Office.City,
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
                     HttpContext.Response.Cookies.Append(
                     "shiftCookieDetails", doctorShift.Nurse.FirstName + " " + doctorShift.Nurse.LastName,
@@ -49,23 +49,32 @@ namespace PrimeCareMed.Frontend.Pages
                 }
                 else if (nurseShift is not null)
                 {
-                    OfficeString = nurseShift.Office.Name + " " + nurseShift.Office.City;
+                    OfficeString = nurseShift.Office.Name + ", " + nurseShift.Office.City;
                     DoctorString = nurseShift.Doctor.FirstName + " " + nurseShift.Doctor.LastName;
                     HttpContext.Response.Cookies.Append(
                     "sessionCookie", nurseShift.Id.ToString(),
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
                     HttpContext.Response.Cookies.Append(
-                    "shiftCookieOffice", nurseShift.Office.Name + " " + nurseShift.Office.City,
+                    "shiftCookieOffice", nurseShift.Office.Name + ", " + nurseShift.Office.City,
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
                     HttpContext.Response.Cookies.Append(
                     "shiftCookieDetails", nurseShift.Doctor.FirstName + " " + nurseShift.Doctor.LastName,
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
+                }
+                if(currentUserRole == "Doctor" && doctorShift is null)
+                {
+                    return Redirect("/Shift/CreateShift");
+                }
+                else if(currentUserRole == "Nurse" && nurseShift is null)
+                {
+                    return Redirect("/Shift/CreateShift");
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"ONGET INDEX {ex}");
             }
+            return Page();
             
         }
     }

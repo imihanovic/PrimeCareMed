@@ -154,6 +154,10 @@ namespace PrimeCareMed.Frontend.Pages.Shift
             {
                 shift = _shiftRepository.CheckIfOpenShiftExistsForDoctor(currentUser.Id);
             }
+            Response.Cookies.Delete("shiftCookie");
+            Response.Cookies.Delete("sessionCookie");
+            Response.Cookies.Delete("shiftCookieOffice");
+            Response.Cookies.Delete("shiftCookieDetails");
             shift = _shiftRepository.UpdateAsync(shift).Result;
             return Redirect("/Shift/CreateShift");
         }

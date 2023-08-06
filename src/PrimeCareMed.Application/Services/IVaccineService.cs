@@ -10,5 +10,7 @@ namespace PrimeCareMed.Application.Services
         IEnumerable<VaccineModel> GetAllVaccines();
         Vaccine EditVaccineAsync(VaccineModelForCreate vaccineModel);
         Task DeleteTableAsync(Guid Id);
+        IEnumerable<VaccineModel> VaccineSearch(IEnumerable<VaccineModel> patients, string searchString);
+        IEnumerable<VaccineModel> VaccineSorting(IEnumerable<VaccineModel> vaccines, string sortOrder);
     }
 }

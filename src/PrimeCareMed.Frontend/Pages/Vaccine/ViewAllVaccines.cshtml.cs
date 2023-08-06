@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PrimeCareMed.Application.Models.Patient;
+using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Models.Vaccine;
 using PrimeCareMed.Application.Services;
+using PrimeCareMed.Application.Services.Impl;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
 
@@ -15,7 +18,7 @@ namespace PrimeCareMed.Frontend.Pages.Vaccine
         public readonly UserManager<ApplicationUser> _userManager;
 
         public List<string> VaccineModelProperties;
-        public List<VaccineModel> Vaccines { get; set; }
+        public PaginatedList<VaccineModel> Vaccines { get; set; }
         public int TotalPages { get; set; }
 
         public ViewAllVaccinesModel(IVaccineService vaccineService,
@@ -28,7 +31,7 @@ namespace PrimeCareMed.Frontend.Pages.Vaccine
             _vaccineRepository = vaccineRepository;
 
         }
-        public void OnGet()
+        public void OnGet(string sort, string currentFilter, string keyword, int? pageIndex)
 
         {
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
@@ -36,19 +39,29 @@ namespace PrimeCareMed.Frontend.Pages.Vaccine
             VaccineModelProperties = _vaccineService.GetVaccineModelFields();
 
 
+            if (keyword != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                keyword = currentFilter;
+            }
+            ViewData["CurrentFilter"] = keyword;
+            int pageSize = 7;
 
             var vaccines = _vaccineService.GetAllVaccines();
-            Vaccines = vaccines.ToList();
-            //ViewData["Keyword"] = keyword;
-            //dishes = _dishService.DishSearch(dishes, keyword);
 
-            //ViewData["CategoryFilter"] = categoryFilter;
-            //dishes = _dishService.DishFilter(dishes, categoryFilter);
+            //ViewData["CurrentSort"] = sort;
+            // SORTIRANJE PACIJENATA
+            //vaccines = _vaccineService.VaccineSorting(vaccines, sort);
 
-            //Dishes = PaginatedList<DishModel>.Create(dishes, pageIndex ?? 1, pageSize);
+            ViewData["Keyword"] = keyword;
+            vaccines = _vaccineService.VaccineSearch(vaccines, keyword);
 
-            //TotalPages = (int)Math.Ceiling(decimal.Divide(dishes.Count(), pageSize));
+            Vaccines = PaginatedList<VaccineModel>.Create(vaccines, pageIndex ?? 1, pageSize);
 
+            TotalPages = (int)Math.Ceiling(decimal.Divide(vaccines.Count(), pageSize));
         }
     }
 }

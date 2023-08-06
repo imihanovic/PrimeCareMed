@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PrimeCareMed.Application.Models.GeneralMedicineOffice;
+using PrimeCareMed.Application.Models.Vaccine;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
 using System;
@@ -57,6 +58,36 @@ namespace PrimeCareMed.Application.Services.Impl
 
             }
             return offices.AsEnumerable();
+        }
+        public IEnumerable<OfficeModel> OfficeSorting(IEnumerable<OfficeModel> offices, string sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case "Name":
+                    return offices.OrderBy(s => s.Name);
+                case "NameDesc":
+                    return offices.OrderByDescending(s => s.Name);
+                case "City":
+                    return offices.OrderBy(s => s.City);
+                case "CityDesc":
+                    return offices.OrderByDescending(s => s.City);
+                default:
+                    return offices.OrderBy(s => s.Name);
+            }
+        }
+
+        public IEnumerable<OfficeModel> OfficeSearch(IEnumerable<OfficeModel> offices, string searchString)
+        {
+            IEnumerable<OfficeModel> searchedOffices = offices;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var searchStrTrim = searchString.ToLower().Trim();
+                searchedOffices = offices.Where(s => s.Name.ToLower().Contains(searchStrTrim)
+                                            || s.Address.ToLower().Contains(searchStrTrim)
+                                            || s.City.ToLower().Contains(searchStrTrim)
+                                            );
+            }
+            return searchedOffices;
         }
         public GeneralMedicineOffice EditOfficeAsync(OfficeModelForCreate officeModel)
         {

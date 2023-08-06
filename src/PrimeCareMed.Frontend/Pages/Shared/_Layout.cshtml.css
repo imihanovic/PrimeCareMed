@@ -46,13 +46,3 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
-.backgroundWaiting{
-    background-color:lightblue;
-}
-.backgroundPending {
-    background-color: steelblue;
-}
-.backgroundDone {
-    background-color: grey;
-}
-

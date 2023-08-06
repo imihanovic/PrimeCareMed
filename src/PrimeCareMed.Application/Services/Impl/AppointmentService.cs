@@ -180,7 +180,6 @@ namespace PrimeCareMed.Application.Services.Impl
             var appointment = _mapper.Map<Appointment>(appointmentModel);
             return _appointmentRepository.UpdateAsync(appointment).Result;
         }
-
         public async Task DeleteAppointmentAsync(Guid Id)
         {
             await _appointmentRepository.DeleteAsync(Id);
@@ -195,10 +194,55 @@ namespace PrimeCareMed.Application.Services.Impl
             var appointment = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
             return appointment.MedicinePrescriptions.Select(r=>r.Medicine);
         }
-        //public IEnumerable<PatientsVaccine> GetAppointmentVaccines(Guid Id)
-        //{
-        //    var appointment = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
-        //    var b = appointment.PatientsVaccines;
-        //}
+        public IEnumerable<AppointmentModel> AppointmentSorting(IEnumerable<AppointmentModel> appointments, string sortOrder)
+        {
+            IEnumerable<AppointmentModel> sortedAppointments = appointments;
+            switch (sortOrder)
+            {
+                case "PatientFirstName":
+                    return appointments.OrderBy(s => s.PatientFirstName);
+                case "PatientFirstNameDesc":
+                    return appointments.OrderByDescending(s => s.PatientFirstName);
+                case "PatientLastName":
+                    return appointments.OrderBy(s => s.PatientLastName);
+                case "PatientLastNameDesc":
+                    return appointments.OrderByDescending(s => s.PatientLastName);
+                case "PatientMbo":
+                    return appointments.OrderBy(s => s.PatientMbo);
+                case "PatientMboDesc":
+                    return appointments.OrderByDescending(s => s.PatientMbo);
+                case "AppointmentDate":
+                    return appointments.OrderBy(s => s.AppointmentDate);
+                case "AppointmentDateDesc":
+                    return appointments.OrderByDescending(s => s.AppointmentDate);
+                default:
+                    return appointments.OrderByDescending(s => s.AppointmentDate);
+            }
+        }
+
+        public IEnumerable<AppointmentModel> AppointmentSearch(IEnumerable<AppointmentModel> appointments, string searchString)
+        {
+            IEnumerable<AppointmentModel> searchedAppointments = appointments;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var searchStrTrim = searchString.ToLower().Trim();
+                searchedAppointments = appointments.Where(s => s.PatientFirstName.ToLower().Contains(searchStrTrim)
+                                            || s.PatientLastName.ToLower().Contains(searchStrTrim)
+                                            || s.PatientMbo.ToLower().Contains(searchStrTrim)
+                                            );
+            }
+            return searchedAppointments;
+        }
+
+        public IEnumerable<AppointmentModel> AppointmentFilterDate(IEnumerable<AppointmentModel> appointments, string date)
+        {
+            IEnumerable<AppointmentModel> filteredAppointments = appointments;
+            if (!String.IsNullOrEmpty(date))
+            {
+                var dateTrim = date.ToLower().Trim();
+                filteredAppointments = appointments.Where(s => s.AppointmentDate.ToString("yyyy-MM-dd").ToLower().Contains(dateTrim));
+            }
+            return filteredAppointments;
+        }
     }
 }

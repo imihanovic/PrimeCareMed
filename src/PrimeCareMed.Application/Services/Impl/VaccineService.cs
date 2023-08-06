@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PrimeCareMed.Application.Models.Patient;
 using PrimeCareMed.Application.Models.Vaccine;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
@@ -52,6 +53,31 @@ namespace PrimeCareMed.Application.Services.Impl
 
             }
             return vaccines.AsEnumerable();
+        }
+        public IEnumerable<VaccineModel> VaccineSorting(IEnumerable<VaccineModel> vaccines, string sortOrder)
+        {
+            IEnumerable<VaccineModel> sortedPatients = vaccines;
+            switch (sortOrder)
+            {
+                case "Name":
+                    return vaccines.OrderBy(s => s.Name);
+                case "NameDesc":
+                    return vaccines.OrderByDescending(s => s.Name);
+                default:
+                    return vaccines.OrderBy(s => s.Name);
+            }
+        }
+
+        public IEnumerable<VaccineModel> VaccineSearch(IEnumerable<VaccineModel> patients, string searchString)
+        {
+            IEnumerable<VaccineModel> searchedPatients = patients;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var searchStrTrim = searchString.ToLower().Trim();
+                searchedPatients = patients.Where(s => s.Name.ToLower().Contains(searchStrTrim)
+                                            );
+            }
+            return searchedPatients;
         }
         public Vaccine EditVaccineAsync(VaccineModelForCreate vaccineModel)
         {
