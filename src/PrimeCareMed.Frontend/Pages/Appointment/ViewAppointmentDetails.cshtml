@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Appointment Details";
 }
-<div class="container text-center d-flex align-items-center justify-content-center">
+<div class="container text-center align-items-center justify-content-center w-100">
     <div>
         <div>
             <h1>@ViewData["Title"]</h1>
@@ -31,27 +31,33 @@
                     @if(Model.Appointment.MedicalReport is null)
                     {
 
-                        <a class="btn btn-outline-success" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Medical report</a> <br />
+                        <a class="btn-blue-custom" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id">
+                             Medical report
+                        </a> <br />
                     }
                     else
                     {
                         <font size="+1">
-                            <b>
+                            <b style="color: #002133">
                                 Medical report <br />
                             </b>
                             @Model.Appointment.MedicalReport<text>&nbsp;</text>
                         </font>
-                       <a class="btn btn-outline-success" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Edit</a><br />
+                        <a class="btn-blue-custom" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Edit</a>
+                        <br />
                     }<br />
                     <div class="row justify-content-around">
-                        <div class="col-4">
+                        <div class="col-6">
+                            <a class="btn-blue-custom" asp-area="" asp-page="/PatientVaccines/CreatePatientVaccine" asp-route-id="@Model.Appointment.Id">
+                                <i class="fa-solid fa-syringe fa-xs"></i> Vaccine
+                            </a>
                             @if (Model.PatientVaccines is not null)
                             {
                                 <table class="table">
                                     <thead class="thead-dark">
                                         <tr>
-                                           <th>Name</th>
-                                           <th>Dosage</th>
+                                            <th style="color: #002133">Name</th>
+                                            <th style="color: #002133">Dosage</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -64,38 +70,29 @@
                                         }
                                     </tbody>
                                 </table>
-                                <a class="btn btn-outline-success" asp-area="" asp-page="/PatientVaccines/CreatePatientVaccine" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Vaccine</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-outline-success" asp-area="" asp-page="/PatientVaccines/CreatePatientVaccine" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Vaccine</a>
                             }
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
+                            <a class="btn-blue-custom" asp-area="" asp-page="/MedicinePrescription/CreateMedicinePrescription" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Medicine prescription</a>
                             @if (Model.MedicinePrescriptions is not null)
                             {
                                 <table class="table">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th>Medicine</th>
-                                            <th>Description</th>
+                                            <th style="color: #002133">Medicine</th>
+                                            <th style="color: #002133">Description</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var medicine in Model.MedicinePrescriptions)
                                         {
-                                            <tr class="align-middle">
+                                            <tr class="justify-content-around">
                                                 <td class="d-none d-lg-table-cell">@medicine.MedicineName</td>
                                                 <td class="d-none d-lg-table-cell">@medicine.Description</td>
                                             </tr>
                                         }
                                     </tbody>
                                 </table>
-                                <a class="btn btn-outline-success" asp-area="" asp-page="/MedicinePrescription/CreateMedicinePrescription" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Medicine prescription</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-outline-success" asp-area="" asp-page="/MedicinePrescription/CreateMedicinePrescription" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Medicine prescription</a>
                             }
                         </div>
                     </div>

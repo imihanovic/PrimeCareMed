@@ -12,9 +12,8 @@
             <form id="createMedicinePrescriptionForm" method="post">
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-floating">
-
-                    <select asp-for="NewMedicinePrescription.MedicineId" class="form-select" id="single-select-field" data-placeholder="Choose one thing">
+                <div class="form-floating mb-4">
+                    <select asp-for="NewMedicinePrescription.MedicineId" class="form-select" id="select-medicine" data-placeholder="Choose medicine">
                         <option></option>
                         @foreach (var medicine in Model.Medicines)
                         {
@@ -23,11 +22,12 @@
                     </select>
                 </div>
                 <div class="form-floating">
-                    <input asp-for="NewMedicinePrescription.Description" class="form-control" aria-required="true" />
-                    <label asp-for="NewMedicinePrescription.Description"></label>
-                    <span asp-validation-for="NewMedicinePrescription.Description" class="text-danger"></span>
+                    <textarea rows="8" cols="35" id="Description" name="Description"></textarea>
                 </div>
-                <button id="confirmMedicineSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Confirm</button>
+                <div class="d-flex justify-content-end ms-5 mt-3">
+                    <button id="confirmMedicineSubmit" type="submit" class="btn text-white" style="background-color: #006622">Confirm</button>
+                </div>
+               
             </form>
             @if (ViewData["Message"] != null)
             {
@@ -40,6 +40,13 @@
         </div>
     </div>
 </div>
+<script>
+    $('#select-medicine').select2({
+        theme: "bootstrap-5",
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+    });
+</script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

@@ -50,7 +50,6 @@ namespace PrimeCareMed.Frontend.Pages.Patients
             var patients = _patientService.GetAllPatients();
 
             ViewData["CurrentSort"] = sort;
-            // SORTIRANJE PACIJENATA
             patients = _patientService.PatientSorting(patients, sort);
 
             ViewData["Keyword"] = keyword;

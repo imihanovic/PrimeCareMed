@@ -32,8 +32,8 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdministratorRole",
          policy => policy.RequireRole("Administrator"));
-    options.AddPolicy("RequireAdministratorRoleOrAnonymous",
-         policy => policy.AddRequirements(new AllowAnonymousAuthorizationRequirement()));
+    options.AddPolicy("RequireShiftOrAdminRole",
+         policy => policy.AddRequirements(new AllowShiftAuthorizationRequirement()));
 });
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

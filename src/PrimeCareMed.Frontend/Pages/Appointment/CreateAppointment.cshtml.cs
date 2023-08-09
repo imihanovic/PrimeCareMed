@@ -12,6 +12,7 @@ using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
+using PrimeCareMed.DataAccess.Repositories.Impl;
 using System.Data;
 using System.Security.Cryptography.X509Certificates;
 
@@ -28,13 +29,17 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         private readonly IAppointmentService _appointmentService;
         private readonly IPatientService _patientService;
         private readonly IShiftService _shiftService;
+        private readonly IShiftRepository _shiftRepository;
+        public readonly UserManager<ApplicationUser> _userManager;
         public CreateAppointmentModel(IMedicineRepository medicineRepository,
             IMapper mapper,
             IUserService userService,
             IUserRepository userRepository,
             IAppointmentService appointmentService,
             IPatientService patientService,
-            IShiftService shiftService
+            IShiftService shiftService,
+            UserManager<ApplicationUser> userManager,
+            IShiftRepository shiftRepository
             )
         {
             _medicineRepository = medicineRepository;
@@ -44,6 +49,8 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             _appointmentService = appointmentService;
             _patientService = patientService;
             _shiftService = shiftService;
+            _userManager = userManager;
+            _shiftRepository = shiftRepository;
 
         }
         [BindProperty]
@@ -76,6 +83,18 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             else
             {
                 Patients = _patientService.GetAllPatients();
+            }
+            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
+            var doctorShift = _shiftRepository.CheckIfOpenShiftExistsForDoctor(currentUser.Id);
+            var nurseShift = _shiftRepository.CheckIfOpenShiftExistsForNurse(currentUser.Id);
+            if (currentUserRole == "Doctor" && doctorShift is null)
+            {
+                return Redirect("/Shift/CreateShift");
+            }
+            else if (currentUserRole == "Nurse" && nurseShift is null)
+            {
+                return Redirect("/Shift/CreateShift");
             }
             return Page();
         }

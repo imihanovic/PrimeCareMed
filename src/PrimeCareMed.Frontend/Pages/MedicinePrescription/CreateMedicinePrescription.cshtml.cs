@@ -36,12 +36,9 @@ namespace PrimeCareMed.Frontend.Pages.MedicinePrescription
 
         [BindProperty]
         public IEnumerable<MedicineModel> Medicines => _medicineService.GetAllMedicines();
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string Description)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            NewMedicinePrescription.Description = Description;
             try
             {
                 await _medicinePrescriptionService.AddAsync(NewMedicinePrescription, Id);

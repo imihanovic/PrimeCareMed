@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Appointment;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
+using PrimeCareMed.DataAccess.Repositories.Impl;
 
 namespace PrimeCareMed.Frontend.Pages.Appointment
 {
@@ -28,13 +30,23 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             _appointmentRepository = appointmentRepository;
 
         }
-        public void OnGet(string sort, string currentFilter, string keyword, string dateFilter, int? pageIndex)
+        public IActionResult OnGet(string sort, string currentFilter, string keyword, string dateFilter, int? pageIndex)
 
         {
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
+
             AppointmentModelProperties = _appointmentService.GetAppointmentModelFields();
             var cookie = Request.Cookies["sessionCookie"];
+
+            if (currentUserRole == "Doctor" && cookie is null)
+            {
+                return Redirect("/Shift/CreateShift");
+            }
+            else if (currentUserRole == "Nurse" && cookie is null)
+            {
+                return Redirect("/Shift/CreateShift");
+            }
             var appointments = new List<AppointmentModel>();
             if (currentUserRole == "Doctor" || currentUserRole == "Nurse")
             {
@@ -71,6 +83,8 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
 
             TotalPages = (int)Math.Ceiling(decimal.Divide(appointments.Count(), pageSize));            
             Appointments = PaginatedList<AppointmentModel>.Create(appointments, pageIndex ?? 1, pageSize);
+
+            return Page();
         }
     }
 }

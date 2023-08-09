@@ -41,6 +41,7 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         }
         public Shift CheckIfOpenShiftExistsForDoctor(string Id)
         {
+            Console.WriteLine($"REPO DOKTOR SHIFT{Id}");
             var all = GetAllShiftsAsync().Result;
             return all.Where(r => r.Doctor.Id == Id && r.ShiftEndTime == null).FirstOrDefault();
         }

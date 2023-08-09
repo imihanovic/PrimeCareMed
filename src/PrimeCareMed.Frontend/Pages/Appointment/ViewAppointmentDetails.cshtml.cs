@@ -54,11 +54,20 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             _patientVaccineRepository = patientVaccineRepository;
             _medicinePrescriptionRepository = medicinePrescriptionRepository;
         }
-        public void OnGet()
+        public IActionResult OnGet()
         {
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
             Appointment = _appointmentService.GetAppointmentDetailsById(Id);
+            var cookie = Request.Cookies["sessionCookie"];
+            if (currentUserRole == "Doctor" && cookie is null)
+            {
+                return Redirect("/Shift/CreateShift");
+            }
+            else if (currentUserRole == "Nurse" && cookie is null)
+            {
+                return Redirect("/Shift/CreateShift");
+            }
             if (_patientVaccineRepository.CheckPatientsVaccinesForAppointmentAsync(Id))
             {
                 PatientVaccines = _patientVaccineService.GetPatientVaccineForAppointment(Id);
@@ -72,7 +81,8 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
                 var appointmentDB = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
                 appointmentDB.Status = Core.Enums.AppointmentStatus.Pending;
                 _appointmentRepository.UpdateAsync(appointmentDB);
-            }    
+            }
+            return Page();
         }
         
     }

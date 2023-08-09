@@ -8,7 +8,7 @@
     var prevDisabled = !Model.Appointments.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.Appointments.HasNextPage ? "disabled" : "";
 }
-<h1>@ViewData["Title"]</h1>
+<h1 style="color:#002133">@ViewData["Title"]</h1>
 <hr />
 
 <div class="form-actions no-color col">
@@ -17,8 +17,8 @@
             <div class="col-4 col-sm-7">
                  <div class="input-group mb-3">
                  <input type="search" class="form-control" placeholder="Search..." name="keyword" value="@keyword">
-                 <input id="dateFilter" type="date" name="dateFilter" class="form-control" value="@dateFilter" />
-                <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                    <input id="dateFilter" type="date" name="dateFilter" class="form-control d-none d-lg-table-cell" value="@dateFilter" />
+                    <button type="submit" class="btn text-white" style="background-color:#004266"><i class="bi bi-search"></i></button>
                 </div>
             </div>
             <div class="col-1">
@@ -27,7 +27,7 @@
             <div class="col-7 col-sm-4 text-end">
                 @if (User.Identity!.IsAuthenticated)
                 {
-                    <a class="btn btn-primary" asp-area="" asp-page="/Appointment/CreateAppointment"><i class="fas fa-utensils"></i> New appointment</a>
+                    <a class="btn text-white d-none d-lg-inline-block" style="background-color:#004266" asp-area="" asp-page="/Appointment/CreateAppointment"><i class="fa-solid fa-file-pen" style="color: #ffffff;"></i> New appointment</a>
                 }
             </div>
         </div>
@@ -41,7 +41,7 @@
             {
                 if (property != "Cause" && property != "Status")
                 {
-                    <th class="@(property == "PatientLastName" ? "" : "d-none d-lg-table-cell")">
+                    <th class="@(property == "PatientLastName" ? "" : "d-none d-lg-table-cell")" style="color: #002133">
 
                         @property
                         @if (sort is null)
@@ -69,7 +69,7 @@
                 }
                 else
                 {
-                    <th class="d-none d-lg-table-cell">
+                    <th class="d-none d-lg-table-cell" style="color: #002133">
                         @property
                     </th>
                 }
@@ -84,7 +84,7 @@
                 <tr class="align-middle">
                     <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
                     <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
-                    <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                    <td class="">@appointment.PatientLastName</td>
                     <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy")</td>
                     <td class="d-none d-lg-table-cell">@appointment.Cause</td>
                     @*@if (User.IsInRole("SysAdministrator"))
@@ -113,7 +113,7 @@
                asp-route-pageIndex="@(Model.Appointments.PageIndex - 1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                asp-route-dateFilter="@ViewData["DateFilter"]"
-               class="page-link @prevDisabled">
+               class="page-link @prevDisabled text-white" style="background-color: #004266">
                 Previous
             </a>
         </li>
@@ -124,7 +124,7 @@
                asp-route-sort="@ViewData["CurrentSort"]"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                asp-route-dateFilter="@ViewData["DateFilter"]"
-               asp-route-pageIndex="@i" class="page-link">
+               asp-route-pageIndex="@i" class="page-link text-black" style="background-color:#fff">
                     @i
                     </a>
                 </li>
@@ -135,7 +135,7 @@
                asp-route-pageIndex="@(Model.Appointments.PageIndex +1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                asp-route-dateFilter="@ViewData["DateFilter"]"
-               class="page-link @nextDisabled">
+               class="page-link @nextDisabled text-white" style="background-color: #004266">
                 Next
             </a>
         </li>

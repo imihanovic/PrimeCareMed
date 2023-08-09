@@ -1,20 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using PrimeCareMed.DataAccess.Repositories;
+using System.Security.Claims;
 
 namespace PrimeCareMed.Frontend.Policies
 {
-    public class AllowAnonymousAuthorizationRequirement :
-        AuthorizationHandler<AllowAnonymousAuthorizationRequirement>, IAuthorizationRequirement
+    public class AllowShiftAuthorizationRequirement : IAuthorizationRequirement
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AllowAnonymousAuthorizationRequirement requirement)
+        public AllowShiftAuthorizationRequirement()
         {
-            var user = context.User;
-            var userIsAnonymous = user?.Identity == null || !user.Identities.Any(i => i.IsAuthenticated);
-            var isAdmin = user.IsInRole("Administrator");
-            if (userIsAnonymous || isAdmin || user.IsInRole("SysAdministrator"))
-            {
-                context.Succeed(requirement);
-            }
-            return Task.CompletedTask;
+            
         }
     }
 }

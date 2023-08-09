@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -61,11 +61,11 @@ namespace PrimeCareMed.Frontend.Pages
                     "shiftCookieDetails", nurseShift.Doctor.FirstName + " " + nurseShift.Doctor.LastName,
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
                 }
-                if(currentUserRole == "Doctor" && doctorShift is null)
+                if (currentUserRole == "Doctor" && doctorShift is null)
                 {
                     return Redirect("/Shift/CreateShift");
                 }
-                else if(currentUserRole == "Nurse" && nurseShift is null)
+                else if (currentUserRole == "Nurse" && nurseShift is null)
                 {
                     return Redirect("/Shift/CreateShift");
                 }
