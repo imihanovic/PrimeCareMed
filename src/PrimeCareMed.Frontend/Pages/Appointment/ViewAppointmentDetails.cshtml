@@ -32,7 +32,8 @@
                     {
 
                         <a class="btn-blue-custom" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id">
-                             Medical report
+                            <i class="fa-solid fa-file-pen"></i>
+                            Medical report
                         </a> <br />
                     }
                     else
@@ -43,7 +44,7 @@
                             </b>
                             @Model.Appointment.MedicalReport<text>&nbsp;</text>
                         </font>
-                        <a class="btn-blue-custom" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Edit</a>
+                        <a class="btn-blue-custom" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id"><i class="fa-solid fa-file-pen"></i> Edit</a>
                         <br />
                     }<br />
                     <div class="row justify-content-around">
@@ -73,7 +74,9 @@
                             }
                         </div>
                         <div class="col-6">
-                            <a class="btn-blue-custom" asp-area="" asp-page="/MedicinePrescription/CreateMedicinePrescription" asp-route-id="@Model.Appointment.Id"><i class="bi bi-person-fill-check"></i> Medicine prescription</a>
+                            <a class="btn-blue-custom" asp-area="" asp-page="/MedicinePrescription/CreateMedicinePrescription" asp-route-id="@Model.Appointment.Id">
+                                <i class="fa-solid fa-prescription-bottle-medical"></i> Medicine prescription
+                            </a>
                             @if (Model.MedicinePrescriptions is not null)
                             {
                                 <table class="table">

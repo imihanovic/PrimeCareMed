@@ -98,8 +98,9 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             }
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string cause)
         {
+            NewAppointment.Cause = cause;
             try
             {
                 await _appointmentService.AddAsync(NewAppointment);

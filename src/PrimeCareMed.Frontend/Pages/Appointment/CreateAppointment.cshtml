@@ -21,11 +21,6 @@
                     <input type="hidden" name="NewAppointment.Status" value="Waiting" />
                 }
                 <div class="form-floating">
-                    <input asp-for="NewAppointment.Cause" class="form-control" aria-required="true" />
-                    <label asp-for="NewAppointment.Cause"></label>
-                    <span asp-validation-for="NewAppointment.Cause" class="text-danger"></span>
-                </div>
-                <div class="form-floating">
                     <select asp-for="NewAppointment.PatientId" class="form-select" id="select-patient" data-placeholder="Choose a patient">
                         <option></option>
                         @foreach (var patient in Model.Patients)
@@ -34,11 +29,16 @@
                         }
                     </select>
                 </div>
-                
+                <div class="form-floating mt-3">
+                    <b style="color: #002133">
+                        Cause <br />
+                    </b>
+                    <textarea rows="8" cols="45" id="cause" name="cause"></textarea>
+                </div>
                 @if (User.IsInRole("SysAdministrator"))
                 {
                     <div class="form-floating">
-                        <select asp-for="NewAppointment.ShiftId" class="form-control">
+                        <select asp-for="NewAppointment.ShiftId" class="form-select" id="select-office" data-placeholder="Choose shift">
                             
                             <option></option>
                             @foreach (var shift in Model.Shifts)
@@ -72,6 +72,13 @@
     width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
     placeholder: $( this ).data( 'placeholder' ),
 } );
+</script>
+<script>
+    $('#select-shift').select2({
+        theme: "bootstrap-5",
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+    });
 </script>
 
 @section Scripts {
