@@ -56,8 +56,6 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             {
                 appointments = _appointmentService.GetAllAppointments().ToList();
             }
-            //Appointments = appointments;
-            
 
             if (keyword != null)
             {

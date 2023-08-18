@@ -11,13 +11,14 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">@ViewData["Title"]</h1>
+    <h1 class="display-4" style="color:#004266; font-family: Garamond, serif; font-weight:bold;">@ViewData["Title"]</h1>
+    <br />
 
     @if (!SignInManager.IsSignedIn(User))
     {
         <div class="row ms-4">
             <div class="col text-center">
-                <a class="btn btn-outline-primary" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                <a class="btn-blue-custom" style="font-size: 26px" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
             </div>
         </div>
     }

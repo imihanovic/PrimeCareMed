@@ -3,6 +3,7 @@ using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
+using PrimeCareMed.Core.Enums;
 
 namespace PrimeCareMed.DataAccess.Repositories.Impl
 {
@@ -44,10 +45,19 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         public async Task<Appointment> UpdateAsync(Appointment appointment)
         {
             var editItem = await GetAppointmentByIdAsync(appointment.Id);
+            editItem.Status = appointment.Status;
             editItem.MedicalReport = appointment.MedicalReport;
             await _context.SaveChangesAsync();
             return editItem;
         }
+        public async Task<Appointment> FinishAppointmentAsync(Appointment appointment)
+        {
+            var editItem = await GetAppointmentByIdAsync(appointment.Id);
+            editItem.Status = AppointmentStatus.Done;
+            await _context.SaveChangesAsync();
+            return editItem;
+        }
+
         public async Task<Appointment> GetAppointmentByIdAsync(Guid id)
         {
             return await _context.Appointment.Include(r=>r.Shift).Include(r=>r.Patient).Include(r=>r.PatientsVaccines).ThenInclude(r=>r.Vaccine).Include(r=>r.MedicinePrescriptions).ThenInclude(r=>r.Medicine).FirstOrDefaultAsync(t => t.Id == id);

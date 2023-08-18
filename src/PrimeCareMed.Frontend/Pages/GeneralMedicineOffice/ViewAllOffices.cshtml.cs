@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PrimeCareMed.Application.Models.GeneralMedicineOffice;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Models.Vaccine;
@@ -8,6 +10,7 @@ using PrimeCareMed.Application.Services.Impl;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
+using PrimeCareMed.DataAccess.Repositories.Impl;
 
 namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
 {
@@ -16,6 +19,7 @@ namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
         public readonly IOfficeService _officeService;
         public readonly IOfficeRepository _officeRepository;
         public readonly UserManager<ApplicationUser> _userManager;
+        public readonly IShiftService _shiftService;
 
         public List<string> OfficeModelProperties;
         public PaginatedList<OfficeModel> Offices { get; set; }
@@ -23,12 +27,14 @@ namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
 
         public ViewAllOfficesModel(IOfficeService officeService,
             UserManager<ApplicationUser> userManager,
-            IOfficeRepository officeRepository
+            IOfficeRepository officeRepository,
+            IShiftService shiftService
             )
         {
             _officeService = officeService;
             _userManager = userManager;
             _officeRepository = officeRepository;
+            _shiftService = shiftService;
 
         }
         public void OnGet(string sort, string currentFilter, string keyword, int? pageIndex)

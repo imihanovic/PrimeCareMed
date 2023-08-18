@@ -62,32 +62,28 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             {
                 return Redirect("/Shift/CreateShift");
             }
+            if (currentUserRole == "Doctor")
+            {
+                appointment.Status = Core.Enums.AppointmentStatus.Pending;
+                _appointmentRepository.UpdateAsync(appointment);
+            }
             return Page();
+
         }
         public IActionResult OnPost(string medicalReport)
         {
-            //if (!ModelState.IsValid) { Console.WriteLine("MODELSTATE"); return Page(); }
             EditAppointment.Id = Id.ToString();
             EditAppointment.MedicalReport = medicalReport;
             try
             {
                 _appointmentService.EditAppointmentAsync(EditAppointment);
-                //return RedirectToPage("ViewAppointmentDetails", new {id=Id});
                 return RedirectToPage("/Appointment/ViewAppointmentDetails", new {id=Id});
             }
             catch (Exception ex)
             {
-                Console.WriteLine("EXCEPTION");
                 Console.WriteLine(ex.Message);
                 return Page();
             }
-        }
-
-        public IActionResult OnPostDelete()
-        {
-            _appointmentService.DeleteAppointmentAsync(Id);
-
-            return RedirectToPage("ViewAllPatients");
         }
     }
 }

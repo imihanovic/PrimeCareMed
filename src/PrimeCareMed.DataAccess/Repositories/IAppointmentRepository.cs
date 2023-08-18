@@ -16,5 +16,6 @@ namespace PrimeCareMed.DataAccess.Repositories
         Task DeleteAsync(Guid id);
         Task<Appointment> UpdateAsync(Appointment appointment);
         Task<Appointment> GetAppointmentByIdAsync(Guid id);
+        Task<Appointment> FinishAppointmentAsync(Appointment appointment);
     }
 }

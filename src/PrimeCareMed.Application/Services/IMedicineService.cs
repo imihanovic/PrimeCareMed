@@ -10,5 +10,7 @@ namespace PrimeCareMed.Application.Services
         IEnumerable<MedicineModel> GetAllMedicines();
         Medicine EditMedicineAsync(MedicineModelForCreate medicineModel);
         Task DeleteMedicineAsync(Guid Id);
+        IEnumerable<MedicineModel> MedicineSorting(IEnumerable<MedicineModel> medicines, string sortOrder);
+        IEnumerable<MedicineModel> MedicineSearch(IEnumerable<MedicineModel> medicines, string searchString);
     }
 }

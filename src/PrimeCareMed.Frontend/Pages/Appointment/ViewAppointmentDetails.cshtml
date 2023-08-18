@@ -28,10 +28,10 @@
                     </font>
                 </div>
                 <div class="form-floating align-items-center justify-content-center mt-2">
-                    @if(Model.Appointment.MedicalReport is null)
+                    @if (Model.Appointment.MedicalReport is null && (Model.Appointment.Status != "Done" || User.IsInRole("SysAdministrator")))
                     {
 
-                        <a class="btn-blue-custom" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id">
+                        <a class="btn-blue-custom p-1" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id">
                             <i class="fa-solid fa-file-pen"></i>
                             Medical report
                         </a> <br />
@@ -40,18 +40,26 @@
                     {
                         <font size="+1">
                             <b style="color: #002133">
-                                Medical report <br />
+                                Medical report 
+                                @if (Model.Appointment.Status != "Done" || User.IsInRole("SysAdministrator"))
+                                {
+                                    <a class="btn-blue-custom p-1" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id"><i class="fa-solid fa-file-pen"></i> Edit</a>
+                                }
+                                <br />
                             </b>
                             @Model.Appointment.MedicalReport<text>&nbsp;</text>
                         </font>
-                        <a class="btn-blue-custom" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id"><i class="fa-solid fa-file-pen"></i> Edit</a>
+                        
                         <br />
                     }<br />
                     <div class="row justify-content-around">
                         <div class="col-6">
-                            <a class="btn-blue-custom" asp-area="" asp-page="/PatientVaccines/CreatePatientVaccine" asp-route-id="@Model.Appointment.Id">
+                            @if (Model.Appointment.Status != "Done" && !User.IsInRole("SysAdministrator"))
+                            {
+                                <a class="btn-blue-custom" asp-area="" asp-page="/PatientVaccines/CreatePatientVaccine" asp-route-id="@Model.Appointment.Id">
                                 <i class="fa-solid fa-syringe fa-xs"></i> Vaccine
                             </a>
+                            }
                             @if (Model.PatientVaccines is not null)
                             {
                                 <table class="table">
@@ -74,9 +82,13 @@
                             }
                         </div>
                         <div class="col-6">
-                            <a class="btn-blue-custom" asp-area="" asp-page="/MedicinePrescription/CreateMedicinePrescription" asp-route-id="@Model.Appointment.Id">
+                            @if (Model.Appointment.Status != "Done" && !User.IsInRole("SysAdministrator"))
+                            {
+                                <a class="btn-blue-custom" asp-area="" asp-page="/MedicinePrescription/CreateMedicinePrescription" 
+                                asp-route-id="@Model.Appointment.Id">
                                 <i class="fa-solid fa-prescription-bottle-medical"></i> Medicine prescription
-                            </a>
+                                </a>
+                            }
                             @if (Model.MedicinePrescriptions is not null)
                             {
                                 <table class="table">
@@ -100,6 +112,13 @@
                         </div>
                     </div>
                 </div>
+                @if ((User.IsInRole("Doctor") || User.IsInRole("SysAdministrator")) && Model.Appointment.Status != "Done")
+                {
+                    <br />
+                    <div class="d-flex justify-content-end ms-5 mt-3 ml-5">
+                        <button type="submit" style="background-color: #006622" class="btn text-white justify-content-end">End appointment</button>
+                    </div>
+                }
             </form>
             @if (ViewData["Message"] != null)
             {

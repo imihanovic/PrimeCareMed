@@ -1,9 +1,10 @@
 ﻿@page "/office/shifts/{id:Guid}"
 @model PrimeCareMed.Frontend.Pages.Shift.ViewAllShiftsForOfficeModel
 @{
-    ViewData["Title"] = "shifts";
+    ViewData["Title"] = "Shifts";
 }
-<h1>@ViewData["Title"]</h1>
+<h1 style="color:#002133">@Model.OfficeModel.Name, @Model.OfficeModel.City</h1>
+<h3 style="color:#002133">@ViewData["Title"]</h3>
 <hr />
 
 <div class="form-actions no-color col">
@@ -29,13 +30,14 @@
     </form>
 </div>
 
-<table class="table table-striped table-bordered user-table">
+<table class="table">
     <thead>
         <tr>
-            <th>Doctor</th>
-            <th>Nurse</th>
-            <th>Shift started</th>
-            <th>Shift ended</th>
+            <th style="color:#002133">Doctor</th>
+            <th style="color:#002133">Nurse</th>
+            <th style="color:#002133">Shift started</th>
+            <th style="color:#002133">Shift ended</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -60,7 +62,7 @@
                     @if (User.IsInRole("SysAdministrator"))
                     {
                         <td>
-                            <a class="btn btn-outline-primary" asp-page="../Appointment/AppointmentsForShift" asp-route-id="@shift.Id">Appointments</a>
+                            <a class="btn-blue-custom" asp-page="../Appointment/AppointmentsForShift" asp-route-id="@shift.Id">Appointments</a>
                         </td>
                     }
                     

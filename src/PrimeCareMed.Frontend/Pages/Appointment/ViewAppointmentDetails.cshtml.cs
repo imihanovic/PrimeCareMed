@@ -76,14 +76,24 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             {
                 MedicinePrescriptions = _medicinePrescriptionService.GetMedicinePrescriptionsForAppointment(Id);
             }
-            if (currentUserRole == "Doctor")
-            {
-                var appointmentDB = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
-                appointmentDB.Status = Core.Enums.AppointmentStatus.Pending;
-                _appointmentRepository.UpdateAsync(appointmentDB);
-            }
             return Page();
         }
-        
+        public IActionResult OnPost()
+        {
+            try
+            {
+                var appointmentDB = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
+                _appointmentRepository.FinishAppointmentAsync(appointmentDB);
+
+                return RedirectToPage("/Appointment/WaitingRoom");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("EXCEPTION");
+                Console.WriteLine(ex.Message);
+                return Page();
+            }
+        }
+
     }
 }

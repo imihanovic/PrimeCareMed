@@ -31,7 +31,7 @@ namespace PrimeCareMed.Frontend.Pages.Vaccine
             _vaccineRepository = vaccineRepository;
 
         }
-        public void OnGet(string sort, string currentFilter, string keyword, int? pageIndex)
+        public void OnGet(string sort, string keyword, int? pageIndex)
 
         {
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
@@ -43,18 +43,13 @@ namespace PrimeCareMed.Frontend.Pages.Vaccine
             {
                 pageIndex = 1;
             }
-            else
-            {
-                keyword = currentFilter;
-            }
-            ViewData["CurrentFilter"] = keyword;
+            
             int pageSize = 7;
 
             var vaccines = _vaccineService.GetAllVaccines();
 
-            //ViewData["CurrentSort"] = sort;
-            // SORTIRANJE PACIJENATA
-            //vaccines = _vaccineService.VaccineSorting(vaccines, sort);
+            ViewData["CurrentSort"] = sort;
+            vaccines = _vaccineService.VaccineSorting(vaccines, sort);
 
             ViewData["Keyword"] = keyword;
             vaccines = _vaccineService.VaccineSearch(vaccines, keyword);

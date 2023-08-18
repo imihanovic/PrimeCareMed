@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Medicine;
+using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
@@ -14,7 +15,7 @@ namespace PrimeCareMed.Frontend.Pages.Medicine
         public readonly UserManager<ApplicationUser> _userManager;
         
         public List<string> MedicineModelProperties;
-        public List<MedicineModel> Medicines { get; set; }
+        public PaginatedList<MedicineModel> Medicines { get; set; }
         public int TotalPages { get; set; }
 
         public ViewAllMedicinesModel(IMedicineService medicineService,
@@ -27,27 +28,30 @@ namespace PrimeCareMed.Frontend.Pages.Medicine
             _medicineRepository = medicineRepository;
 
         }
-        public void OnGet()
+        public void OnGet(string sort, string keyword, int? pageIndex)
 
         {
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
             MedicineModelProperties = _medicineService.GetMedicineModelFields();
 
-          
+            if (keyword != null)
+            {
+                pageIndex = 1;
+            }
+
+            int pageSize = 8;
 
             var medicines = _medicineService.GetAllMedicines();
-            Medicines = medicines.ToList();
-            //ViewData["Keyword"] = keyword;
-            //dishes = _dishService.DishSearch(dishes, keyword);
 
-            //ViewData["CategoryFilter"] = categoryFilter;
-            //dishes = _dishService.DishFilter(dishes, categoryFilter);
+            ViewData["CurrentSort"] = sort;
+            medicines = _medicineService.MedicineSorting(medicines, sort);
 
-            //Dishes = PaginatedList<DishModel>.Create(dishes, pageIndex ?? 1, pageSize);
+            ViewData["Keyword"] = keyword;
+            medicines = _medicineService.MedicineSearch(medicines, keyword);
 
-            //TotalPages = (int)Math.Ceiling(decimal.Divide(dishes.Count(), pageSize));
-
+            Medicines = PaginatedList<MedicineModel>.Create(medicines, pageIndex ?? 1, pageSize);
+            TotalPages = (int)Math.Ceiling(decimal.Divide(medicines.Count(), pageSize));
         }
     }
 }

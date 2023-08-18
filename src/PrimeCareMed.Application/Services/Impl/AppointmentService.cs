@@ -42,12 +42,6 @@ namespace PrimeCareMed.Application.Services.Impl
 
         public async Task<AppointmentModel> AddAsync(AppointmentModelForCreate createAppointmentModel)
         {
-            //var config = new MapperConfiguration(cfg => {
-
-            //    cfg.CreateMap<AppointmentModelForCreate, Appointment>();
-
-            //});
-            //var appointment = config.CreateMapper().Map<Appointment>(createAppointmentModel);
             var appointment = new Appointment();
             appointment.AppointmentDate = DateTime.Now.ToUniversalTime().AddHours(2);
             appointment.Cause = createAppointmentModel.Cause;
@@ -65,7 +59,6 @@ namespace PrimeCareMed.Application.Services.Impl
         }
         public IEnumerable<PatientModel> GetAllPatientsNotInWaitingRoom(IEnumerable<PatientModel> patientModels, string shiftId)
         {
-            Console.WriteLine($"POSTOJI ULAZ U SERVIS");
             var availablePatients = new List<PatientModel>();
             if (shiftId == null)
             {
@@ -143,7 +136,7 @@ namespace PrimeCareMed.Application.Services.Impl
 
         public IEnumerable<AppointmentModel> GetAllAppointmentsInWaitingRoom(string cookie)
         {
-            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r => r.Shift.Id.ToString() == cookie && r.Status.ToString()!="Done").ToList();
+            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r => r.Shift.Id.ToString() == cookie).OrderBy(x => (int)x.Status).ToList();
             var appointments = new List<AppointmentModel>();
             foreach (var appointment in appointmentsFromDB)
             {
@@ -241,6 +234,17 @@ namespace PrimeCareMed.Application.Services.Impl
             {
                 var dateTrim = date.ToLower().Trim();
                 filteredAppointments = appointments.Where(s => s.AppointmentDate.ToString("yyyy-MM-dd").ToLower().Contains(dateTrim));
+            }
+            return filteredAppointments;
+        }
+
+        public IEnumerable<AppointmentModel> AppointmentFilterStatus(IEnumerable<AppointmentModel> appointments, string status)
+        {
+            IEnumerable<AppointmentModel> filteredAppointments = appointments;
+            if (!String.IsNullOrEmpty(status))
+            {
+                var statusTrim = status.ToLower().Trim();
+                filteredAppointments = appointments.Where(s => s.Status.ToString().ToLower().Contains(statusTrim));
             }
             return filteredAppointments;
         }

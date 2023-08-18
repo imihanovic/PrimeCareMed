@@ -5,6 +5,7 @@ using PrimeCareMed.DataAccess.Repositories;
 using PrimeCareMed.Application.Models;
 using PrimeCareMed.Application.Models.Medicine;
 using PrimeCareMed.Core.Entities;
+using PrimeCareMed.Application.Models.Vaccine;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -55,6 +56,30 @@ namespace PrimeCareMed.Application.Services.Impl
        
             }
             return medicines.AsEnumerable();
+        }
+        public IEnumerable<MedicineModel> MedicineSorting(IEnumerable<MedicineModel> medicines, string sortOrder)
+        {
+            IEnumerable<MedicineModel> sortedMedicines = medicines;
+            switch (sortOrder)
+            {
+                case "Name":
+                    return medicines.OrderBy(s => s.Name);
+                case "NameDesc":
+                    return medicines.OrderByDescending(s => s.Name);
+                default:
+                    return medicines.OrderBy(s => s.Name);
+            }
+        }
+
+        public IEnumerable<MedicineModel> MedicineSearch(IEnumerable<MedicineModel> medicines, string searchString)
+        {
+            IEnumerable<MedicineModel> searchedMedicines = medicines;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var searchStrTrim = searchString.ToLower().Trim();
+                searchedMedicines = medicines.Where(s => s.Name.ToLower().Contains(searchStrTrim));
+            }
+            return searchedMedicines;
         }
         public Medicine EditMedicineAsync(MedicineModelForCreate medicineModel)
         {

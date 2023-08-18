@@ -23,6 +23,7 @@ namespace PrimeCareMed.Application.Services
         IEnumerable<AppointmentModel> GetAllAppointmentsInWaitingRoom(string cookie);
         IEnumerable<AppointmentModel> GetAllAppointmentsForShift(Guid Id);
         IEnumerable<AppointmentModel> AppointmentFilterDate(IEnumerable<AppointmentModel> appointments, string date);
+        IEnumerable<AppointmentModel> AppointmentFilterStatus(IEnumerable<AppointmentModel> appointments, string status);
         IEnumerable<AppointmentModel> AppointmentSearch(IEnumerable<AppointmentModel> appointments, string searchString);
         IEnumerable<AppointmentModel> AppointmentSorting(IEnumerable<AppointmentModel> appointments, string sortOrder);
     }

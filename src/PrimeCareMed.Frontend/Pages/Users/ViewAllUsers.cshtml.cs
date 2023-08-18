@@ -39,7 +39,7 @@ namespace PrimeCareMed.Frontend.Pages.Users
             }
 
             ViewData["CurrentFilter"] = keyword;
-            int pageSize = 4;
+            int pageSize = 8;
 
             var users = _userService.GetAllUsers();
             users = User.IsInRole("Administrator") ? users.Where(r => r.UserRole == "Doctor" || r.UserRole == "Nurse") : users;
