@@ -2,30 +2,29 @@
 @model PrimeCareMed.Frontend.Pages.Shift.ViewAllShiftsForOfficeModel
 @{
     ViewData["Title"] = "Shifts";
+    var sort = ViewData["CurrentSort"] as string;
+    var keyword = ViewData["Keyword"] as string;
+    var dateFilter = ViewData["DateFilter"] as string;
+    var prevDisabled = !Model.Shifts.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Shifts.HasNextPage ? "disabled" : "";
 }
-<h1 style="color:#002133">@Model.OfficeModel.Name, @Model.OfficeModel.City</h1>
-<h3 style="color:#002133">@ViewData["Title"]</h3>
+<h1 style="color:#004266">@Model.OfficeModel.Name, @Model.OfficeModel.City</h1>
+<h3 style="color:#004266">@ViewData["Title"]</h3>
 <hr />
 
 <div class="form-actions no-color col">
-    <form asp-action="ViewAllPatients" method="get">
+    <form asp-action="ViewAllShiftsForOffice" method="get">
         <div class="row">
             <div class="col-4 col-sm-7">
-                @* <div class="input-group mb-3">*@
-                @* <input type="search" class="form-control" placeholder="Search..." name="keyword" value="@keyword">
-                <select class="form-select" aria-label="Example select with button addon" name="categoryFilter">
-                <option value="">All categories</option>
-                @foreach (var category in Enum.GetNames(typeof(DishCategory)))
-                {
-                <option value="@category" selected="@(category == categoryFilter)">@category</option>
-                }
-                </select>
-                <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
-                </div>*@
+                <div class="input-group mb-3">
+                    <input type="search" class="form-control" placeholder="Search..." name="keyword" value="@keyword">
+                    <input id="dateFilter" type="date" name="dateFilter" class="form-control d-none d-lg-table-cell" value="@dateFilter" />
+                    <button type="submit" class="btn text-white" style="background-color:#004266"><i class="bi bi-search"></i></button>
+                </div>
             </div>
-            @*<div class="col-1">
-            <a asp-action="ViewAllDishes" class="btn btn-secondary clear-btn">Clear</a>
-            </div>*@
+            <div class="col-1">
+                <a asp-action="ViewAllShiftsForOffice" class="btn btn-secondary clear-btn">Clear</a>
+            </div>
         </div>
     </form>
 </div>
@@ -33,10 +32,102 @@
 <table class="table">
     <thead>
         <tr>
-            <th style="color:#002133">Doctor</th>
-            <th style="color:#002133">Nurse</th>
-            <th style="color:#002133">Shift started</th>
-            <th style="color:#002133">Shift ended</th>
+            <th style="color:#004266">
+                Doctor
+                @if (sort is null)
+                {
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"DoctorLastName") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"DoctorLastNameDesc") class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+
+                }
+                else if (sort.Contains("Desc"))
+                {
+                    <a asp-page="ViewAllShiftsForOffice"
+                   asp-route-sort=@($"DoctorLastName")
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]"
+                   class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+                }
+                else
+                {
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"DoctorLastNameDesc") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                }
+            </th>
+            <th style="color:#004266">
+                Nurse
+                @if (sort is null)
+                {
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"NurseLastName") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"NurseLastNameDesc") class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+
+                }
+                else if (sort.Contains("Desc"))
+                {
+                    <a asp-page="ViewAllShiftsForOffice"
+                   asp-route-sort=@($"NurseLastName")
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]"
+                   class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+                }
+                else
+                {
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"NurseLastNameDesc") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                }
+            </th>
+            <th style="color:#004266">
+                Shift started
+                @if (sort is null)
+                {
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"ShiftStartTime") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"ShiftStartTimeDesc") class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+
+                }
+                else if (sort.Contains("Desc"))
+                {
+                    <a asp-page="ViewAllShiftsForOffice"
+                   asp-route-sort=@($"ShiftStartTime")
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]"
+                   class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+                }
+                else
+                {
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"ShiftStartTimeDesc") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                }
+            </th>
+            <th style="color:#004266">
+                Shift ended
+                @if (sort is null)
+                {
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"ShiftEndTime") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"ShiftEndTimeDesc") class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+
+                }
+                else if (sort.Contains("Desc"))
+                {
+                    <a asp-page="ViewAllShiftsForOffice"
+                   asp-route-sort=@($"ShiftEndTime")
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]"
+                   class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+                }
+                else
+                {
+                    <a asp-page="ViewAllShiftsForOffice" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]" asp-route-sort=@($"ShiftStartTimeDesc") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                }
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -72,3 +163,39 @@
         }
     </tbody>
 </table>
+<div>
+    <ul class="pagination">
+        <li class="page-item">
+            <a asp-page="./ViewAllShiftsForOffice"
+               asp-route-sort="@ViewData["CurrentSort"]"
+               asp-route-pageIndex="@(Model.Shifts.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               asp-route-dateFilter="@ViewData["DateFilter"]"
+               class="page-link @prevDisabled text-white" style="background-color: #004266">
+                Previous
+            </a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Shifts.PageIndex ? "active" : "")">
+                <a asp-page="./ViewAllShiftsForOffice"
+               asp-route-sort="@ViewData["CurrentSort"]"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               asp-route-dateFilter="@ViewData["DateFilter"]"
+               asp-route-pageIndex="@i" class="page-link text-black" style="background-color:#fff">
+                    @i
+                </a>
+            </li>
+        }
+        <li class="page-item">
+            <a asp-page="./ViewAllShiftsForOffice"
+               asp-route-sort="@ViewData["CurrentSort"]"
+               asp-route-pageIndex="@(Model.Shifts.PageIndex +1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               asp-route-dateFilter="@ViewData["DateFilter"]"
+               class="page-link @nextDisabled text-white" style="background-color: #004266">
+                Next
+            </a>
+        </li>
+    </ul>
+</div>

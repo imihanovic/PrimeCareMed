@@ -181,13 +181,15 @@
             </div>
         </div>
         }
-        <div class="px-4 flex-column flex-grow-1 d-flex flex-column py-2">
-            <div class="flex-grow-1">
-                <main role="main" class="pb-3">
-                    @RenderBody()
-                </main>
-            </div>
-
+        <div class="px-4 flex-column flex-grow-1 d-flex flex-column py-2 custom-body">
+            @if (1>0)
+            {
+                <div class="flex-grow-1">
+                    <main role="main" class="pb-3">
+                        @RenderBody()
+                    </main>
+                </div>
+            }
             <footer class="d-flex flex-wrap justify-content-between align-items-center">
                 <div class="col-md-4 d-flex align-items-center">
                     <span class="mb-3 mb-md-0 text-body-secondary">Ivana Mihanovic 2023 - PrimeCareMed</span>

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using PrimeCareMed.Application.Models.Appointment;
+using PrimeCareMed.Application.Models.Patient;
 using PrimeCareMed.Application.Models.Shift;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Core.Entities;
@@ -147,52 +149,56 @@ namespace PrimeCareMed.Application.Services.Impl
             return shift != null ? true : false;
         }
 
-    //    public IEnumerable<ShiftModel> GetAllAvailableShifts(IEnumerable<ShiftModel> shifts, string currentUserId, string currentUserRole)
-    //    {
-    //        var availableShifts = new List<ShiftModel>();
-
-    //        var allShifts = new List<Shift>();
-    //        var activeShifts = new List<string>();
-    //        if (currentUserRole == "Doctor")
-    //        {
-    //            allShifts = _shiftRepository.GetAllShiftsForDoctor(currentUserId).Result.ToList();
-    //            activeShifts = _shiftRepository.GetAllCurrentShifts().Result.Select(r => r.Shift.Nurse.Id).ToList();
-    //            foreach (var shift in allShifts)
-    //            {
-    //                if (!activeShifts.Contains(shift.Nurse.Id))
-    //                {
-    //                    var shiftDto = _mapper.Map<ShiftModel>(shift);
-    //                    shiftDto.DoctorFirstName = shift.Doctor.FirstName;
-    //                    shiftDto.DoctorLastName = shift.Doctor.LastName;
-    //                    shiftDto.NurseFirstName = shift.Nurse.FirstName;
-    //                    shiftDto.NurseLastName = shift.Nurse.LastName;
-    //                    shiftDto.OfficeAddress = shift.Office.Address;
-    //                    shiftDto.OfficeCity = shift.Office.City;
-    //                    availableShifts.Add(shiftDto);
-    //                }
-    //            }
-    //        }
-    //        else if (currentUserRole == "Nurse")
-    //        {
-    //            allShifts = _shiftRepository.GetAllShiftsForNurse(currentUserId).Result.ToList();
-    //            activeShifts = _shiftRepository.GetAllCurrentShifts().Result.Select(r => r.Shift.Doctor.Id).ToList();
-    //            foreach (var shift in allShifts)
-    //            {
-    //                if (!activeShifts.Contains(shift.Doctor.Id))
-    //                {
-    //                    var shiftDto = _mapper.Map<ShiftModel>(shift);
-    //                    shiftDto.DoctorFirstName = shift.Doctor.FirstName;
-    //                    shiftDto.DoctorLastName = shift.Doctor.LastName;
-    //                    shiftDto.NurseFirstName = shift.Nurse.FirstName;
-    //                    shiftDto.NurseLastName = shift.Nurse.LastName;
-    //                    shiftDto.OfficeAddress = shift.Office.Address;
-    //                    shiftDto.OfficeCity = shift.Office.City;
-    //                    availableShifts.Add(shiftDto);
-    //                }
-    //            }
-    //        }
-            
-    //        return availableShifts.AsEnumerable();
-    //    }
+        public IEnumerable<ShiftModel> ShiftSorting(IEnumerable<ShiftModel> shifts, string sortOrder)
+        {
+            IEnumerable<ShiftModel> sortedShifts = shifts;
+            switch (sortOrder)
+            {
+                case "DoctorLastName":
+                    return shifts.OrderBy(s => s.DoctorLastName);
+                case "DoctorLastNameDesc":
+                    return shifts = shifts.OrderByDescending(s => s.DoctorLastName);
+                case "NurseLastName":
+                    return shifts.OrderBy(s => s.NurseLastName);
+                case "NurseLastNameDesc":
+                    return shifts.OrderByDescending(s => s.NurseLastName);
+                case "ShiftStartTime":
+                    return shifts.OrderBy(s => s.ShiftStartTime);
+                case "ShiftStartTimeDesc":
+                    return shifts.OrderByDescending(s => s.ShiftStartTime);
+                case "ShiftEndTime":
+                    return shifts.OrderBy(s => s.ShiftEndTime);
+                case "ShiftEndTimeDesc":
+                    return shifts.OrderByDescending(s => s.ShiftEndTime);
+                default:
+                    return shifts.OrderByDescending(s => s.ShiftEndTime);
+            }
+        }
+        public IEnumerable<ShiftModel> ShiftFilterDate(IEnumerable<ShiftModel> shifts, string date)
+        {
+            IEnumerable<ShiftModel> filteredShifts = shifts;
+            if (!String.IsNullOrEmpty(date))
+            {
+                var dateTrim = date.ToLower().Trim();
+                filteredShifts = shifts.Where(s => s.ShiftStartTime.ToString("yyyy-MM-dd").ToLower().Contains(dateTrim));
+            }
+            return filteredShifts;
+        }
+        public IEnumerable<ShiftModel> ShiftSearch(IEnumerable<ShiftModel> shifts, string searchString)
+        {
+            IEnumerable<ShiftModel> searchedShifts = shifts;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var searchStrTrim = searchString.ToLower().Trim();
+                searchedShifts = shifts.Where(s => s.OfficeCity.ToLower().Contains(searchStrTrim)
+                                            || s.NurseLastName.ToLower().Contains(searchStrTrim)
+                                            || s.NurseFirstName.ToLower().Contains(searchStrTrim)
+                                            || s.DoctorLastName.ToLower().Contains(searchStrTrim)
+                                            || s.DoctorFirstName.ToLower().Contains(searchStrTrim)
+                                            || s.OfficeName.ToString().ToLower().Contains(searchStrTrim)
+                                            );
+            }
+            return searchedShifts;
+        }
     }
 }

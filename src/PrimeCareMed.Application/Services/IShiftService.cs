@@ -24,6 +24,9 @@ namespace PrimeCareMed.Application.Services
         IEnumerable<ListUsersModel> GetAllAvailableDoctors();
         IEnumerable<ShiftModel> GetAllShifts();
         ShiftModel GetShiftById(string Id);
-        //IEnumerable<ShiftModel> GetAllAvailableShifts(IEnumerable<ShiftModel> shifts, string currentUserId, string currentUserRole);
+
+        IEnumerable<ShiftModel> ShiftSorting(IEnumerable<ShiftModel> shifts, string sortOrder);
+        IEnumerable<ShiftModel> ShiftSearch(IEnumerable<ShiftModel> shifts, string searchString);
+        IEnumerable<ShiftModel> ShiftFilterDate(IEnumerable<ShiftModel> shifts, string date);
     }
 }

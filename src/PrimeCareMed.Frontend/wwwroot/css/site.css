@@ -91,3 +91,10 @@ html {
     padding-left: 15px;
     padding-right: 15px;
 }
+.custom-body {
+    position:relative;
+    background-image: url("../images/background_pic.png");
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+    background-size:cover;
+}

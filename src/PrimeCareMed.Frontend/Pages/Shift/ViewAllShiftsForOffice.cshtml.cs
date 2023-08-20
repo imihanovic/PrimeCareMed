@@ -5,12 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using PrimeCareMed.Application.Models.GeneralMedicineOffice;
+using PrimeCareMed.Application.Models.Patient;
 using PrimeCareMed.Application.Models.Shift;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
+using PrimeCareMed.Application.Services.Impl;
+using PrimeCareMed.Core.Entities;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
 using System.Data;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace PrimeCareMed.Frontend.Pages.Shift
 {
@@ -26,15 +30,14 @@ namespace PrimeCareMed.Frontend.Pages.Shift
         public readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 #nullable enable
-        //public PaginatedList<TableModel> Tables { get; set; }
-
+        public PaginatedList<ShiftModel> Shifts;
 #nullable disable
         public List<string> ShiftModelProperties => _shiftService.GetShiftModelFields();
 
         [FromRoute]
         public Guid Id { get; set; }
 
-        public IEnumerable<ShiftModel> Shifts => _shiftService.GetAllShiftsForOffice(Id).OrderByDescending(r => r.ShiftStartTime);
+        
         public OfficeModel OfficeModel => _officeService.GetAllOffices().FirstOrDefault(r=>r.Id==Id);
 
         public int TotalPages { get; set; }
@@ -54,30 +57,37 @@ namespace PrimeCareMed.Frontend.Pages.Shift
             _officeRepository = officeRepository;
         }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(string sort, string currentFilter, string keyword, string dateFilter, int? pageIndex)
         {
 
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
-            foreach(var sh in Shifts)
+
+            if (keyword != null)
             {
-                Console.WriteLine($"ENDTIME{sh.DoctorLastName}");
-                Console.WriteLine($"ENDTIME{sh.ShiftEndTime}");
+                pageIndex = 1;
             }
-            //AllTables = tables;
+            else
+            {
+                keyword = currentFilter;
+            }
 
-            //ViewData["CurrentSort"] = sort;
-            //tables = _tableService.TableSorting(tables, sort);
+            ViewData["CurrentFilter"] = keyword;
+            int pageSize = 7;
 
-            //ViewData["AreaFilter"] = areaFilter;
-            //tables = _tableService.TableFilterByArea(tables, areaFilter);
+            var shifts = _shiftService.GetAllShiftsForOffice(Id).OrderByDescending(r => r.ShiftStartTime).ToList();
+            ViewData["CurrentSort"] = sort;
+            shifts = _shiftService.ShiftSorting(shifts, sort).ToList();
 
-            //ViewData["SmokingFilter"] = smokingFilter;
-            //tables = _tableService.TableFilterBySmoking(tables, smokingFilter);
+            ViewData["Keyword"] = keyword;
+            shifts = _shiftService.ShiftSearch(shifts, keyword).ToList();
 
-            //Tables = PaginatedList<TableModel>.Create(tables, pageIndex ?? 1, pageSize);
+            ViewData["DateFilter"] = dateFilter;
+            shifts = _shiftService.ShiftFilterDate(shifts, dateFilter).ToList();
 
-            //TotalPages = (int)Math.Ceiling(decimal.Divide(tables.Count(), pageSize));
+            Shifts = PaginatedList<ShiftModel>.Create(shifts, pageIndex ?? 1, pageSize);
+
+            TotalPages = (int)Math.Ceiling(decimal.Divide(shifts.Count(), pageSize));
 
             return Page();
         }

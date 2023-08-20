@@ -9,11 +9,9 @@
 @{
     ViewData["Title"] = "Prime Care Med";
 }
-
 <div class="text-center">
     <h1 class="display-4" style="color:#004266; font-family: Garamond, serif; font-weight:bold;">@ViewData["Title"]</h1>
     <br />
-
     @if (!SignInManager.IsSignedIn(User))
     {
         <div class="row ms-4">
