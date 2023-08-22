@@ -8,7 +8,7 @@ namespace PrimeCareMed.Core.Entities
         public string Address { get; set; }
         public string City { get; set; }
 #nullable enable
-        public ICollection<HospitalExam>? HospitalExams { get; set; } = new List<HospitalExam>();
+        public ICollection<HospitalCheckup>? HospitalCheckups { get; set; } = new List<HospitalCheckup>();
 #nullable disable
     }
 }

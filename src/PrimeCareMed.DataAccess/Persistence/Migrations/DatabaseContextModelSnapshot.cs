@@ -187,7 +187,7 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.ToTable("Appointment");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.Exam", b =>
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Checkup", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -207,10 +207,10 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Exam");
+                    b.ToTable("Checkup");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.ExamAppointment", b =>
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.CheckupAppointment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -219,25 +219,25 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Property<Guid?>("AppointmentId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("ExamDate")
+                    b.Property<DateTime>("CheckupDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("ExamStatus")
+                    b.Property<int>("CheckupStatus")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("HospitalExamExamId")
+                    b.Property<Guid?>("HospitalCheckupCheckupId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("HospitalExamHospitalId")
+                    b.Property<Guid?>("HospitalCheckupHospitalId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentId");
 
-                    b.HasIndex("HospitalExamHospitalId", "HospitalExamExamId");
+                    b.HasIndex("HospitalCheckupHospitalId", "HospitalCheckupCheckupId");
 
-                    b.ToTable("ExamAppointment");
+                    b.ToTable("CheckupAppointment");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.GeneralMedicineOffice", b =>
@@ -280,19 +280,19 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.ToTable("Hospital");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.HospitalExam", b =>
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.HospitalCheckup", b =>
                 {
                     b.Property<Guid>("HospitalId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ExamId")
+                    b.Property<Guid>("CheckupId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("HospitalId", "ExamId");
+                    b.HasKey("HospitalId", "CheckupId");
 
-                    b.HasIndex("ExamId");
+                    b.HasIndex("CheckupId");
 
-                    b.ToTable("HospitalExam");
+                    b.ToTable("HospitalCheckup");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Identity.ApplicationUser", b =>
@@ -611,36 +611,36 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Navigation("Shift");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.ExamAppointment", b =>
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.CheckupAppointment", b =>
                 {
                     b.HasOne("PrimeCareMed.Core.Entities.Appointment", "Appointment")
-                        .WithMany("ExamAppointments")
+                        .WithMany("CheckupAppointments")
                         .HasForeignKey("AppointmentId");
 
-                    b.HasOne("PrimeCareMed.Core.Entities.HospitalExam", "HospitalExam")
-                        .WithMany("HospitalExams")
-                        .HasForeignKey("HospitalExamHospitalId", "HospitalExamExamId");
+                    b.HasOne("PrimeCareMed.Core.Entities.HospitalCheckup", "HospitalCheckup")
+                        .WithMany("HospitalCheckups")
+                        .HasForeignKey("HospitalCheckupHospitalId", "HospitalCheckupCheckupId");
 
                     b.Navigation("Appointment");
 
-                    b.Navigation("HospitalExam");
+                    b.Navigation("HospitalCheckup");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.HospitalExam", b =>
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.HospitalCheckup", b =>
                 {
-                    b.HasOne("PrimeCareMed.Core.Entities.Exam", "Exam")
-                        .WithMany("HospitalExams")
-                        .HasForeignKey("ExamId")
+                    b.HasOne("PrimeCareMed.Core.Entities.Checkup", "Checkup")
+                        .WithMany("HospitalCheckups")
+                        .HasForeignKey("CheckupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PrimeCareMed.Core.Entities.Hospital", "Hospital")
-                        .WithMany("HospitalExams")
+                        .WithMany("HospitalCheckups")
                         .HasForeignKey("HospitalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Exam");
+                    b.Navigation("Checkup");
 
                     b.Navigation("Hospital");
                 });
@@ -704,16 +704,16 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Appointment", b =>
                 {
-                    b.Navigation("ExamAppointments");
+                    b.Navigation("CheckupAppointments");
 
                     b.Navigation("MedicinePrescriptions");
 
                     b.Navigation("PatientsVaccines");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.Exam", b =>
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Checkup", b =>
                 {
-                    b.Navigation("HospitalExams");
+                    b.Navigation("HospitalCheckups");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.GeneralMedicineOffice", b =>
@@ -723,12 +723,12 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Hospital", b =>
                 {
-                    b.Navigation("HospitalExams");
+                    b.Navigation("HospitalCheckups");
                 });
 
-            modelBuilder.Entity("PrimeCareMed.Core.Entities.HospitalExam", b =>
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.HospitalCheckup", b =>
                 {
-                    b.Navigation("HospitalExams");
+                    b.Navigation("HospitalCheckups");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Identity.ApplicationUser", b =>

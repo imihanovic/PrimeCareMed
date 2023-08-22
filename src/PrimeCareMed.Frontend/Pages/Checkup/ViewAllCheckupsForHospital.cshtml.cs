@@ -1,39 +1,39 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PrimeCareMed.Application.Models.Exam;
+using PrimeCareMed.Application.Models.Checkup;
 using PrimeCareMed.Application.Models.Hospital;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
 
-namespace PrimeCareMed.Frontend.Pages.Exam
+namespace PrimeCareMed.Frontend.Pages.Checkup
 {
-    public class ViewAllExamsForHospitalModel : PageModel
+    public class ViewAllCheckupsForHospitalModel : PageModel
     {
-        public readonly IExamService _examService;
+        public readonly ICheckupService _checkupService;
         public readonly IOfficeRepository _officeRepository;
         public readonly UserManager<ApplicationUser> _userManager;
         public readonly IShiftService _shiftService;
         public readonly IHospitalService _hospitalService;
 
-        public List<string> ExamModelProperties;
-        public PaginatedList<ExamModel> Exams { get; set; }
+        public List<string> CheckupModelProperties;
+        public PaginatedList<CheckupModel> Checkups { get; set; }
         public HospitalModel Hospital { get; set; }
         public int TotalPages { get; set; }
 
         [FromRoute]
         public Guid Id { get; set; }
 
-        public ViewAllExamsForHospitalModel(IExamService examService,
+        public ViewAllCheckupsForHospitalModel(ICheckupService checkupService,
             UserManager<ApplicationUser> userManager,
             IOfficeRepository officeRepository,
             IShiftService shiftService,
             IHospitalService hospitalService
             )
         {
-            _examService = examService;
+            _checkupService = checkupService;
             _userManager = userManager;
             _officeRepository = officeRepository;
             _shiftService = shiftService;
@@ -46,7 +46,7 @@ namespace PrimeCareMed.Frontend.Pages.Exam
             Hospital = _hospitalService.GetHospitalModelById(Id.ToString());
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
-            ExamModelProperties = _examService.GetExamModelFields();
+            CheckupModelProperties = _checkupService.GetCheckupModelFields();
 
             if (keyword != null)
             {
@@ -59,18 +59,18 @@ namespace PrimeCareMed.Frontend.Pages.Exam
             ViewData["CurrentFilter"] = keyword;
             int pageSize = 7;
 
-            var exams = _examService.GetAllHospitalExams(Id);
+            var checkups = _checkupService.GetAllHospitalCheckups(Id);
 
             ViewData["CurrentSort"] = sort;
             // SORTIRANJE PACIJENATA
-            exams = _examService.ExamSorting(exams, sort);
+            checkups = _checkupService.CheckupSorting(checkups, sort);
 
             ViewData["Keyword"] = keyword;
-            exams = _examService.ExamSearch(exams, keyword);
+            checkups = _checkupService.CheckupSearch(checkups, keyword);
 
-            Exams = PaginatedList<ExamModel>.Create(exams, pageIndex ?? 1, pageSize);
+            Checkups = PaginatedList<CheckupModel>.Create(checkups, pageIndex ?? 1, pageSize);
 
-            TotalPages = (int)Math.Ceiling(decimal.Divide(exams.Count(), pageSize));
+            TotalPages = (int)Math.Ceiling(decimal.Divide(checkups.Count(), pageSize));
         }
     }
 }

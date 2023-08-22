@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace PrimeCareMed.Core.Entities
 {
-    public class HospitalExam
+    public class HospitalCheckup
     {
         public Guid HospitalId { get; set; }
 
-        public Guid ExamId { get; set; }
+        public Guid CheckupId { get; set; }
 
         [ForeignKey("HospitalId")]
         public Hospital Hospital { get; set; }
 
-        [ForeignKey("ExamId")]
-        public Exam Exam { get; set; }
+        [ForeignKey("CheckupId")]
+        public Checkup Checkup { get; set; }
 #nullable enable
-        public ICollection<ExamAppointment>? HospitalExams { get; set; } = new List<ExamAppointment>();
+        public ICollection<CheckupAppointment>? HospitalCheckups { get; set; } = new List<CheckupAppointment>();
 #nullable disable
 
     }

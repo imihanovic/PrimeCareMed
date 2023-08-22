@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace PrimeCareMed.Core.Enums
 {
-    public enum ExamStatus : int
+    public enum CheckupStatus : int
     {
         Active = 0,
         Cancelled = 1,
-        Done = 2
+        NoShow = 2,
+        Done = 3
     }
 }

@@ -1,7 +1,7 @@
-﻿@page "/hospital/exams/add/{id:Guid}"
-@model PrimeCareMed.Frontend.Pages.Exam.AddExamToHospitalModel
+﻿@page "/hospital/checkups/add/{id:Guid}"
+@model PrimeCareMed.Frontend.Pages.Checkup.AddCheckupToHospitalModel
 @{
-    ViewData["Title"] = "Add exam";
+    ViewData["Title"] = "Add checkup";
 }
 <div class="container text-center d-flex align-items-center justify-content-center">
     <div>
@@ -14,11 +14,11 @@
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating mb-4">
-                    <select asp-for="NewHospitalExam.ExamId" class="form-select" id="select-medicine" data-placeholder="Choose exam">
+                    <select asp-for="NewHospitalCheckup.CheckupId" class="form-select" id="select-medicine" data-placeholder="Choose checkup">
                         <option></option>
-                        @foreach (var exam in Model.Exams)
+                        @foreach (var checkup in Model.Checkups)
                         {
-                                <option value="@exam.Id">@exam.Name</option>
+                                <option value="@checkup.Id">@checkup.Name</option>
                         }
                     </select>
                 </div>

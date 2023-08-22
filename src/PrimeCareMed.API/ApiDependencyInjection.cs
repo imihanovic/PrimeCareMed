@@ -38,7 +38,7 @@ public static class ApiDependencyInjection
         {
             s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer YOUR_TOKEN')",
+                Description = "JWT Authorization header using the Bearer scheme (Checkupple: 'Bearer YOUR_TOKEN')",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,

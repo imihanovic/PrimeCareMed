@@ -1,6 +1,6 @@
-﻿namespace PrimeCareMed.Application.Models.Exam
+﻿namespace PrimeCareMed.Application.Models.Checkup
 {
-    public class ExamModel : BaseResponseModel
+    public class CheckupModel : BaseResponseModel
     {
         public string Name { get; set; }
         public string Description { get; set; }

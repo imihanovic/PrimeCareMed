@@ -56,7 +56,7 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Exam",
+                name: "Checkup",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -67,7 +67,7 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Exam", x => x.Id);
+                    table.PrimaryKey("PK_Checkup", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -284,23 +284,23 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HospitalExam",
+                name: "HospitalCheckup",
                 columns: table => new
                 {
                     HospitalId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExamId = table.Column<Guid>(type: "uuid", nullable: false)
+                    CheckupId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HospitalExam", x => new { x.HospitalId, x.ExamId });
+                    table.PrimaryKey("PK_HospitalCheckup", x => new { x.HospitalId, x.CheckupId });
                     table.ForeignKey(
-                        name: "FK_HospitalExam_Exam_ExamId",
-                        column: x => x.ExamId,
-                        principalTable: "Exam",
+                        name: "FK_HospitalCheckup_Checkup_CheckupId",
+                        column: x => x.CheckupId,
+                        principalTable: "Checkup",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_HospitalExam_Hospital_HospitalId",
+                        name: "FK_HospitalCheckup_Hospital_HospitalId",
                         column: x => x.HospitalId,
                         principalTable: "Hospital",
                         principalColumn: "Id",
@@ -336,29 +336,29 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExamAppointment",
+                name: "CheckupAppointment",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    HospitalExamHospitalId = table.Column<Guid>(type: "uuid", nullable: true),
-                    HospitalExamExamId = table.Column<Guid>(type: "uuid", nullable: true),
+                    HospitalCheckupHospitalId = table.Column<Guid>(type: "uuid", nullable: true),
+                    HospitalCheckupCheckupId = table.Column<Guid>(type: "uuid", nullable: true),
                     AppointmentId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ExamDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ExamStatus = table.Column<int>(type: "integer", nullable: false)
+                    CheckupDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CheckupStatus = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExamAppointment", x => x.Id);
+                    table.PrimaryKey("PK_CheckupAppointment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExamAppointment_Appointment_AppointmentId",
+                        name: "FK_CheckupAppointment_Appointment_AppointmentId",
                         column: x => x.AppointmentId,
                         principalTable: "Appointment",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ExamAppointment_HospitalExam_HospitalExamHospitalId_Hospita~",
-                        columns: x => new { x.HospitalExamHospitalId, x.HospitalExamExamId },
-                        principalTable: "HospitalExam",
-                        principalColumns: new[] { "HospitalId", "ExamId" });
+                        name: "FK_CheckupAppointment_HospitalCheckup_HospitalCheckupHospitalI~",
+                        columns: x => new { x.HospitalCheckupHospitalId, x.HospitalCheckupCheckupId },
+                        principalTable: "HospitalCheckup",
+                        principalColumns: new[] { "HospitalId", "CheckupId" });
                 });
 
             migrationBuilder.CreateTable(
@@ -460,19 +460,19 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExamAppointment_AppointmentId",
-                table: "ExamAppointment",
+                name: "IX_CheckupAppointment_AppointmentId",
+                table: "CheckupAppointment",
                 column: "AppointmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExamAppointment_HospitalExamHospitalId_HospitalExamExamId",
-                table: "ExamAppointment",
-                columns: new[] { "HospitalExamHospitalId", "HospitalExamExamId" });
+                name: "IX_CheckupAppointment_HospitalCheckupHospitalId_HospitalChecku~",
+                table: "CheckupAppointment",
+                columns: new[] { "HospitalCheckupHospitalId", "HospitalCheckupCheckupId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_HospitalExam_ExamId",
-                table: "HospitalExam",
-                column: "ExamId");
+                name: "IX_HospitalCheckup_CheckupId",
+                table: "HospitalCheckup",
+                column: "CheckupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicinePrescription_AppointmentId",
@@ -540,7 +540,7 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ExamAppointment");
+                name: "CheckupAppointment");
 
             migrationBuilder.DropTable(
                 name: "MedicinePrescription");
@@ -552,7 +552,7 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "HospitalExam");
+                name: "HospitalCheckup");
 
             migrationBuilder.DropTable(
                 name: "Medicines");
@@ -564,7 +564,7 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 name: "Vaccines");
 
             migrationBuilder.DropTable(
-                name: "Exam");
+                name: "Checkup");
 
             migrationBuilder.DropTable(
                 name: "Hospital");

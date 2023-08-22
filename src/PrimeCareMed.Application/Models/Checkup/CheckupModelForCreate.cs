@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PrimeCareMed.Application.Models.Exam
+namespace PrimeCareMed.Application.Models.Checkup
 {
-    public class ExamModelForCreate
+    public class CheckupModelForCreate
     {
         public string Id { get; set; }
 

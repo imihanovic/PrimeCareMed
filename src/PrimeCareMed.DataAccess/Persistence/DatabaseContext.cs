@@ -28,9 +28,9 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<MedicinePrescription> MedicinePrescription { get; set; }
     public DbSet<Appointment> Appointment { get; set; }
     public DbSet<Hospital> Hospital { get; set; }
-    public DbSet<Exam> Exam { get; set; }
-    public DbSet<HospitalExam> HospitalExam { get; set; }
-    public DbSet<ExamAppointment> ExamAppointment { get; set; }
+    public DbSet<Checkup> Checkup { get; set; }
+    public DbSet<HospitalCheckup> HospitalCheckup { get; set; }
+    public DbSet<CheckupAppointment> CheckupAppointment { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -65,13 +65,13 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
         .WithOne(e => e.Shift)
         .IsRequired();
 
-        builder.Entity<HospitalExam>().HasKey(gu => new { gu.HospitalId, gu.ExamId });
+        builder.Entity<HospitalCheckup>().HasKey(gu => new { gu.HospitalId, gu.CheckupId });
 
-        builder.Entity<HospitalExam>().HasOne(ub => ub.Hospital)
-               .WithMany(x => x.HospitalExams).HasForeignKey(h => h.HospitalId);
+        builder.Entity<HospitalCheckup>().HasOne(ub => ub.Hospital)
+               .WithMany(x => x.HospitalCheckups).HasForeignKey(h => h.HospitalId);
 
-        builder.Entity<HospitalExam>().HasOne(ub => ub.Exam)
-            .WithMany(x => x.HospitalExams).HasForeignKey(h => h.ExamId);
+        builder.Entity<HospitalCheckup>().HasOne(ub => ub.Checkup)
+            .WithMany(x => x.HospitalCheckups).HasForeignKey(h => h.CheckupId);
 
 
     }

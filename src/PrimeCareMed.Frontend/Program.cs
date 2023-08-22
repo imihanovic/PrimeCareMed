@@ -62,8 +62,8 @@ builder.Services.AddScoped<IPatientVaccineRepository, PatientVaccineRepository>(
 builder.Services.AddScoped<IPatientVaccineService, PatientVaccineService>();
 builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
 builder.Services.AddScoped<IHospitalService, HospitalService>();
-builder.Services.AddScoped<IExamRepository, ExamRepository>();
-builder.Services.AddScoped<IExamService, ExamService>();
+builder.Services.AddScoped<ICheckupRepository, CheckupRepository>();
+builder.Services.AddScoped<ICheckupService, CheckupService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
