@@ -10,7 +10,7 @@
     var prevDisabled = !Model.Users.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.Users.HasNextPage ? "disabled" : "";
 }
-<h1 style="color:#004266">@ViewData["Title"]</h1>
+<h1 style="color:#002133">@ViewData["Title"]</h1>
 <hr/>
 
 <div class="search-user form-actions no-color col">
@@ -35,7 +35,7 @@
             <div class="col-7 col-sm-4 text-end">
                 @if (User.Identity!.IsAuthenticated && (User.IsInRole("Administrator") || User.IsInRole("SysAdministrator")))
                 {
-                    <a class="btn text-white" style="background-color:#004266" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-person-fill-add"></i>New user</a>
+                    <a class="btn text-white" style="background-color:#004266" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-person-fill-add"></i> New user</a>
                 }
             </div>
         </div>

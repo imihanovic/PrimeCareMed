@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-4 col-sm-7">
                  <div class="input-group mb-3">
-                 <input type="search" class="form-control" placeholder="Search..." name="keyword" value="@keyword">
+                    <input type="search" class="form-control" style="width:250px;" placeholder="Search..." name="keyword" value="@keyword">
                 <select class="form-select" aria-label="Example select with button addon" name="genderFilter">
                 <option value="">All genders</option>
                 @foreach (var gender in Enum.GetNames(typeof(Gender)))
@@ -34,7 +34,7 @@
             <div class="col-7 col-sm-4 text-end">
                 @if (User.Identity!.IsAuthenticated && ((User.IsInRole("SysAdministrator"))||User.IsInRole("Doctor")||User.IsInRole("Nurse")))
                 {
-                    <a class="btn text-white d-none d-lg-inline-block" style="background-color:#004266" asp-area="" asp-page="/Patients/CreatePatient"><i class="fa-solid fa-user-plus"></i> Create new patient</a>
+                    <a class="btn text-white d-none d-lg-inline-block" style="background-color:#004266" asp-area="" asp-page="/Patients/CreatePatient"><i class="fa-solid fa-user-plus"></i> New patient</a>
                 }
             </div>
         </div>

@@ -1,31 +1,31 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PrimeCareMed.Application.Models.GeneralMedicineOffice;
+using PrimeCareMed.Application.Models.Hospital;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
 
-namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
+namespace PrimeCareMed.Frontend.Pages.Hospital
 {
-    public class ViewAllOfficesModel : PageModel
+    public class ViewAllHospitalsModel : PageModel
     {
-        public readonly IOfficeService _officeService;
+        public readonly IHospitalService _hospitalService;
         public readonly IOfficeRepository _officeRepository;
         public readonly UserManager<ApplicationUser> _userManager;
         public readonly IShiftService _shiftService;
 
-        public List<string> OfficeModelProperties;
-        public PaginatedList<OfficeModel> Offices { get; set; }
+        public List<string> HospitalModelProperties;
+        public PaginatedList<HospitalModel> Hospitals { get; set; }
         public int TotalPages { get; set; }
 
-        public ViewAllOfficesModel(IOfficeService officeService,
+        public ViewAllHospitalsModel(IHospitalService hospitalService,
             UserManager<ApplicationUser> userManager,
             IOfficeRepository officeRepository,
             IShiftService shiftService
             )
         {
-            _officeService = officeService;
+            _hospitalService = hospitalService;
             _userManager = userManager;
             _officeRepository = officeRepository;
             _shiftService = shiftService;
@@ -36,7 +36,7 @@ namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
         {
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
-            OfficeModelProperties = _officeService.GetOfficeModelFields();
+            HospitalModelProperties = _hospitalService.GetHospitalModelFields();
 
             if (keyword != null)
             {
@@ -49,18 +49,18 @@ namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
             ViewData["CurrentFilter"] = keyword;
             int pageSize = 7;
 
-            var offices = _officeService.GetAllOffices();
+            var hospitals = _hospitalService.GetAllHospitals();
 
             ViewData["CurrentSort"] = sort;
             // SORTIRANJE PACIJENATA
-            offices = _officeService.OfficeSorting(offices, sort);
+            hospitals = _hospitalService.HospitalSorting(hospitals, sort);
 
             ViewData["Keyword"] = keyword;
-            offices = _officeService.OfficeSearch(offices, keyword);
+            hospitals = _hospitalService.HospitalSearch(hospitals, keyword);
 
-            Offices = PaginatedList<OfficeModel>.Create(offices, pageIndex ?? 1, pageSize);
+            Hospitals = PaginatedList<HospitalModel>.Create(hospitals, pageIndex ?? 1, pageSize);
 
-            TotalPages = (int)Math.Ceiling(decimal.Divide(offices.Count(), pageSize));
+            TotalPages = (int)Math.Ceiling(decimal.Divide(hospitals.Count(), pageSize));
         }
     }
 }

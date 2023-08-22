@@ -1,16 +1,17 @@
-﻿@page
-@model PrimeCareMed.Frontend.Pages.GeneralMedicineOffice.ViewAllOfficesModel
+﻿@page "/hospital/exams/{id:Guid}"
+@model PrimeCareMed.Frontend.Pages.Exam.ViewAllExamsForHospitalModel
 @{
-    ViewData["Title"] = "General Medicine Offices";
+    ViewData["Title"] = "Exams";
     var keyword = ViewData["Keyword"] as string;
-    var prevDisabled = !Model.Offices.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.Offices.HasNextPage ? "disabled" : "";
+    var prevDisabled = !Model.Exams.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Exams.HasNextPage ? "disabled" : "";
 }
-<h1 style="color:#002133">@ViewData["Title"]</h1>
+<h1 style="color:#002133">@Model.Hospital.Name, @Model.Hospital.City</h1>
+<h2 style="color:#002133">@ViewData["Title"]</h2>
 <hr />
 
 <div class="form-actions no-color col">
-    <form asp-action="ViewAllOffices" method="get">
+    <form asp-action="ViewAllExams" method="get">
         <div class="row">
             <div class="col-4 col-sm-7">
                 <div class="input-group mb-3">
@@ -19,13 +20,12 @@
                 </div>
             </div>
             <div class="col-1">
-                <a asp-action="ViewAllOffices" class="btn btn-secondary clear-btn">Clear</a>
+                <a asp-action="ViewAllExams" class="btn btn-secondary clear-btn">Clear</a>
             </div>
             <div class="col-7 col-sm-4 text-end">
-                @if (User.Identity!.IsAuthenticated && (User.IsInRole("SysAdministrator")))
+                @if (User.Identity!.IsAuthenticated)
                 {
-                    <a class="btn text-white" style="background-color:#004266" asp-area="" asp-page="/GeneralMedicineOffice/CreateOffice">
-                        <i class="fa-solid fa-square-plus"></i> New office</a>
+                    <a class="btn text-white d-none d-lg-inline-block" style="background-color:#004266" asp-area="" asp-page="/Exam/AddExamToHospital" asp-route-id="@Model.Hospital.Id"><i class="fa-solid fa-file-pen" style="color: #ffffff;"></i> Add exam</a>
                 }
             </div>
         </div>
@@ -35,28 +35,22 @@
 <table class="table">
     <thead>
         <tr>
-            @foreach(var property in Model.OfficeModelProperties)
+            @foreach (var property in Model.ExamModelProperties)
             {
                 <th style="color:#004266">@property</th>
             }
         </tr>
     </thead>
     <tbody>
-        @if (Model.Offices.Count() > 0)
+        @if (Model.Exams.Count() > 0)
         {
-            @foreach (var office in Model.Offices)
+            @foreach (var office in Model.Exams)
             {
                 <tr class="align-middle">
                     <td class="d-none d-lg-table-cell">@office.Name</td>
-                    <td class="d-none d-lg-table-cell">@office.Address</td>
-                    <td class="d-none d-lg-table-cell">@office.City</td>
-                
-                    @if (User.IsInRole("SysAdministrator"))
-                    {
-                        <td>
-                            <a class="btn-blue-custom" asp-page="../Shift/ViewAllShiftsForOffice" asp-route-id="@office.Id">Shifts</a>
-                        </td>     
-                    }
+                    <td class="d-none d-lg-table-cell">@office.Description</td>
+                    <td class="d-none d-lg-table-cell">@office.Duration minutes</td>
+                    <td class="d-none d-lg-table-cell">@office.Preparation</td>
                 </tr>
             }
         }
@@ -65,8 +59,8 @@
 <div>
     <ul class="pagination">
         <li class="page-item">
-            <a asp-page="./ViewAllOffices"
-               asp-route-pageIndex="@(Model.Offices.PageIndex - 1)"
+            <a asp-page="./ViewAllExams"
+               asp-route-pageIndex="@(Model.Exams.PageIndex - 1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                class="page-link @prevDisabled text-white" style="background-color: #004266">
                 Previous
@@ -74,8 +68,8 @@
         </li>
         @for (var i = 1; i <= Model.TotalPages; i++)
         {
-            <li class="page-item @(i == Model.Offices.PageIndex ? "active" : "")">
-                <a asp-page="./ViewAllOffices"
+            <li class="page-item @(i == Model.Exams.PageIndex ? "active" : "")">
+                <a asp-page="./ViewAllExams"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                asp-route-pageIndex="@i" class="page-link text-black" style="background-color:#fff">
                     @i
@@ -83,8 +77,8 @@
             </li>
         }
         <li class="page-item">
-            <a asp-page="./ViewAllOffices"
-               asp-route-pageIndex="@(Model.Offices.PageIndex +1)"
+            <a asp-page="./ViewAllExams"
+               asp-route-pageIndex="@(Model.Exams.PageIndex +1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                class="page-link @nextDisabled text-white" style="background-color: #004266">
                 Next
@@ -92,5 +86,3 @@
         </li>
     </ul>
 </div>
-
-

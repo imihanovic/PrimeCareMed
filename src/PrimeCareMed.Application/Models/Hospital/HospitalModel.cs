@@ -1,6 +1,6 @@
-﻿namespace PrimeCareMed.Application.Models.GeneralMedicineOffice
+﻿namespace PrimeCareMed.Application.Models.Hospital
 {
-    public class OfficeModel : BaseResponseModel
+    public class HospitalModel : BaseResponseModel
     {
         public string Name { get; set; }
         public string Address { get; set; }

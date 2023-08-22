@@ -27,6 +27,10 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<PatientsVaccine> PatientsVaccines { get; set; }
     public DbSet<MedicinePrescription> MedicinePrescription { get; set; }
     public DbSet<Appointment> Appointment { get; set; }
+    public DbSet<Hospital> Hospital { get; set; }
+    public DbSet<Exam> Exam { get; set; }
+    public DbSet<HospitalExam> HospitalExam { get; set; }
+    public DbSet<ExamAppointment> ExamAppointment { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -60,6 +64,14 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
         .HasMany(e => e.Appointments)
         .WithOne(e => e.Shift)
         .IsRequired();
+
+        builder.Entity<HospitalExam>().HasKey(gu => new { gu.HospitalId, gu.ExamId });
+
+        builder.Entity<HospitalExam>().HasOne(ub => ub.Hospital)
+               .WithMany(x => x.HospitalExams).HasForeignKey(h => h.HospitalId);
+
+        builder.Entity<HospitalExam>().HasOne(ub => ub.Exam)
+            .WithMany(x => x.HospitalExams).HasForeignKey(h => h.ExamId);
 
 
     }

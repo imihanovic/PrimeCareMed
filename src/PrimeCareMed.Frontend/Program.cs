@@ -60,7 +60,10 @@ builder.Services.AddScoped<IMedicinePrescriptionRepository, MedicinePrescription
 builder.Services.AddScoped<IMedicinePrescriptionService, MedicinePrescriptionService>();
 builder.Services.AddScoped<IPatientVaccineRepository, PatientVaccineRepository>();
 builder.Services.AddScoped<IPatientVaccineService, PatientVaccineService>();
-
+builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
+builder.Services.AddScoped<IHospitalService, HospitalService>();
+builder.Services.AddScoped<IExamRepository, ExamRepository>();
+builder.Services.AddScoped<IExamService, ExamService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

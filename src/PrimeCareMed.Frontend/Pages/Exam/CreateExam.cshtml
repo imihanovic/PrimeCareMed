@@ -1,0 +1,46 @@
+﻿@page
+@model PrimeCareMed.Frontend.Pages.Exam.CreateExamModel
+@{
+    ViewData["Title"] = "New exam";
+}
+<div class="container text-center d-flex align-items-center justify-content-center">
+    <div>
+        <div>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div>
+            <form id="createExamForm" method="post">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input asp-for="NewExam.Name" class="form-control" aria-required="true" />
+                    <label asp-for="NewExam.Name"></label>
+                    <span asp-validation-for="NewExam.Name" class="text-danger"></span>
+                </div>
+                <div class="form-floating my-1">
+                    <textarea rows="8" cols="35" id="Description" name="Description"></textarea>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="NewExam.Duration" class="form-control" aria-required="true" />
+                    <label asp-for="NewExam.Duration"></label>
+                    <span asp-validation-for="NewExam.Duration" class="text-danger"></span>
+                </div>
+                <div class="form-floating my-1">
+                    <textarea rows="8" cols="35" id="Preparation" name="Preparation"></textarea>
+                </div>
+                <button id="createExamSubmit" type="submit" class="w-100 btn btn-lg text-white" style="background-color:#004266">Confirm</button>
+            </form>
+            @if (ViewData["Message"] != null)
+            {
+                <script type="text/javascript">
+                    window.onload = function () {
+                        alert("@ViewData["Message"]");
+                    };
+                </script>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace PrimeCareMed.DataAccess.Persistence.Migrations
 {
-    public partial class InitalMigration : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,6 +56,21 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Exam",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Duration = table.Column<int>(type: "integer", nullable: false),
+                    Preparation = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Exam", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GeneralMedicineOffices",
                 columns: table => new
                 {
@@ -67,6 +82,20 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GeneralMedicineOffices", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Hospital",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    City = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hospital", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -255,6 +284,30 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HospitalExam",
+                columns: table => new
+                {
+                    HospitalId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExamId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HospitalExam", x => new { x.HospitalId, x.ExamId });
+                    table.ForeignKey(
+                        name: "FK_HospitalExam_Exam_ExamId",
+                        column: x => x.ExamId,
+                        principalTable: "Exam",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HospitalExam_Hospital_HospitalId",
+                        column: x => x.HospitalId,
+                        principalTable: "Hospital",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Appointment",
                 columns: table => new
                 {
@@ -280,6 +333,32 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                         principalTable: "Shift",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ExamAppointment",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    HospitalExamHospitalId = table.Column<Guid>(type: "uuid", nullable: true),
+                    HospitalExamExamId = table.Column<Guid>(type: "uuid", nullable: true),
+                    AppointmentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ExamDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ExamStatus = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExamAppointment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExamAppointment_Appointment_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "Appointment",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ExamAppointment_HospitalExam_HospitalExamHospitalId_Hospita~",
+                        columns: x => new { x.HospitalExamHospitalId, x.HospitalExamExamId },
+                        principalTable: "HospitalExam",
+                        principalColumns: new[] { "HospitalId", "ExamId" });
                 });
 
             migrationBuilder.CreateTable(
@@ -381,6 +460,21 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExamAppointment_AppointmentId",
+                table: "ExamAppointment",
+                column: "AppointmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExamAppointment_HospitalExamHospitalId_HospitalExamExamId",
+                table: "ExamAppointment",
+                columns: new[] { "HospitalExamHospitalId", "HospitalExamExamId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HospitalExam_ExamId",
+                table: "HospitalExam",
+                column: "ExamId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MedicinePrescription_AppointmentId",
                 table: "MedicinePrescription",
                 column: "AppointmentId");
@@ -446,6 +540,9 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ExamAppointment");
+
+            migrationBuilder.DropTable(
                 name: "MedicinePrescription");
 
             migrationBuilder.DropTable(
@@ -455,6 +552,9 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "HospitalExam");
+
+            migrationBuilder.DropTable(
                 name: "Medicines");
 
             migrationBuilder.DropTable(
@@ -462,6 +562,12 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Vaccines");
+
+            migrationBuilder.DropTable(
+                name: "Exam");
+
+            migrationBuilder.DropTable(
+                name: "Hospital");
 
             migrationBuilder.DropTable(
                 name: "Patients");

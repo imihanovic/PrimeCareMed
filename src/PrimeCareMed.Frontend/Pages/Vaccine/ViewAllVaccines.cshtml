@@ -7,7 +7,7 @@
     var prevDisabled = !Model.Vaccines.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.Vaccines.HasNextPage ? "disabled" : "";
 }
-<h1 style="color:#004266">@ViewData["Title"]</h1>
+<h1 style="color:#002133">@ViewData["Title"]</h1>
 <hr />
 
 <div class="form-actions no-color col">
@@ -25,7 +25,7 @@
             <div class="col-7 col-sm-4 text-end">
                 @if (User.Identity!.IsAuthenticated && (User.IsInRole("SysAdministrator")))
                 {
-                    <a class="btn text-white" style="background-color:#004266" asp-area="" asp-page="/Vaccine/CreateVaccine"><i class="fa-solid fa-square-plus"></i> Create new vaccine</a>
+                    <a class="btn text-white" style="background-color:#004266" asp-area="" asp-page="/Vaccine/CreateVaccine"><i class="fa-solid fa-square-plus"></i> New vaccine</a>
                 }
             </div>
         </div>
@@ -85,14 +85,13 @@
         }
     </tbody>
 </table>
-
 <div>
     <ul class="pagination">
         <li class="page-item">
             <a asp-page="./ViewAllVaccines"
-                asp-route-pageIndex="@(Model.Vaccines.PageIndex - 1)"
-                asp-route-currentFilter="@ViewData["CurrentFilter"]"       
-                class="page-link @prevDisabled">
+               asp-route-pageIndex="@(Model.Vaccines.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="page-link @prevDisabled text-white" style="background-color: #004266">
                 Previous
             </a>
         </li>
@@ -100,16 +99,17 @@
         {
             <li class="page-item @(i == Model.Vaccines.PageIndex ? "active" : "")">
                 <a asp-page="./ViewAllVaccines"
-                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                    asp-route-pageIndex="@i" class="page-link">@i
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               asp-route-pageIndex="@i" class="page-link text-black" style="background-color:#fff">
+                    @i
                 </a>
             </li>
         }
         <li class="page-item">
             <a asp-page="./ViewAllVaccines"
-                asp-route-pageIndex="@(Model.Vaccines.PageIndex +1)"
-                asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                class="page-link @nextDisabled">
+               asp-route-pageIndex="@(Model.Vaccines.PageIndex +1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="page-link @nextDisabled text-white" style="background-color: #004266">
                 Next
             </a>
         </li>

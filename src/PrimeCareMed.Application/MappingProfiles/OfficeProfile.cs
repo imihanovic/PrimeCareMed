@@ -12,7 +12,7 @@ namespace PrimeCareMed.Application.MappingProfiles
             CreateMap<OfficeModelForCreate, GeneralMedicineOffice>();
             CreateMap<GeneralMedicineOffice, OfficeModelForCreate>();
             CreateMap<GeneralMedicineOffice, OfficeModel>();
-            CreateMap<MedicineModel, GeneralMedicineOffice>();
+            CreateMap<OfficeModel, GeneralMedicineOffice>();
             CreateMap<OfficeModelForCreate, OfficeModel>();
             CreateMap<OfficeModel, OfficeModelForCreate>();
         }

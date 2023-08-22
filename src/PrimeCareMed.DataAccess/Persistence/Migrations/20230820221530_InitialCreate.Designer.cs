@@ -12,8 +12,8 @@ using PrimeCareMed.DataAccess.Persistence;
 namespace PrimeCareMed.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230719162457_InitalMigration")]
-    partial class InitalMigration
+    [Migration("20230820221530_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -189,6 +189,59 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.ToTable("Appointment");
                 });
 
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Exam", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Preparation")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Exam");
+                });
+
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.ExamAppointment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("AppointmentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExamDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ExamStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("HospitalExamExamId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("HospitalExamHospitalId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("HospitalExamHospitalId", "HospitalExamExamId");
+
+                    b.ToTable("ExamAppointment");
+                });
+
             modelBuilder.Entity("PrimeCareMed.Core.Entities.GeneralMedicineOffice", b =>
                 {
                     b.Property<Guid>("Id")
@@ -207,6 +260,41 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("GeneralMedicineOffices");
+                });
+
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Hospital", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Hospital");
+                });
+
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.HospitalExam", b =>
+                {
+                    b.Property<Guid>("HospitalId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ExamId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("HospitalId", "ExamId");
+
+                    b.HasIndex("ExamId");
+
+                    b.ToTable("HospitalExam");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Identity.ApplicationUser", b =>
@@ -525,6 +613,40 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Navigation("Shift");
                 });
 
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.ExamAppointment", b =>
+                {
+                    b.HasOne("PrimeCareMed.Core.Entities.Appointment", "Appointment")
+                        .WithMany("ExamAppointments")
+                        .HasForeignKey("AppointmentId");
+
+                    b.HasOne("PrimeCareMed.Core.Entities.HospitalExam", "HospitalExam")
+                        .WithMany("HospitalExams")
+                        .HasForeignKey("HospitalExamHospitalId", "HospitalExamExamId");
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("HospitalExam");
+                });
+
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.HospitalExam", b =>
+                {
+                    b.HasOne("PrimeCareMed.Core.Entities.Exam", "Exam")
+                        .WithMany("HospitalExams")
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PrimeCareMed.Core.Entities.Hospital", "Hospital")
+                        .WithMany("HospitalExams")
+                        .HasForeignKey("HospitalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+
+                    b.Navigation("Hospital");
+                });
+
             modelBuilder.Entity("PrimeCareMed.Core.Entities.MedicinePrescription", b =>
                 {
                     b.HasOne("PrimeCareMed.Core.Entities.Appointment", "Appointment")
@@ -584,14 +706,31 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Appointment", b =>
                 {
+                    b.Navigation("ExamAppointments");
+
                     b.Navigation("MedicinePrescriptions");
 
                     b.Navigation("PatientsVaccines");
                 });
 
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Exam", b =>
+                {
+                    b.Navigation("HospitalExams");
+                });
+
             modelBuilder.Entity("PrimeCareMed.Core.Entities.GeneralMedicineOffice", b =>
                 {
                     b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Hospital", b =>
+                {
+                    b.Navigation("HospitalExams");
+                });
+
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.HospitalExam", b =>
+                {
+                    b.Navigation("HospitalExams");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Identity.ApplicationUser", b =>

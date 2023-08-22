@@ -1,45 +1,43 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PrimeCareMed.Application.Models.GeneralMedicineOffice;
+using PrimeCareMed.Application.Models.Exam;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.DataAccess.Repositories;
-using System.Data;
 
-namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
+namespace PrimeCareMed.Frontend.Pages.Exam
 {
-    [Authorize(Roles = "Administrator, SysAdministrator")]
-    public class CreateOfficeModel : PageModel
+    public class CreateExamModel : PageModel
     {
         private readonly IOfficeRepository _officeRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly IOfficeService _officeService;
-        public CreateOfficeModel(IOfficeRepository officeRepository,
+        private readonly IExamService _examService;
+        public CreateExamModel(IOfficeRepository officeRepository,
             IMapper mapper,
             IUserService userService,
             IUserRepository userRepository,
-            IOfficeService officeService)
+            IExamService examService)
         {
             _officeRepository = officeRepository;
             _mapper = mapper;
             _userService = userService;
             _userRepository = userRepository;
-            _officeService = officeService;
+            _examService = examService;
 
         }
         [BindProperty]
-        public OfficeModelForCreate NewOffice { get; set; }
+        public ExamModelForCreate NewExam { get; set; }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string Description, string Preparation)
         {
-            if (!ModelState.IsValid) { return Page(); }
+            NewExam.Description = Description;
+            NewExam.Preparation = Preparation;
             try
             {
-                await _officeService.AddAsync(NewOffice);
-                return RedirectToPage("ViewAllOffices");
+                await _examService.AddAsync(NewExam);
+                return RedirectToPage("ViewAllExams");
             }
             catch (Exception ex)
             {
@@ -47,6 +45,5 @@ namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
             }
             return Page();
         }
-
     }
 }

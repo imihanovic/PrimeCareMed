@@ -16,6 +16,7 @@ namespace PrimeCareMed.Core.Entities
         public string? MedicalReport { get; set; }
         public ICollection<PatientsVaccine>? PatientsVaccines { get; set; } = new List<PatientsVaccine>();
         public ICollection<MedicinePrescription>? MedicinePrescriptions { get; set; } = new List<MedicinePrescription>();
+        public ICollection<ExamAppointment>? ExamAppointments { get; set; } = new List<ExamAppointment>();
 #nullable disable
     }
 }
