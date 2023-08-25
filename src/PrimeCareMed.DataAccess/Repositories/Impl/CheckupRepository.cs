@@ -19,9 +19,17 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         {
             return await _context.Checkup.OrderBy(r => r.Id).ToListAsync();
         }
+        public async Task<IEnumerable<HospitalCheckup>> GetAllHospitalCheckupsAsync()
+        {
+            return await _context.HospitalCheckup.ToListAsync();
+        }
         public async Task<IEnumerable<HospitalCheckup>> GetAllHospitalCheckupsAsync(Guid HospitalId)
         {
-            return await _context.HospitalCheckup.Include(r=>r.Checkup).Where(r=>r.HospitalId==HospitalId).ToListAsync();
+            return await _context.HospitalCheckup.Include(r=>r.Checkup).Include(r=>r.Hospital).Where(r=>r.HospitalId==HospitalId).ToListAsync();
+        }
+        public async Task<IEnumerable<HospitalCheckup>> GetAllCheckupHospitalsAsync(Guid CheckupId)
+        {
+            return await _context.HospitalCheckup.Include(r => r.Checkup).Include(r => r.Hospital).Where(r => r.CheckupId == CheckupId).ToListAsync();
         }
         public async Task<Checkup> AddAsync(Checkup checkup)
         {
@@ -54,6 +62,10 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         public async Task<Checkup> GetCheckupByIdAsync(string id)
         {
             return await _context.Checkup.FirstOrDefaultAsync(t => t.Id.ToString() == id);
+        }
+        public async Task<HospitalCheckup> GetHospitalCheckupByIdsAsync(Guid HospitalId, Guid CheckupId)
+        {
+            return await _context.HospitalCheckup.FirstOrDefaultAsync(t => t.HospitalId==HospitalId && t.CheckupId==CheckupId);
         }
     }
 }

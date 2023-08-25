@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using PrimeCareMed.Application.Models;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.Application.Models.WeatherForecast;
-using PrimeCareMed.Application.Services.Impl;
 
 namespace PrimeCareMed.API.Controllers;
 

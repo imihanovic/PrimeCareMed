@@ -112,6 +112,10 @@
                         </div>
                     </div>
                 </div>
+                <a class="btn-blue-custom" asp-area="" asp-page="/CheckupAppointment/CreateCheckupAppointment"
+                   asp-route-id="@Model.Appointment.Id">
+                    <i class="fa-solid fa-prescription-bottle-medical"></i> CHECKUP
+                </a>
                 @if ((User.IsInRole("Doctor") || User.IsInRole("SysAdministrator")) && Model.Appointment.Status != "Done")
                 {
                     <br />

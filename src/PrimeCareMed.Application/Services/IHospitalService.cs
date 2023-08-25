@@ -14,6 +14,7 @@ namespace PrimeCareMed.Application.Services
         Hospital EditHospitalAsync(HospitalModelForCreate hospitalModel);
         HospitalModelForCreate GetHospitalById(string Id);
         Task DeleteHospitalAsync(Guid Id);
+        IEnumerable<HospitalModel> GetHospitalsByCheckupId(Guid CheckupId);
         HospitalModel GetHospitalModelById(string Id);
     }
 }

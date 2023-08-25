@@ -9,7 +9,11 @@ namespace PrimeCareMed.Application.MappingProfiles
         public HospitalCheckupProfile()
         {
             CreateMap<HospitalCheckupModelForCreate, HospitalCheckup>();
-            CreateMap<Hospital, HospitalCheckupModelForCreate>();
+            CreateMap<HospitalCheckup, HospitalCheckupModelForCreate>();
+            CreateMap<HospitalCheckupModelForCreate, HospitalCheckupModel>();
+            CreateMap<HospitalCheckupModel, HospitalCheckupModelForCreate>();
+            CreateMap<HospitalCheckupModel, HospitalCheckup>();
+            CreateMap<Hospital, HospitalCheckupModel>();
         }
     }
 }

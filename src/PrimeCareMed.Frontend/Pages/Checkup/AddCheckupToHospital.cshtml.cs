@@ -57,7 +57,7 @@ namespace PrimeCareMed.Frontend.Pages.Checkup
                 Console.WriteLine(ex.Message);
                 return Page();
             }
-            return RedirectToPage("/Hospital/ViewAllCheckupsForHospital", new { id = Id });
+            return RedirectToPage("/Checkup/ViewAllCheckupsForHospital", new { id = Id });
         }
     }
 }

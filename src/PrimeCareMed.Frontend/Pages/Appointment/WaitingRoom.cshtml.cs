@@ -33,6 +33,10 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
 
         {
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            if(currentUser is null)
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
             AppointmentModelProperties = _appointmentService.GetAppointmentModelFields();
             var appointments = new List<AppointmentModel>();

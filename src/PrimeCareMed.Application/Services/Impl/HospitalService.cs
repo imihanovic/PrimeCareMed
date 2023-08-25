@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using PrimeCareMed.Application.Models.Checkup;
 using PrimeCareMed.Application.Models.GeneralMedicineOffice;
 using PrimeCareMed.Application.Models.Hospital;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
+using PrimeCareMed.DataAccess.Repositories.Impl;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -11,15 +13,18 @@ namespace PrimeCareMed.Application.Services.Impl
         private readonly IMapper _mapper;
         private readonly IHospitalRepository _hospitalRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ICheckupRepository _checkupRepository;
 
         public HospitalService(IMapper mapper,
             IHospitalRepository hospitalRepository,
-            IUserRepository userRepository
+            IUserRepository userRepository,
+            ICheckupRepository checkupRepository
             )
         {
             _mapper = mapper;
             _hospitalRepository = hospitalRepository;
             _userRepository = userRepository;
+            _checkupRepository = checkupRepository;
         }
 
         public async Task<HospitalModel> AddAsync(HospitalModelForCreate createHospitalModel)
@@ -94,6 +99,21 @@ namespace PrimeCareMed.Application.Services.Impl
         {
             var hospitalFromDB = _hospitalRepository.GetHospitalByIdAsync(Id).Result;
             return _mapper.Map<HospitalModelForCreate>(hospitalFromDB);
+        }
+        public IEnumerable<HospitalModel> GetHospitalsByCheckupId(Guid CheckupId)
+        {
+            var hospitalsFromDatabase = _checkupRepository.GetAllCheckupHospitalsAsync(CheckupId).Result.Select(r => r.Hospital);
+
+            List<HospitalModel> hospitals = new List<HospitalModel>();
+            foreach (var checkup in hospitalsFromDatabase)
+            {
+                var hospitalDto = _mapper.Map<HospitalModel>(checkup);
+                hospitalDto.Name = checkup.Name;
+                hospitalDto.Address = checkup.Address;
+                hospitalDto.City = checkup.City;
+                hospitals.Add(hospitalDto);
+            }
+            return hospitals.AsEnumerable();
         }
         public HospitalModel GetHospitalModelById(string Id)
         {

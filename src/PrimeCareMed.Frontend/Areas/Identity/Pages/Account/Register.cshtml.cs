@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace PrimeCareMed.Frontend.Areas.Identity.Pages.Account
 {
 
-    [Authorize(Policy = "RequireAdministratorRoleOrAnonymous")]
+    [Authorize(Roles = "Administrator, SysAdministrator")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

@@ -64,6 +64,8 @@ builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
 builder.Services.AddScoped<IHospitalService, HospitalService>();
 builder.Services.AddScoped<ICheckupRepository, CheckupRepository>();
 builder.Services.AddScoped<ICheckupService, CheckupService>();
+builder.Services.AddScoped<ICheckupAppointmentRepository, CheckupAppointmentRepository>();
+builder.Services.AddScoped<ICheckupAppointmentService, CheckupAppointmentService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

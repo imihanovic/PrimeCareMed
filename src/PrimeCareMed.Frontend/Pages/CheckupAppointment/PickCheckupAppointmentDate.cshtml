@@ -1,0 +1,46 @@
+﻿@page "/appointment/details/checkup/add/date"
+@model PrimeCareMed.Frontend.Pages.CheckupAppointment.PickCheckupAppointmentDateModel
+@{
+    ViewData["Title"] = "Select date for";
+}
+<div class="container text-center d-flex align-items-center justify-content-center">
+    <div>
+        <div>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div>
+            <form id="pickCheckupDateForm" asp-page="PickCheckupAppointmentTime" method="post">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input id="checkupDate" type="date" name="checkupDate" class="form-control" required min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddDays(1460).ToString("yyyy-MM-dd")" />
+                    <label for="checkupDate">Date of appointment</label>
+                </div>
+                <input type="hidden" name="hospitalId" value="@ViewData["HospitalId"]"/>
+                <input type="hidden" name="checkupId" value="@ViewData["CheckupId"]"/>
+                <input type="hidden" name="appointmentId" value="@ViewData["AppointmentId"]" />
+                <div class="d-flex justify-content-end ms-5 mt-3">
+                    <button id="confirmMedicineSubmit" type="submit" class="btn text-white" style="background-color: #006622">Next</button>
+                </div>
+            </form>
+            @if (ViewData["Message"] != null)
+            {
+                    <script type="text/javascript">
+                        window.onload = function () {
+                            alert("@ViewData["Message"]");
+                        };
+                    </script>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $('#selectCheckup').select2({
+        theme: "bootstrap-5",
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+    });
+</script>
+@section Scripts {
+                <partial name="_ValidationScriptsPartial" />
+}

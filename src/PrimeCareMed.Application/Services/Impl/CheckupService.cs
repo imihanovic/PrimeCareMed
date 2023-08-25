@@ -12,17 +12,20 @@ namespace PrimeCareMed.Application.Services.Impl
         private readonly ICheckupRepository _checkupRepository;
         private readonly IUserRepository _userRepository;
         private readonly IHospitalRepository _hospitalRepository;
+        private readonly ICheckupAppointmentService _checkupAppointmentService;
 
         public CheckupService(IMapper mapper,
             ICheckupRepository checkupRepository,
             IUserRepository userRepository,
-            IHospitalRepository hospitalRepository
+            IHospitalRepository hospitalRepository,
+            ICheckupAppointmentService checkupAppointmentService
             )
         {
             _mapper = mapper;
             _checkupRepository = checkupRepository;
             _userRepository = userRepository;
             _hospitalRepository = hospitalRepository;
+            _checkupAppointmentService = checkupAppointmentService;
         }
 
         public async Task<CheckupModel> AddAsync(CheckupModelForCreate createCheckupModel)
@@ -116,6 +119,73 @@ namespace PrimeCareMed.Application.Services.Impl
 
             }
             return checkups.AsEnumerable();
+        }
+        public IEnumerable<HospitalCheckupModel> GetAllHospitalCheckups()
+        {
+            var checkupsFromDatabase = _checkupRepository.GetAllHospitalCheckupsAsync().Result;
+
+            List<HospitalCheckupModel> checkups = new List<HospitalCheckupModel>();
+            foreach (var checkup in checkupsFromDatabase)
+            {
+                var checkupDto = _mapper.Map<HospitalCheckupModel>(checkup);
+                checkupDto.CheckupName = checkup.Checkup.Name;
+                checkupDto.HospitalName = checkup.Hospital.Name;
+                checkupDto.HospitalAddressCity = checkup.Hospital.Address+", "+checkup.Hospital.City;
+                checkups.Add(checkupDto);
+
+            }
+            return checkups.AsEnumerable();
+        }
+        public IEnumerable<HospitalCheckupModel> GetAvailableHospitalCheckupModelsForPatient(Guid PatientId)
+        {
+            var patientCheckups = _checkupAppointmentService.GetAllAvailableCheckupAppointments(PatientId);
+            List<HospitalCheckupModel> availableCheckupModels = new List<HospitalCheckupModel>();
+            foreach (var checkup in patientCheckups)
+            {
+                Console.WriteLine($"CHECKUP DOSTUPAN{checkup.Name}");
+                var hospitals = _checkupRepository.GetAllCheckupHospitalsAsync(checkup.Id).Result;
+                foreach(var hospital in hospitals)
+                {
+                    Console.WriteLine($"CHECKUP DOSTUPAN{hospital.Hospital.Name}");
+                    var checkupDto = new HospitalCheckupModel();
+                    checkupDto.HospitalId= hospital.Hospital.Id;
+                    checkupDto.CheckupId = checkup.Id;
+                    checkupDto.CheckupName = checkup.Name;
+                    checkupDto.HospitalName = hospital.Hospital.Name;
+                    checkupDto.HospitalAddressCity = hospital.Hospital.Address + ", " + hospital.Hospital.City;
+                    availableCheckupModels.Add(checkupDto);
+                }
+                
+            }
+            return availableCheckupModels.AsEnumerable();
+        }
+        public List<DateTime> GetTimeslotsForCheckup(string checkupId)
+        {
+            var checkup = _checkupRepository.GetCheckupByIdAsync(checkupId).Result;
+            var listOfSlots = new List<DateTime>();
+            var slot = new DateTime().AddHours(8);
+            var maxSlot = new DateTime().AddHours(17).TimeOfDay;
+            while(slot.TimeOfDay < maxSlot)
+            {
+                listOfSlots.Add(slot);
+                slot=slot.AddMinutes(checkup.Duration + 10);
+            }
+            return listOfSlots;
+        }
+        public List<DateTime> GetAvailableTimeslotsForCheckup(string date, string checkupId, string hospitalId)
+        {
+            var timeSlots = GetTimeslotsForCheckup(checkupId);
+            var availableSlots = new List<DateTime>();
+            foreach(var slot in timeSlots)
+            {
+                var checkupDateTime = DateTime.Parse(date).AddHours(slot.Hour).AddMinutes(slot.Minute).ToUniversalTime();
+                var chekupsAtDateTime = _checkupAppointmentService.GetAllCheckupAppointments(Guid.Parse(hospitalId), Guid.Parse(checkupId)).Where(r=>r.CheckupDate == checkupDateTime);
+                if (chekupsAtDateTime.Count() < 4)
+                {
+                    availableSlots.Add(slot);
+                }
+            }
+            return availableSlots;
         }
         public IEnumerable<CheckupModel> CheckupSearch(IEnumerable<CheckupModel> checkups, string searchString)
         {
