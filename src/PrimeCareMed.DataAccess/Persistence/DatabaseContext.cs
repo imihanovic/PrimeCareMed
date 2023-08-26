@@ -5,8 +5,6 @@ using PrimeCareMed.Core.Common;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.Shared.Services;
 using PrimeCareMed.Core.Entities.Identity;
-using System.Reflection.Emit;
-using static System.Collections.Specialized.BitVector32;
 
 namespace PrimeCareMed.DataAccess.Persistence;
 

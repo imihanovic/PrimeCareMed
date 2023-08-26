@@ -1,5 +1,4 @@
 ﻿using PrimeCareMed.Core.Common;
-using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.Core.Enums;
 
 namespace PrimeCareMed.Core.Entities
@@ -11,7 +10,6 @@ namespace PrimeCareMed.Core.Entities
         public AppointmentStatus Status { get; set; }
         public Shift Shift { get; set; }
         public Patient Patient { get; set; }
-
 #nullable enable
         public string? MedicalReport { get; set; }
         public ICollection<PatientsVaccine>? PatientsVaccines { get; set; } = new List<PatientsVaccine>();
