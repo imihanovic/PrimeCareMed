@@ -73,10 +73,10 @@
                 {
                     <input type="hidden" name="NewShift.NurseId" value="@Model.CurrentUser.Id" />
                 }
-                <button id="createShiftSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Create new shift</button>
+                    <button id="createShiftSubmit" type="submit" class="w-100 btn btn-lg text-white" style="background-color: #006622">Confirm</button>
             </form>
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                <button id="logout" type="submit" class="dropdown-item">Logout</button>
+                    <button id="logout" type="submit" class="btn btn-lg text-white" style="background-color:#004266">Logout</button>
             </form>
             @if (ViewData["Message"] != null)
             {

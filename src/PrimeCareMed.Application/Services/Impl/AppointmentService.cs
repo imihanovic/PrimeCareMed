@@ -1,20 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using PrimeCareMed.Application.Models.Appointment;
-using PrimeCareMed.Application.Models.Medicine;
 using PrimeCareMed.Application.Models.Patient;
-using PrimeCareMed.Application.Models.Shift;
 using PrimeCareMed.Core.Entities;
-using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.Core.Enums;
 using PrimeCareMed.DataAccess.Repositories;
-using PrimeCareMed.DataAccess.Repositories.Impl;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -22,20 +11,17 @@ namespace PrimeCareMed.Application.Services.Impl
     {
         private readonly IMapper _mapper;
         private readonly IAppointmentRepository _appointmentRepository;
-        private readonly IUserRepository _userRepository;
         private readonly IShiftRepository _shiftRepository;
         private readonly IPatientRepository _patientRepository;
 
         public AppointmentService(IMapper mapper,
             IAppointmentRepository appointmentRepository,
-            IUserRepository userRepository,
             IShiftRepository shiftRepository,
             IPatientRepository patientRepository
             )
         {
             _mapper = mapper;
             _appointmentRepository = appointmentRepository;
-            _userRepository = userRepository;
             _shiftRepository = shiftRepository;
             _patientRepository = patientRepository;
         }

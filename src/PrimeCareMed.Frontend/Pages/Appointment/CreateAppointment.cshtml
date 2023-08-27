@@ -21,6 +21,9 @@
                     <input type="hidden" name="NewAppointment.Status" value="Waiting" />
                 }
                 <div class="form-floating">
+                    <b style="color: #002133">
+                        Patient <br />
+                    </b>
                     <select asp-for="NewAppointment.PatientId" class="form-select" id="select-patient" data-placeholder="Choose a patient">
                         <option></option>
                         @foreach (var patient in Model.Patients)
@@ -33,13 +36,15 @@
                     <b style="color: #002133">
                         Cause <br />
                     </b>
-                    <textarea rows="8" cols="45" id="cause" name="cause"></textarea>
+                    <textarea rows="8" cols="65" id="cause" name="cause"></textarea>
                 </div>
                 @if (User.IsInRole("SysAdministrator"))
                 {
-                    <div class="form-floating">
+                    <div class="form-floating mt-3">
+                        <b style="color: #002133">
+                            Shift <br />
+                        </b>
                         <select asp-for="NewAppointment.ShiftId" class="form-select" id="select-office" data-placeholder="Choose shift">
-                            
                             <option></option>
                             @foreach (var shift in Model.Shifts)
                             {
@@ -52,7 +57,7 @@
                 {
                     <input type="hidden" name="NewAppointment.ShiftId" value="@Model.CurrentShiftId" />
                 }
-                <button id="createOfficeSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Confirm appointment</button>
+                <button id="createOfficeSubmit" type="submit" class="w-100 btn btn-lg text-white mt-3" style="background-color: #006622">Confirm appointment</button>
             </form>
             @if (ViewData["Message"] != null)
             {

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace PrimeCareMed.Frontend.Pages.Users
 {
-    [Authorize(Policy = "RequireAdministratorRole")]
+    [Authorize(Roles = "Administrator, SysAdministrator")]
     public class EditUserModel : PageModel
     {
         private IUserService _userService;

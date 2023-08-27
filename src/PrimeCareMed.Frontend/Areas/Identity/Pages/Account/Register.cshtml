@@ -7,9 +7,9 @@
 
 
 <div class="container text-center d-flex align-items-center justify-content-center">
-    <div>
+    <div style="width:400px">
         <div>
-            <h1>@ViewData["Title"]</h1>
+            <h1 style="color:#002133">@ViewData["Title"]</h1>
         </div>
         <div>
             <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
@@ -66,11 +66,8 @@
                 <label asp-for="Input.ConfirmPassword"></label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Register</button>
-            @if (!User.IsInRole("Administrator") || !User.IsInRole("SysAdministrator"))
-            {
-                <a type="button" class="btn btn-success" asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">You already have a user account</a>              
-            }
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg text-white mb-2" style="background-color: #004266">Confirm </button> 
+           
             </form>
         </div>  
     </div>

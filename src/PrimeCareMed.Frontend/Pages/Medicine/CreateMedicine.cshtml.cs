@@ -33,10 +33,9 @@ namespace PrimeCareMed.Frontend.Pages.Medicine
             [BindProperty]
             public MedicineModelForCreate NewMedicine { get; set; }
 
-            public async Task<IActionResult> OnPostAsync()
+            public async Task<IActionResult> OnPostAsync(string description)
             {
-                if (!ModelState.IsValid) { return Page(); }
-
+                NewMedicine.Description = description;
                 try
                 {
                     await _medicineService.AddAsync(NewMedicine);
@@ -44,9 +43,9 @@ namespace PrimeCareMed.Frontend.Pages.Medicine
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    ViewData["Message"] = "Invalid form";
+                    return Page();
                 }
-                return Page();
             }
         
     }

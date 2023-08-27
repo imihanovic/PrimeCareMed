@@ -10,7 +10,7 @@
     ViewData["Title"] = "Prime Care Med";
 }
 <div class="text-center">
-    <h1 class="display-4" style="color:#004266; font-family: Garamond, serif; font-weight:bold;">@ViewData["Title"]</h1>
+    <h1 class="display-1" style="color:#004266; font-family: Garamond, serif; font-weight:bold;">@ViewData["Title"]</h1>
     <br />
     @if (!SignInManager.IsSignedIn(User))
     {
@@ -22,9 +22,15 @@
     }
     else
     {
-        <div class="d-flex align-content-center">
+        <br />
+        <br />
+        <br />
+        <div class="display-4" style="color:#004266; font-weight:bold;">
 
-        <p class="font-italic 15px">“Wherever the art of medicine is loved, there is also a love for humanity.”</p>
+            <p class="display-4"><cite>“Wherever the art of medicine is loved, there is also a love for humanity.”</cite></p>
+            <div>
+                <p class="display-6"><cite>- Hippokrat</cite></p>
+            </div>
         </div>
     }
 </div>

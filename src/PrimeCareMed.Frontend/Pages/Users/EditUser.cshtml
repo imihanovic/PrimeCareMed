@@ -8,33 +8,33 @@
 <div class="container text-center d-flex align-items-center justify-content-center">
     <div>
         <div>
-            <h1>@ViewData["Title"]</h1>
+            <h1 style="color:#002133">@ViewData["Title"]</h1>
         </div>
         <div>
             <form id="editUserForm" method="post" enctype="multipart/form-data">
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
+            <div class="form-floating mt-2">
                 <input asp-for="EditUser.FirstName" class="form-control" aria-required="true" />
                 <label asp-for="EditUser.FirstName"></label>
                 <span asp-validation-for="EditUser.FirstName" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+                <div class="form-floating mt-2">
                 <input asp-for="EditUser.LastName" class="form-control" aria-required="true" />
                 <label asp-for="EditUser.LastName"></label>
                 <span asp-validation-for="EditUser.LastName" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mt-2">
                 <input asp-for="EditUser.Email" class="form-control" autocomplete="username" aria-required="true" />
                 <label asp-for="EditUser.Email"></label>
                 <span asp-validation-for="EditUser.Email" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+                <div class="form-floating mt-2">
                 <input asp-for="EditUser.PhoneNumber" class="form-control" aria-required="true" />
                 <label asp-for="EditUser.PhoneNumber"></label>
                 <span asp-validation-for="EditUser.PhoneNumber" class="text-danger"></span>
-            </div> 
-            <div class="form-floating">
+            </div>
+                <div class="form-floating mt-2">
                 <select asp-for = "EditUser.Role" class="form-control">
                     @foreach (var role in Enum.GetNames(typeof(UserRole)))
                     {

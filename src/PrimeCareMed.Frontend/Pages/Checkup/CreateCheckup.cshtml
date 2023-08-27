@@ -17,27 +17,25 @@
                     <label asp-for="NewCheckup.Name"></label>
                     <span asp-validation-for="NewCheckup.Name" class="text-danger"></span>
                 </div>
-                <div class="form-floating my-1">
+                <div class="form-floating mt-2">
+                    <b style="color: #002133">
+                        Description <br />
+                    </b>
                     <textarea rows="8" cols="35" id="Description" name="Description"></textarea>
                 </div>
-                <div class="form-floating">
+                <div class="form-floating mt-2">
                     <input asp-for="NewCheckup.Duration" class="form-control" aria-required="true" />
                     <label asp-for="NewCheckup.Duration"></label>
                     <span asp-validation-for="NewCheckup.Duration" class="text-danger"></span>
                 </div>
-                <div class="form-floating my-1">
+                <div class="form-floating mt-2">
+                    <b style="color: #002133">
+                        Preparation <br />
+                    </b>
                     <textarea rows="8" cols="35" id="Preparation" name="Preparation"></textarea>
                 </div>
-                <button id="createCheckupSubmit" type="submit" class="w-100 btn btn-lg text-white" style="background-color:#004266">Confirm</button>
+                <button id="createCheckupSubmit" type="submit" class="w-100 btn btn-lg text-white" style="background-color: #006622">Confirm</button>
             </form>
-            @if (ViewData["Message"] != null)
-            {
-                <script type="text/javascript">
-                    window.onload = function () {
-                        alert("@ViewData["Message"]");
-                    };
-                </script>
-            }
         </div>
     </div>
 </div>

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using PrimeCareMed.Core.Entities.Identity;
-using PrimeCareMed.Core.Entities;
+﻿using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,11 +7,9 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
     public class CheckupAppointmentRepository : ICheckupAppointmentRepository
     {
         private readonly DatabaseContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public CheckupAppointmentRepository(DatabaseContext context, UserManager<ApplicationUser> userManager)
+        public CheckupAppointmentRepository(DatabaseContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _userManager = userManager;
         }
         public async Task<IEnumerable<CheckupAppointment>> GetAllCheckupAppointmentsAsync(Guid CheckupId, Guid HospitalId)
         {

@@ -16,6 +16,10 @@
                     <input id="checkupDate" type="date" name="checkupDate" class="form-control" required min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddDays(1460).ToString("yyyy-MM-dd")" />
                     <label for="checkupDate">Date of appointment</label>
                 </div>
+                <div class="form-floating">
+                    Date2 (no weekends):
+                <input class="form-control" type="date" id="datepicker" name="datepicker" data-weekends="false">
+                </div>
                 <input type="hidden" name="hospitalId" value="@ViewData["HospitalId"]"/>
                 <input type="hidden" name="checkupId" value="@ViewData["CheckupId"]"/>
                 <input type="hidden" name="appointmentId" value="@ViewData["AppointmentId"]" />
@@ -39,6 +43,12 @@
         theme: "bootstrap-5",
         width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
         placeholder: $(this).data('placeholder'),
+    });
+    $("#datepicker").datepicker({
+        beforeShowDay: function (date) {
+            var day = date.getDay();
+            return [(day != 0), ''];
+        }
     });
 </script>
 @section Scripts {

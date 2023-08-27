@@ -12,7 +12,7 @@ using PrimeCareMed.DataAccess.Persistence;
 namespace PrimeCareMed.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230822155934_InitialCreate")]
+    [Migration("20230827164932_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -309,9 +309,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -322,9 +319,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("text");
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("integer");
-
                     b.Property<string>("LastName")
                         .HasColumnType("text");
 
@@ -334,9 +328,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Mbo")
-                        .HasColumnType("text");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -344,9 +335,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
-
-                    b.Property<string>("Oib")
-                        .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");

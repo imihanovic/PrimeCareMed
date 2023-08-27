@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using PrimeCareMed.Core.Entities.Identity;
-using PrimeCareMed.Core.Entities;
+﻿using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 using PrimeCareMed.Core.Enums;
@@ -10,11 +8,9 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
     public class AppointmentRepository : IAppointmentRepository
     {
         private readonly DatabaseContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public AppointmentRepository(DatabaseContext context, UserManager<ApplicationUser> userManager)
+        public AppointmentRepository(DatabaseContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _userManager = userManager;
         }
         public Task<IEnumerable<Appointment>> GetAllAppointmentsForOfficeAsync(string Id)
         {

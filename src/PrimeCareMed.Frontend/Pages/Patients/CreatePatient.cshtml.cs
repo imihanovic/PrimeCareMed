@@ -15,22 +15,11 @@ namespace PrimeCareMed.Frontend.Pages.Patients
     {
         
         private readonly IPatientService _patientService;
-        private readonly IUserRepository _userRepository;
-        private readonly IUserService _userService;
-        private readonly IMapper _mapper;
-        private readonly IMedicineService _medicineService;
         
         public CreatePatientModel(
-            IMapper mapper,
-            IUserService userService,
-            IUserRepository userRepository,
             IPatientService patientService)
         {
-            _mapper = mapper;
-            _userService = userService;
-            _userRepository = userRepository;
             _patientService = patientService;
-
         }
         [BindProperty]
         public PatientModelForCreate NewPatient { get; set; }

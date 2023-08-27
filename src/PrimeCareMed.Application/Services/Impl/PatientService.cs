@@ -9,18 +9,15 @@ namespace PrimeCareMed.Application.Services.Impl
     {
         private readonly IMapper _mapper;
         private readonly IPatientRepository _patientRepository;
-        private readonly IUserRepository _userRepository;
         private readonly IAppointmentService _appointmentService;
 
         public PatientService(IMapper mapper,
             IPatientRepository patientRepository,
-            IUserRepository userRepository,
             IAppointmentService appointmentService
             )
         {
             _mapper = mapper;
             _patientRepository = patientRepository;
-            _userRepository = userRepository;
             _appointmentService = appointmentService;
         }
 
@@ -58,13 +55,11 @@ namespace PrimeCareMed.Application.Services.Impl
                 patientDto.Mbo = patient.Mbo;
                 patientDto.Gender = patient.Gender;
                 patients.Add(patientDto);
-
             }
             return patients.AsEnumerable();
         }
         public IEnumerable<PatientModel> GetAllAvailablePatients(string shiftId)
         {
-            Console.WriteLine($"POSTOJI shiftID u patientService {shiftId}");
             var allPatients = GetAllPatients();
             return _appointmentService.GetAllPatientsNotInWaitingRoom(allPatients, shiftId);
         }

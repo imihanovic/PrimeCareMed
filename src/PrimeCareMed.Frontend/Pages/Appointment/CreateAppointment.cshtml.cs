@@ -4,17 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Appointment;
-using PrimeCareMed.Application.Models.GeneralMedicineOffice;
-using PrimeCareMed.Application.Models.Medicine;
 using PrimeCareMed.Application.Models.Patient;
 using PrimeCareMed.Application.Models.Shift;
-using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
-using PrimeCareMed.DataAccess.Repositories.Impl;
 using System.Data;
-using System.Security.Cryptography.X509Certificates;
 
 namespace PrimeCareMed.Frontend.Pages.Appointment
 {

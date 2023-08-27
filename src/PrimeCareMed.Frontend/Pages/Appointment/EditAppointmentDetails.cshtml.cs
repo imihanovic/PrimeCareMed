@@ -8,6 +8,7 @@ using PrimeCareMed.Application.Models.Appointment;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.Application.Services.Impl;
 using PrimeCareMed.Core.Entities.Identity;
+using PrimeCareMed.Core.Enums;
 using PrimeCareMed.DataAccess.Repositories;
 using PrimeCareMed.DataAccess.Repositories.Impl;
 using System.Data;
@@ -74,6 +75,7 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         {
             EditAppointment.Id = Id.ToString();
             EditAppointment.MedicalReport = medicalReport;
+            EditAppointment.Status = AppointmentStatus.Pending.ToString();
             try
             {
                 _appointmentService.EditAppointmentAsync(EditAppointment);

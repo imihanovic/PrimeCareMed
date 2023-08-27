@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.GeneralMedicineOffice;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.DataAccess.Repositories;
-using System.Data;
 
 namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
 {

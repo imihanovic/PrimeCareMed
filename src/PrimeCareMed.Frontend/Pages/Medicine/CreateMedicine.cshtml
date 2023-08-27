@@ -17,12 +17,13 @@
                     <label asp-for="NewMedicine.Name"></label>
                     <span asp-validation-for="NewMedicine.Name" class="text-danger"></span>
                 </div>
-                <div class="form-floating">
-                    <input asp-for="NewMedicine.Description" class="form-control" aria-required="true" />
-                    <label asp-for="NewMedicine.Description"></label>
-                    <span asp-validation-for="NewMedicine.Description" class="text-danger"></span>
+                <div class="form-floating mt-3">
+                    <b style="color: #002133">
+                        Description <br />
+                    </b>
+                    <textarea rows="8" cols="45" id="cause" name="description"></textarea>
                 </div>
-                <button id="createMedicineSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Add medicine</button>
+                <button id="createMedicineSubmit" type="submit" class="w-100 btn btn-lg text-white" style="background-color: #006622">Confirm</button>
             </form>
             @if (ViewData["Message"] != null)
             {

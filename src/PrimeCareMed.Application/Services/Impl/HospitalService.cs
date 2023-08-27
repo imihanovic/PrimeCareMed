@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using PrimeCareMed.Application.Models.Checkup;
-using PrimeCareMed.Application.Models.GeneralMedicineOffice;
 using PrimeCareMed.Application.Models.Hospital;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
-using PrimeCareMed.DataAccess.Repositories.Impl;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -12,18 +9,15 @@ namespace PrimeCareMed.Application.Services.Impl
     {
         private readonly IMapper _mapper;
         private readonly IHospitalRepository _hospitalRepository;
-        private readonly IUserRepository _userRepository;
         private readonly ICheckupRepository _checkupRepository;
 
         public HospitalService(IMapper mapper,
             IHospitalRepository hospitalRepository,
-            IUserRepository userRepository,
             ICheckupRepository checkupRepository
             )
         {
             _mapper = mapper;
             _hospitalRepository = hospitalRepository;
-            _userRepository = userRepository;
             _checkupRepository = checkupRepository;
         }
 
@@ -56,7 +50,6 @@ namespace PrimeCareMed.Application.Services.Impl
                 hospitalDto.Address = hospital.Address;
                 hospitalDto.City = hospital.City;
                 hospitals.Add(hospitalDto);
-
             }
             return hospitals.AsEnumerable();
         }

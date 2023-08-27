@@ -12,7 +12,6 @@ namespace PrimeCareMed.Application.Services
 {
     public interface ICheckupAppointmentService
     {
-        Task<CheckupAppointmentModel> AddAsync(CheckupAppointmentModelForCreate createCheckupAppointmentModel);
         Task<CheckupAppointment> AddCheckupAppointment(CheckupAppointmentModelForCreate createCheckupAppointmentModel);
         List<string> GetCheckupAppointmentModelFields();
         IEnumerable<CheckupAppointmentModel> GetAllCheckupAppointments(Guid HospitalId, Guid CheckupId);

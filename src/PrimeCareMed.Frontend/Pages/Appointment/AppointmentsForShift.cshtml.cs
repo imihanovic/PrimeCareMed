@@ -21,10 +21,7 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         public readonly IShiftRepository _shiftRepository;
         public readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
-#nullable enable
-        //public PaginatedList<TableModel> Tables { get; set; }
 
-#nullable disable
         public List<string> AppointmentModelProperties => _appointmentService.GetAppointmentModelFields();
 
         [FromRoute]

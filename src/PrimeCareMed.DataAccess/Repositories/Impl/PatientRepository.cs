@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using PrimeCareMed.Core.Entities.Identity;
-using PrimeCareMed.Core.Entities;
+﻿using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,11 +7,9 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
     public class PatientRepository : IPatientRepository
     {
         private readonly DatabaseContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public PatientRepository(DatabaseContext context, UserManager<ApplicationUser> userManager)
+        public PatientRepository(DatabaseContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _userManager = userManager;
         }
         public async Task<IEnumerable<Patient>> GetAllPatientsAsync()
         {

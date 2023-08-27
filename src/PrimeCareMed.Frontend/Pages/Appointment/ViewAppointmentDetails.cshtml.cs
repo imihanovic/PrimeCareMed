@@ -83,8 +83,8 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             try
             {
                 var appointmentDB = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
+                appointmentDB.Status = Core.Enums.AppointmentStatus.Done;
                 _appointmentRepository.FinishAppointmentAsync(appointmentDB);
-
                 return RedirectToPage("/Appointment/WaitingRoom");
             }
             catch (Exception ex)

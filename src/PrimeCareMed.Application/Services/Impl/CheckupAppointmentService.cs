@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using PrimeCareMed.Application.Models.Checkup;
 using PrimeCareMed.Application.Models.CheckupAppointment;
-using PrimeCareMed.Application.Models.CheckupAppointment;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
-using System;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -12,37 +10,19 @@ namespace PrimeCareMed.Application.Services.Impl
     {
         private readonly IMapper _mapper;
         private readonly ICheckupAppointmentRepository _checkupAppointmentRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IHospitalRepository _hospitalRepository;
         private readonly ICheckupRepository _checkupRepository;
         private readonly IAppointmentRepository _appointmentRepository;
 
         public CheckupAppointmentService(IMapper mapper,
             ICheckupAppointmentRepository checkupAppointmentRepository,
-            IUserRepository userRepository,
-            IHospitalRepository hospitalRepository,
             ICheckupRepository checkupRepository,
             IAppointmentRepository appointmentRepository
             )
         {
             _mapper = mapper;
             _checkupAppointmentRepository = checkupAppointmentRepository;
-            _userRepository = userRepository;
-            _hospitalRepository = hospitalRepository;
             _checkupRepository = checkupRepository;
             _appointmentRepository = appointmentRepository;
-        }
-
-        public async Task<CheckupAppointmentModel> AddAsync(CheckupAppointmentModelForCreate createCheckupAppointmentModel)
-        {
-            var config = new MapperConfiguration(cfg => {
-
-                cfg.CreateMap<CheckupAppointmentModelForCreate, CheckupAppointment>();
-
-            });
-            var checkupAppointment = config.CreateMapper().Map<CheckupAppointment>(createCheckupAppointmentModel);
-            await _checkupAppointmentRepository.AddAsync(checkupAppointment);
-            return _mapper.Map<CheckupAppointmentModel>(checkupAppointment);
         }
 
         public async Task<CheckupAppointment> AddCheckupAppointment(CheckupAppointmentModelForCreate createCheckupAppointmentModel)
@@ -93,7 +73,6 @@ namespace PrimeCareMed.Application.Services.Impl
                 if (!patientCheckupAppointmentsFromDB.Contains(checkup.Id))
                 {
                     var checkupAppointmentDto = _mapper.Map<CheckupModel>(checkup);
-                    Console.WriteLine($"CheckUPPPP {checkupAppointmentDto.Name}");
                     checkupAppointmentsNotActive.Add(checkupAppointmentDto);
                 }
             }
