@@ -41,7 +41,7 @@ namespace PrimeCareMed.Application.Models.Patient
 #nullable enable
         [DataType(DataType.Text)]
         [Display(Name = "Doctor")]
-        public Guid DoctorId { get; set; }
+        public Guid? DoctorId { get; set; }
 #nullable disable
     }
 }

@@ -115,7 +115,7 @@
 <div>
     <ul class="pagination">
         <li class="page-item">
-            <a asp-page="./ViewAllUsers"
+            <a asp-page="./ViewAllPatients"
                asp-route-sort="@ViewData["CurrentSort"]"
                asp-route-pageIndex="@(Model.Patients.PageIndex - 1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
@@ -127,7 +127,7 @@
         @for (var i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(i == Model.Patients.PageIndex ? "active" : "")">
-                <a asp-page="./ViewAllUsers"
+                <a asp-page="./ViewAllPatients"
                asp-route-sort="@ViewData["CurrentSort"]"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                asp-route-genderFilter="@ViewData["GenderFilter"]"
@@ -137,7 +137,7 @@
             </li>
         }
         <li class="page-item">
-            <a asp-page="./ViewAllUsers"
+            <a asp-page="./ViewAllPatients"
                asp-route-sort="@ViewData["CurrentSort"]"
                asp-route-pageIndex="@(Model.Patients.PageIndex +1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
