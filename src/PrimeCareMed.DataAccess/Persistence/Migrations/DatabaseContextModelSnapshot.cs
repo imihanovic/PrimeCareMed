@@ -421,6 +421,9 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("DoctorId")
+                        .HasColumnType("text");
+
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
@@ -443,6 +446,8 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
 
                     b.HasIndex("Mbo")
                         .IsUnique();
@@ -648,6 +653,15 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Navigation("Medicine");
                 });
 
+            modelBuilder.Entity("PrimeCareMed.Core.Entities.Patient", b =>
+                {
+                    b.HasOne("PrimeCareMed.Core.Entities.Identity.ApplicationUser", "Doctor")
+                        .WithMany("Patients")
+                        .HasForeignKey("DoctorId");
+
+                    b.Navigation("Doctor");
+                });
+
             modelBuilder.Entity("PrimeCareMed.Core.Entities.PatientsVaccine", b =>
                 {
                     b.HasOne("PrimeCareMed.Core.Entities.Appointment", "Appointment")
@@ -724,6 +738,8 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                     b.Navigation("DoctorsShifts");
 
                     b.Navigation("NursesShifts");
+
+                    b.Navigation("Patients");
                 });
 
             modelBuilder.Entity("PrimeCareMed.Core.Entities.Medicine", b =>

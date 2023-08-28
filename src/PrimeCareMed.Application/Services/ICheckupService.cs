@@ -25,5 +25,6 @@ namespace PrimeCareMed.Application.Services
         IEnumerable<HospitalCheckupModel> GetAvailableHospitalCheckupModelsForPatient(Guid PatientId);
         List<DateTime> GetTimeslotsForCheckup(string checkupId);
         List<DateTime> GetAvailableTimeslotsForCheckup(string date, string checkupId, string hospitalId);
+        HospitalCheckupModel GetHospitalCheckupById(string hospitalId, string checkupId);
     }
 }

@@ -16,6 +16,7 @@ namespace PrimeCareMed.Core.Entities
         public Gender Gender { get; set; }
 #nullable enable
         public ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
+        public ApplicationUser? Doctor { get; set; }
 #nullable disable
     }
 }

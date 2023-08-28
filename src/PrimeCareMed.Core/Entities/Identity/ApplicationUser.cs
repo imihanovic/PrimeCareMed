@@ -10,6 +10,7 @@ namespace PrimeCareMed.Core.Entities.Identity
 #nullable enable
             public ICollection<Shift>? DoctorsShifts { get; set; } = new List<Shift>();
             public ICollection<Shift>? NursesShifts { get; set; } = new List<Shift>();
+            public ICollection<Patient>? Patients { get; set; } = new List<Patient>();
 #nullable disable
     }
 }

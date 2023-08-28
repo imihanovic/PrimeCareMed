@@ -8,7 +8,6 @@ using PrimeCareMed.Application.Services;
 using PrimeCareMed.Application.Services.Impl;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using PrimeCareMed.DataAccess.Repositories;
-using PrimeCareMed.Frontend.Policies;
 using PrimeCareMed.DataAccess.Repositories.Impl;
 using PrimeCareMed.Application.Common.Email;
 
@@ -31,9 +30,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdministratorRole",
-         policy => policy.RequireRole("Administrator"));
-    options.AddPolicy("RequireShiftOrAdminRole",
-         policy => policy.AddRequirements(new AllowShiftAuthorizationRequirement()));
+         policy => policy.RequireRole("SysAdministrator"));
 });
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

@@ -58,6 +58,15 @@
                     </select>
                     <label asp-for="NewPatient.Gender"></label>
                 </div>
+                <div class="form-floating mb-4">
+                    <select asp-for="NewPatient.DoctorId" class="form-select" id="select-doctor" data-placeholder="Choose doctor">
+                        <option></option>
+                        @foreach (var doctor in Model.Doctors)
+                        {
+                            <option value="@doctor.Id">@doctor.FirstName @doctor.LastName</option>
+                        }
+                    </select>
+                </div>
                 <button id="createPatientSubmit" type="submit" class="w-100 btn btn-lg text-white" style="background-color: #006622">Confirm</button>
             </form>
             @if (ViewData["Message"] != null)
@@ -71,6 +80,14 @@
         </div>
     </div>
 </div>
+<script>
+    $('#select-doctor').select2({
+        theme: "bootstrap-5",
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+    });
+    $('#select-doctor').removeAttr('required');
+</script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

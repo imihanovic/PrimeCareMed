@@ -13,11 +13,10 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         }
         public async Task<IEnumerable<Patient>> GetAllPatientsAsync()
         {
-            return await _context.Patients.OrderBy(r => r.LastName).ToListAsync();
+            return await _context.Patients.Include(r=>r.Doctor).OrderBy(r => r.LastName).ToListAsync();
         }
         public async Task<Patient> AddAsync(Patient patient)
         {
-            Console.WriteLine($"DATUM REPO {patient.DateOfBirth}");
             await _context.Patients.AddAsync(patient);
             await _context.SaveChangesAsync();
             return patient;

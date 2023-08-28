@@ -6,10 +6,12 @@ using PrimeCareMed.Application.Common.Email;
 using PrimeCareMed.Application.Exceptions;
 using PrimeCareMed.Application.Helpers;
 using PrimeCareMed.Application.Models;
+using PrimeCareMed.Application.Models.GeneralMedicineOffice;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Templates;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
+using PrimeCareMed.DataAccess.Repositories.Impl;
 using System.Data;
 
 namespace PrimeCareMed.Application.Services.Impl;
@@ -215,5 +217,4 @@ public class UserService : IUserService
         var user = _mapper.Map<ApplicationUser>(userModel);
         return  _userRepository.UpdateAsync(user).Result;
     }
-
 }

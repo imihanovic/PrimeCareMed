@@ -43,6 +43,11 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
        .HasIndex(u => u.Mbo)
        .IsUnique();
 
+        builder.Entity<ApplicationUser>()
+        .HasMany(r=>r.Patients)
+        .WithOne(r=>r.Doctor)
+        .IsRequired(false);
+
         builder.Entity<Shift>()
         .HasOne(e => e.Nurse)
         .WithMany(e => e.NursesShifts)

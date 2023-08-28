@@ -1,12 +1,15 @@
 ﻿@page "/appointment/details/checkup/add/{id:Guid}"
 @model PrimeCareMed.Frontend.Pages.CheckupAppointment.CreateCheckupAppointmentModel
 @{
-    ViewData["Title"] = "New checkup appointment";
+    ViewData["Title"] = "New checkup";
 }
 <div class="container text-center d-flex align-items-center justify-content-center">
     <div>
-        <div>
-            <h1>@ViewData["Title"]</h1>
+        <div> <br />
+            <h1 style="color:#002133">@ViewData["Title"]</h1>
+            <br />
+            <h3 style="color:#002133">@Model.Appointment.PatientMbo</h3>
+            <h3 style="color:#002133">@Model.Appointment.PatientFirstName @Model.Appointment.PatientLastName (@Model.Appointment.PatientDateOfBirth.ToString("dd.MM.yyyy"))</h3>
         </div>
         <div>
             <form id="createMedicinePrescriptionForm" asp-page="PickCheckupAppointmentDate" method="post">
@@ -17,7 +20,7 @@
                         <option></option>
                         @foreach (var checkup in Model.Checkups)
                         {
-                                    <option value="@checkup.HospitalId,@checkup.CheckupId">@checkup.CheckupName, @checkup.HospitalName @checkup.HospitalAddressCity</option>
+                            <option value="@checkup.HospitalId,@checkup.CheckupId">@checkup.CheckupName, @checkup.HospitalName @checkup.HospitalAddressCity</option>
                         }
                     </select>
                 </div>

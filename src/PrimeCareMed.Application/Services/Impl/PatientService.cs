@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using PrimeCareMed.Application.Models.Patient;
+using PrimeCareMed.Application.Models.Shift;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
+using PrimeCareMed.DataAccess.Repositories.Impl;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -10,15 +12,18 @@ namespace PrimeCareMed.Application.Services.Impl
         private readonly IMapper _mapper;
         private readonly IPatientRepository _patientRepository;
         private readonly IAppointmentService _appointmentService;
+        private readonly IUserRepository _userRepository;
 
         public PatientService(IMapper mapper,
             IPatientRepository patientRepository,
-            IAppointmentService appointmentService
+            IAppointmentService appointmentService,
+            IUserRepository userRepository
             )
         {
             _mapper = mapper;
             _patientRepository = patientRepository;
             _appointmentService = appointmentService;
+            _userRepository = userRepository;
         }
 
         public async Task<PatientModel> AddAsync(PatientModelForCreate createPatientModel)
@@ -29,6 +34,10 @@ namespace PrimeCareMed.Application.Services.Impl
 
             });
             var patient = config.CreateMapper().Map<Patient>(createPatientModel);
+            if(createPatientModel.DoctorId.ToString() != "")
+            {
+                patient.Doctor = _userRepository.GetUserByIdAsync(createPatientModel.DoctorId.ToString()).Result;
+            }
             await _patientRepository.AddAsync(patient);
             return _mapper.Map<PatientModel>(patient);
         }
@@ -54,6 +63,10 @@ namespace PrimeCareMed.Application.Services.Impl
                 patientDto.Oib = patient.Oib;
                 patientDto.Mbo = patient.Mbo;
                 patientDto.Gender = patient.Gender;
+                if(patient.Doctor is not null)
+                {
+                    patientDto.Doctor = patient.Doctor.FirstName + " " + patient.Doctor.LastName;
+                }
                 patients.Add(patientDto);
             }
             return patients.AsEnumerable();
@@ -115,6 +128,7 @@ namespace PrimeCareMed.Application.Services.Impl
                                             || s.Email.ToLower().Contains(searchStrTrim)
                                             || s.Mbo.ToLower().Contains(searchStrTrim)
                                             || s.PhoneNumber.ToLower().Contains(searchStrTrim)
+                                            || s.Doctor.ToLower().Contains(searchStrTrim)
                                             );
             }
             return searchedPatients;

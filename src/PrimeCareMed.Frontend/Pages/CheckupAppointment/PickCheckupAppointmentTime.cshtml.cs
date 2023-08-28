@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PrimeCareMed.Application.Models.Appointment;
 using PrimeCareMed.Application.Models.CheckupAppointment;
 using PrimeCareMed.Application.Models.HospitalCheckup;
 using PrimeCareMed.Application.Services;
+using PrimeCareMed.Application.Services.Impl;
 using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
@@ -19,6 +21,7 @@ namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
         private readonly ICheckupAppointmentService _checkupAppointmentService;
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IHospitalService _hospitalService;
+        private readonly IAppointmentService _appointmentService;
         public PickCheckupAppointmentTimeModel(IOfficeRepository officeRepository,
             IMapper mapper,
             IUserService userService,
@@ -26,7 +29,8 @@ namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
             ICheckupService checkupService,
             ICheckupAppointmentService checkupAppointmentService,
             IAppointmentRepository appointmentRepository,
-            IHospitalService hospitalService)
+            IHospitalService hospitalService,
+            IAppointmentService appointmentService)
         {
             _officeRepository = officeRepository;
             _mapper = mapper;
@@ -36,6 +40,7 @@ namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
             _checkupAppointmentService = checkupAppointmentService;
             _appointmentRepository = appointmentRepository;
             _hospitalService = hospitalService;
+            _appointmentService = appointmentService;
         }
         [BindProperty]
         public CheckupAppointmentModelForCreate NewCheckupAppointment { get; set; }
@@ -43,12 +48,13 @@ namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
 #nullable enable
         public List<DateTime>? AvailableSlots { get; set; }
         public string? time { get; set; }
+        public HospitalCheckupModel Checkup { get; set; }
+        public AppointmentDetailsModel Appointment { get; set; }
 #nullable disable
         public async Task<IActionResult> OnPostAsync(string hospitalId, string checkupId, string checkupDate, string appointmentId)
         {
             var appointment = _appointmentRepository.GetAppointmentByIdAsync(Guid.Parse(appointmentId)).Result;
             var availableSlots = _checkupService.GetAvailableTimeslotsForCheckup(checkupDate, checkupId, hospitalId);
-            // VAR GET TIMESLOTS FOR CHECKUP!!!!
             AvailableSlots = availableSlots;
             ViewData["HospitalId"] = hospitalId;
             ViewData["CheckupId"] = checkupId;
@@ -56,6 +62,8 @@ namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
             ViewData["AppointmentId"] = appointmentId;
             var currentdate = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd");
             var currentHour = int.Parse(DateTime.Now.ToLocalTime().ToString("HH")) + 2;
+            Appointment = _appointmentService.GetAppointmentDetailsById(Guid.Parse(appointmentId));
+            Checkup = _checkupService.GetHospitalCheckupById(hospitalId, checkupId);
 
             Console.WriteLine($"VRIME {NewCheckupAppointment.Time}");
             Console.WriteLine($"VRIME {time}");

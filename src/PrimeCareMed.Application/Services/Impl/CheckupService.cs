@@ -210,6 +210,17 @@ namespace PrimeCareMed.Application.Services.Impl
             var checkupFromDB = _checkupRepository.GetCheckupByIdAsync(Id).Result;
             return _mapper.Map<CheckupModelForCreate>(checkupFromDB);
         }
+        public HospitalCheckupModel GetHospitalCheckupById(string hospitalId, string checkupId)
+        {
+            var checkupFromDB = _checkupRepository.GetHospitalCheckupByIdsAsync(Guid.Parse(hospitalId), Guid.Parse(checkupId)).Result;
+            var hospitalCheckupModel = new HospitalCheckupModel();
+            hospitalCheckupModel.CheckupId = Guid.Parse(checkupId);
+            hospitalCheckupModel.CheckupName = checkupFromDB.Checkup.Name;
+            hospitalCheckupModel.HospitalId = Guid.Parse(hospitalId);
+            hospitalCheckupModel.HospitalName = checkupFromDB.Hospital.Name;
+            hospitalCheckupModel.HospitalAddressCity = checkupFromDB.Hospital.Address + ", " + checkupFromDB.Hospital.City;
+            return hospitalCheckupModel;
+        }
 
         public async Task DeleteCheckupAsync(Guid Id)
         {

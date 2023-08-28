@@ -65,7 +65,7 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         }
         public async Task<HospitalCheckup> GetHospitalCheckupByIdsAsync(Guid HospitalId, Guid CheckupId)
         {
-            return await _context.HospitalCheckup.FirstOrDefaultAsync(t => t.HospitalId==HospitalId && t.CheckupId==CheckupId);
+            return await _context.HospitalCheckup.Include(r=>r.Hospital).Include(r=>r.Checkup).FirstOrDefaultAsync(t => t.HospitalId==HospitalId && t.CheckupId==CheckupId);
         }
     }
 }

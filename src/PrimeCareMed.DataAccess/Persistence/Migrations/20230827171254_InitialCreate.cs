@@ -108,25 +108,6 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Patients",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: true),
-                    LastName = table.Column<string>(type: "text", nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    Oib = table.Column<string>(type: "text", nullable: true),
-                    Mbo = table.Column<string>(type: "text", nullable: true),
-                    Gender = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Patients", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Vaccines",
                 columns: table => new
                 {
@@ -243,6 +224,31 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Patients",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Oib = table.Column<string>(type: "text", nullable: true),
+                    Mbo = table.Column<string>(type: "text", nullable: true),
+                    Gender = table.Column<int>(type: "integer", nullable: false),
+                    DoctorId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patients", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Patients_AspNetUsers_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -479,6 +485,11 @@ namespace PrimeCareMed.DataAccess.Persistence.Migrations
                 name: "IX_MedicinePrescription_MedicineId",
                 table: "MedicinePrescription",
                 column: "MedicineId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_DoctorId",
+                table: "Patients",
+                column: "DoctorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patients_Mbo",

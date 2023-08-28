@@ -6,7 +6,13 @@
 <div class="container text-center d-flex align-items-center justify-content-center">
     <div>
         <div>
-            <h1>@ViewData["Title"]</h1>
+            <h1 style="color:#002133">@ViewData["Title"]</h1>
+            <br />
+            <h3 style="color:#002133">@Model.Appointment.PatientMbo</h3>
+            <h3 style="color:#002133">@Model.Appointment.PatientFirstName @Model.Appointment.PatientLastName (@Model.Appointment.PatientDateOfBirth.ToString("dd.MM.yyyy"))</h3>
+            <br />
+            <h3 style="color:#002133">@Model.Checkup.CheckupName</h3>
+            <h3 style="color:#002133">@Model.Checkup.HospitalName, @Model.Checkup.HospitalAddressCity</h3>
         </div>
         <div>
             <form id="pickCheckupDateForm" asp-page="PickCheckupAppointmentTime" method="post">
@@ -15,10 +21,6 @@
                 <div class="form-floating">
                     <input id="checkupDate" type="date" name="checkupDate" class="form-control" required min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddDays(1460).ToString("yyyy-MM-dd")" />
                     <label for="checkupDate">Date of appointment</label>
-                </div>
-                <div class="form-floating">
-                    Date2 (no weekends):
-                <input class="form-control" type="date" id="datepicker" name="datepicker" data-weekends="false">
                 </div>
                 <input type="hidden" name="hospitalId" value="@ViewData["HospitalId"]"/>
                 <input type="hidden" name="checkupId" value="@ViewData["CheckupId"]"/>
@@ -44,13 +46,7 @@
         width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
         placeholder: $(this).data('placeholder'),
     });
-    $("#datepicker").datepicker({
-        beforeShowDay: function (date) {
-            var day = date.getDay();
-            return [(day != 0), ''];
-        }
-    });
 </script>
 @section Scripts {
-                <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

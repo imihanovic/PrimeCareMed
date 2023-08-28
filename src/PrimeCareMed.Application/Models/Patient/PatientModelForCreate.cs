@@ -38,5 +38,10 @@ namespace PrimeCareMed.Application.Models.Patient
         [DataType(DataType.Text)]
         [Display(Name = "Gender")]
         public Gender Gender { get; set; }
+#nullable enable
+        [DataType(DataType.Text)]
+        [Display(Name = "Doctor")]
+        public Guid DoctorId { get; set; }
+#nullable disable
     }
 }
