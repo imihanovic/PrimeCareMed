@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.GeneralMedicineOffice;
 using PrimeCareMed.Application.Models.User;
@@ -8,6 +9,7 @@ using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
 {
+    [Authorize(Roles = "Administrator, SysAdministrator")]
     public class ViewAllOfficesModel : PageModel
     {
         public readonly IOfficeService _officeService;

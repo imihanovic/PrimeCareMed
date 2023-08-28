@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Appointment;
-using PrimeCareMed.Application.Models.Checkup;
-using PrimeCareMed.Application.Models.CheckupAppointment;
 using PrimeCareMed.Application.Models.HospitalCheckup;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
 {
+    [Authorize(Roles = "Doctor, SysAdministrator")]
     public class PickCheckupAppointmentDateModel : PageModel
     {
         private readonly ICheckupService _checkupService;

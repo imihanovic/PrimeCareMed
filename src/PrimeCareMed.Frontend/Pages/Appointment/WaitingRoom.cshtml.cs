@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Appointment;
@@ -9,6 +10,7 @@ using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.Appointment
 {
+    [Authorize(Roles = "Doctor, Nurse")]
     public class WaitingRoomModel : PageModel
     {
         public readonly IAppointmentService _appointmentService;
@@ -64,7 +66,10 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             int pageSize = 7;
 
             ViewData["CurrentSort"] = sort;
-            appointments = _appointmentService.AppointmentSorting(appointments, sort).ToList();
+            if(sort != "")
+            {
+                appointments = _appointmentService.AppointmentSorting(appointments, sort).ToList();
+            }
 
             ViewData["Keyword"] = keyword;
             appointments = _appointmentService.AppointmentSearch(appointments, keyword).ToList();

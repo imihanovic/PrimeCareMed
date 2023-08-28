@@ -122,7 +122,7 @@ namespace PrimeCareMed.Application.Services.Impl
 
         public IEnumerable<AppointmentModel> GetAllAppointmentsInWaitingRoom(string cookie)
         {
-            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r => r.Shift.Id.ToString() == cookie).OrderBy(x => (int)x.Status).ToList();
+            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r => r.Shift.Id.ToString() == cookie).OrderBy(x => x.Status).ToList();
             var appointments = new List<AppointmentModel>();
             foreach (var appointment in appointmentsFromDB)
             {
@@ -135,7 +135,7 @@ namespace PrimeCareMed.Application.Services.Impl
                 appointments.Add(appointmentDto);
 
             }
-            return appointments.AsEnumerable();
+            return appointments.AsEnumerable().OrderBy(x => x.Status);
         }
         public IEnumerable<AppointmentModel> GetAllAppointmentsForShift(Guid Id)
         {

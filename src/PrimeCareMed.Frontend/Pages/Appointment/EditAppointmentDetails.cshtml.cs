@@ -4,14 +4,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Appointment;
-using PrimeCareMed.Application.Models.Appointment;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.Application.Services.Impl;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.Core.Enums;
 using PrimeCareMed.DataAccess.Repositories;
-using PrimeCareMed.DataAccess.Repositories.Impl;
-using System.Data;
 
 namespace PrimeCareMed.Frontend.Pages.Appointment
 {
@@ -20,24 +16,18 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
     {
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IAppointmentService _appointmentService;
-        private readonly IUserRepository _userRepository;
-        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IShiftRepository _shiftRepository;
 
         public EditAppointmentDetailsModel(IAppointmentRepository appointmentRepository,
             IAppointmentService appointmentService,
-            IUserRepository userRepository,
-            IUserService userService,
             IMapper mapper,
             UserManager<ApplicationUser> userManager,
             IShiftRepository shiftRepository)
         {
             _appointmentRepository = appointmentRepository;
             _appointmentService = appointmentService;
-            _userService = userService;
-            _userRepository = userRepository;
             _mapper = mapper;
             _userManager = userManager;
             _shiftRepository = shiftRepository;

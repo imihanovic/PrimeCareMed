@@ -1,33 +1,19 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.GeneralMedicineOffice;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.GeneralMedicineOffice
 {
     [Authorize(Roles = "Administrator, SysAdministrator")]
     public class CreateOfficeModel : PageModel
     {
-        private readonly IOfficeRepository _officeRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IUserService _userService;
-        private readonly IMapper _mapper;
         private readonly IOfficeService _officeService;
-        public CreateOfficeModel(IOfficeRepository officeRepository,
-            IMapper mapper,
-            IUserService userService,
-            IUserRepository userRepository,
+        public CreateOfficeModel(
             IOfficeService officeService)
         {
-            _officeRepository = officeRepository;
-            _mapper = mapper;
-            _userService = userService;
-            _userRepository = userRepository;
             _officeService = officeService;
-
         }
         [BindProperty]
         public OfficeModelForCreate NewOffice { get; set; }

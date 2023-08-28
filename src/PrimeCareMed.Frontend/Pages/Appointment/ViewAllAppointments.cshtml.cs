@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Appointment;
@@ -6,10 +7,10 @@ using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
-using PrimeCareMed.DataAccess.Repositories.Impl;
 
 namespace PrimeCareMed.Frontend.Pages.Appointment
 {
+    [Authorize(Roles = "Doctor, Nurse, SysAdministrator")]
     public class ViewAllAppointmentsModel : PageModel
     {
         public readonly IAppointmentService _appointmentService;

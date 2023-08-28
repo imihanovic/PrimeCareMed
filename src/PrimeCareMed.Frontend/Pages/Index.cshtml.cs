@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Core.Entities.Identity;
@@ -9,13 +8,11 @@ namespace PrimeCareMed.Frontend.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
         public readonly UserManager<ApplicationUser> _userManager;
         public readonly IShiftRepository _shiftRepository;
 
-        public IndexModel(ILogger<IndexModel> logger, UserManager<ApplicationUser> userManager, IShiftRepository shiftRepository)
+        public IndexModel(UserManager<ApplicationUser> userManager, IShiftRepository shiftRepository)
         {
-            _logger = logger;
             _userManager = userManager;
             _shiftRepository = shiftRepository;
         }

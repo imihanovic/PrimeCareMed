@@ -1,34 +1,25 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using PrimeCareMed.Application.Models.GeneralMedicineOffice;
-using PrimeCareMed.Application.Models.Patient;
 using PrimeCareMed.Application.Models.Shift;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.Application.Services.Impl;
-using PrimeCareMed.Core.Entities;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
 using System.Data;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace PrimeCareMed.Frontend.Pages.Shift
 {
-    [Authorize(Roles = "Administrator,SysAdministrator")]
+    [Authorize(Roles = "Administrator, SysAdministrator")]
     public class ViewAllShiftsForOfficeModel : PageModel
     {
-        
-
         public readonly IShiftService _shiftService;
         public readonly IOfficeService _officeService;
         public readonly IShiftRepository _shiftRepository;
         public readonly IOfficeRepository _officeRepository;
         public readonly UserManager<ApplicationUser> _userManager;
-        private readonly IMapper _mapper;
 #nullable enable
         public PaginatedList<ShiftModel> Shifts;
 #nullable disable
@@ -45,14 +36,12 @@ namespace PrimeCareMed.Frontend.Pages.Shift
         public ViewAllShiftsForOfficeModel(IShiftService shiftService,
             IOfficeService officeService,
             IShiftRepository shiftRepository,
-            IMapper mapper,
             UserManager<ApplicationUser> userManager,
             IOfficeRepository officeRepository)
         {
             _shiftService = shiftService;
             _shiftRepository = shiftRepository;
             _officeService = officeService;
-            _mapper = mapper;
             _userManager = userManager;
             _officeRepository = officeRepository;
         }

@@ -1,16 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PrimeCareMed.Application.Models.Patient;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Models.Vaccine;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.Application.Services.Impl;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.Vaccine
 {
+    [Authorize(Roles = "Administrator, SysAdministrator")]
     public class ViewAllVaccinesModel : PageModel
     {
         public readonly IVaccineService _vaccineService;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Hospital;
 using PrimeCareMed.Application.Models.User;
@@ -8,6 +9,7 @@ using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.Hospital
 {
+    [Authorize(Roles = "Administrator, SysAdministrator")]
     public class ViewAllHospitalsModel : PageModel
     {
         public readonly IHospitalService _hospitalService;
@@ -52,7 +54,7 @@ namespace PrimeCareMed.Frontend.Pages.Hospital
             var hospitals = _hospitalService.GetAllHospitals();
 
             ViewData["CurrentSort"] = sort;
-            // SORTIRANJE PACIJENATA
+
             hospitals = _hospitalService.HospitalSorting(hospitals, sort);
 
             ViewData["Keyword"] = keyword;

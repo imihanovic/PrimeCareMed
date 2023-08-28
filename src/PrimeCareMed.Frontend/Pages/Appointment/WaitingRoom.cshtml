@@ -53,11 +53,11 @@
                         @property
                         @if (sort is null)
                         {
-                            <a asp-page="ViewAllAppointments" asp-route-keyword="@ViewData["Keyword"]"
+                            <a asp-page="WaitingRoom" asp-route-keyword="@ViewData["Keyword"]"
                             asp-route-statusFilter="@ViewData["StatusFilter"]" 
                             asp-route-sort=@($"{@property}") 
                             class="sort-icon"><span class="bi bi-arrow-up"></span></a>
-                            <a asp-page="ViewAllAppointments" 
+                            <a asp-page="WaitingRoom"
                             asp-route-keyword="@ViewData["Keyword"]"
                             asp-route-statusFilter="@ViewData["StatusFilter"]" 
                             asp-route-sort=@($"{@property}Desc") class="sort-icon"><span class="bi bi-arrow-down"></span></a>
@@ -65,7 +65,7 @@
                         }
                         else if (sort.Contains("Desc"))
                         {
-                            <a asp-page="ViewAllAppointments"
+                            <a asp-page="WaitingRoom"
                             asp-route-sort=@($"{@property}")
                             asp-route-keyword="@ViewData["Keyword"]"
                             asp-route-statusFilter="@ViewData["StatusFilter"]"
@@ -73,7 +73,7 @@
                         }
                         else
                         {
-                            <a asp-page="ViewAllAppointments" 
+                            <a asp-page="WaitingRoom"
                             asp-route-keyword="@ViewData["Keyword"]"
                             asp-route-dateFilter="@ViewData["DateFilter"]" 
                             asp-route-sort=@($"{@property}Desc") 
@@ -93,51 +93,101 @@
     </thead>
     <tbody>
         <form method="post">
-        @if (Model.Appointments.Count() > 0)
-        {
-            @foreach (var appointment in Model.Appointments)
+            @if (Model.Appointments.Count() > 0)
             {
-                @if(appointment.Status == "Waiting")
+                @foreach (var appointment in Model.Appointments)
+                {
+
+                    @if (appointment.Status == "Waiting")
+                    {
+                        <tr class="align-middle table-info">
+                            <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
+                            <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
+                            <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                            <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="d-none d-lg-table-cell">@appointment.Cause</td>
+                            <td>
+                                <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+                @foreach (var appointment in Model.Appointments)
+                {
+                    if (appointment.Status == "Pending")
+                    {
+                        <tr class="align-middle table-danger">
+                            <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
+                            <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
+                            <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                            <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="d-none d-lg-table-cell">@appointment.Cause</td>
+                            <td>
+                                <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+                @foreach (var appointment in Model.Appointments)
+                {
+                    @if (appointment.Status == "Done")
+                    {
+                        <tr class="align-middle table-primary">
+                            <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
+                            <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
+                            <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                            <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="d-none d-lg-table-cell">@appointment.Cause</td>
+                            <td>
+                                <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+                @* @foreach (var appointment in Model.Appointments)
+            {
+                @if (appointment.Status == "Waiting")
                 {
                     <tr class="align-middle table-info">
-                        <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
-                        <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
-                        <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
-                        <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
-                        <td class="d-none d-lg-table-cell">@appointment.Cause</td>
-                        <td>
-                            <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
-                        </td>
+                    <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
+                    <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
+                    <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                    <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td class="d-none d-lg-table-cell">@appointment.Cause</td>
+                    <td>
+                    <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                    </td>
                     </tr>
                 }
-                else if(appointment.Status == "Pending")
+                else if (appointment.Status == "Pending")
                 {
                     <tr class="align-middle table-danger">
-                        <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
-                        <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
-                        <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
-                        <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy")</td>
-                        <td class="d-none d-lg-table-cell">@appointment.Cause</td>
-                        <td>
-                            <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
-                        </td>
+                    <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
+                    <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
+                    <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                    <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td class="d-none d-lg-table-cell">@appointment.Cause</td>
+                    <td>
+                    <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                    </td>
                     </tr>
                 }
                 else
                 {
                     <tr class="align-middle table-primary">
-                        <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
-                        <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
-                        <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
-                        <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy")</td>
-                        <td class="d-none d-lg-table-cell">@appointment.Cause</td>
-                        <td>
-                            <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
-                        </td>
+                    <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
+                    <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
+                    <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                    <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td class="d-none d-lg-table-cell">@appointment.Cause</td>
+                    <td>
+                    <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                    </td>
                     </tr>
-                }   
+                }
+                
+                }*@
             }
-        }
         </form>
     </tbody>
 </table>

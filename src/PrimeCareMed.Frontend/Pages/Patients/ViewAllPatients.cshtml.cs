@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using PrimeCareMed.Application.Models.Patient;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
@@ -13,7 +11,6 @@ namespace PrimeCareMed.Frontend.Pages.Patients
     [Authorize(Roles = "Doctor, Nurse, SysAdministrator")]
     public class ViewAllPatientsModel : PageModel
     {
-        private readonly IUserService _userService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPatientService _patientService;
 
@@ -24,9 +21,9 @@ namespace PrimeCareMed.Frontend.Pages.Patients
         public List<string> PatientModelProperties;
 
         public int TotalPages { get; set; }
-        public ViewAllPatientsModel(IUserService userService, UserManager<ApplicationUser> userManager, IPatientService patientService)
+        public ViewAllPatientsModel(UserManager<ApplicationUser> userManager,
+            IPatientService patientService)
         {
-            _userService = userService;
             _userManager = userManager;
             _patientService = patientService;
         }
@@ -64,11 +61,6 @@ namespace PrimeCareMed.Frontend.Pages.Patients
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
 
-        }
-        public IActionResult OnPostDelete(Guid id)
-        {
-            _patientService.DeletePatientAsync(id);
-            return RedirectToPage("ViewAllPatients");
         }
     }
 }

@@ -12,7 +12,6 @@ namespace PrimeCareMed.Frontend.Pages.Users
     {
 
         private readonly IUserService _userService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
 #nullable enable
         public PaginatedList<ListUsersModel> Users { get; set; }
@@ -21,10 +20,9 @@ namespace PrimeCareMed.Frontend.Pages.Users
         public List<string> UserModelProperties;
 
         public int TotalPages { get; set; }
-        public ViewAllUsersModel(IUserService userService, UserManager<ApplicationUser> userManager)
+        public ViewAllUsersModel(IUserService userService)
         {
             _userService = userService;
-            _userManager = userManager;
         }
 
         public void OnGet(string sort, string currentFilter, string keyword, string roleFilter, int? pageIndex)

@@ -1,15 +1,13 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PrimeCareMed.Application.Models.Medicine;
-using PrimeCareMed.Application.Models.MedicinePrescription;
 using PrimeCareMed.Application.Models.PatientVaccine;
 using PrimeCareMed.Application.Models.Vaccine;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.PatientVaccines
 {
+    [Authorize(Roles = "Doctor, Nurse, SysAdministrator")]
     public class CreatePatientVaccineModel : PageModel
     {
         private readonly IVaccineService _vaccineService;

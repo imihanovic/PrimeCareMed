@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Appointment;
@@ -9,6 +10,7 @@ using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
 {
+    [Authorize(Roles = "Doctor, SysAdministrator")]
     public class CreateCheckupAppointmentModel : PageModel
     {
         private readonly ICheckupService _checkupService;

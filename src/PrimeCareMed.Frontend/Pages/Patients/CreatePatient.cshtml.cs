@@ -1,15 +1,9 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PrimeCareMed.Application.Models.Medicine;
 using PrimeCareMed.Application.Models.Patient;
 using PrimeCareMed.Application.Models.User;
-using PrimeCareMed.Application.Models.Vaccine;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.Application.Services.Impl;
-using PrimeCareMed.DataAccess.Repositories;
-using PrimeCareMed.Frontend.Pages.Users;
 using System.Data;
 
 namespace PrimeCareMed.Frontend.Pages.Patients
@@ -35,9 +29,14 @@ namespace PrimeCareMed.Frontend.Pages.Patients
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if(NewPatient.Mbo.Length != 9 || NewPatient.Oib.Length != 11)
+            if(NewPatient.Oib.Length != 11)
             {
-                ViewData["Message"] = string.Format("OIB or MBO is invalid!");
+                ViewData["Message"] = string.Format("OIB is invalid!");
+                return Page();
+            }
+            else if(NewPatient.Mbo.Length != 9)
+            {
+                ViewData["Message"] = string.Format("MBO is invalid!");
                 return Page();
             }
             try

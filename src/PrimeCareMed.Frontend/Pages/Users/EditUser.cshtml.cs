@@ -15,15 +15,11 @@ namespace PrimeCareMed.Frontend.Pages.Users
     {
         private IUserService _userService;
         private IUserRepository _userRepository;
-        private IWebHostEnvironment _webEnv;
         private IMapper _mapper;
         private UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
-        private readonly IUserEmailStore<ApplicationUser> _emailStore;
-
         public EditUserModel(IUserService userService,
             IUserRepository userRepository,
-            IWebHostEnvironment environment,
             IMapper mapper,
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore
@@ -31,11 +27,9 @@ namespace PrimeCareMed.Frontend.Pages.Users
         {
             _userService = userService;
             _userRepository = userRepository;
-            _webEnv = environment;
             _mapper = mapper;
             _userManager = userManager;
             _userStore = userStore;
-            _emailStore = GetEmailStore();
         }
 
         [FromRoute]
@@ -73,16 +67,6 @@ namespace PrimeCareMed.Frontend.Pages.Users
             _userService.DeleteUser(Id);
             
             return RedirectToPage("ViewAllUsers");
-
-        }
-
-        private IUserEmailStore<ApplicationUser> GetEmailStore()
-        {
-            if (!_userManager.SupportsUserEmail)
-            {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
-            }
-            return (IUserEmailStore<ApplicationUser>)_userStore;
         }
     }
 }

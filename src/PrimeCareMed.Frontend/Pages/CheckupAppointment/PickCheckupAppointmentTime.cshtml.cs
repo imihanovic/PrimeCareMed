@@ -1,45 +1,30 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PrimeCareMed.Application.Models.Appointment;
 using PrimeCareMed.Application.Models.CheckupAppointment;
 using PrimeCareMed.Application.Models.HospitalCheckup;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.Application.Services.Impl;
 using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
 {
+    [Authorize(Roles = "Doctor, SysAdministrator")]
     public class PickCheckupAppointmentTimeModel : PageModel
     {
-        private readonly IOfficeRepository _officeRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IUserService _userService;
-        private readonly IMapper _mapper;
         private readonly ICheckupService _checkupService;
         private readonly ICheckupAppointmentService _checkupAppointmentService;
         private readonly IAppointmentRepository _appointmentRepository;
-        private readonly IHospitalService _hospitalService;
         private readonly IAppointmentService _appointmentService;
-        public PickCheckupAppointmentTimeModel(IOfficeRepository officeRepository,
-            IMapper mapper,
-            IUserService userService,
-            IUserRepository userRepository,
+        public PickCheckupAppointmentTimeModel(
             ICheckupService checkupService,
             ICheckupAppointmentService checkupAppointmentService,
             IAppointmentRepository appointmentRepository,
-            IHospitalService hospitalService,
             IAppointmentService appointmentService)
         {
-            _officeRepository = officeRepository;
-            _mapper = mapper;
-            _userService = userService;
-            _userRepository = userRepository;
             _checkupService = checkupService;
             _checkupAppointmentService = checkupAppointmentService;
             _appointmentRepository = appointmentRepository;
-            _hospitalService = hospitalService;
             _appointmentService = appointmentService;
         }
         [BindProperty]
@@ -56,6 +41,7 @@ namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
             var appointment = _appointmentRepository.GetAppointmentByIdAsync(Guid.Parse(appointmentId)).Result;
             var availableSlots = _checkupService.GetAvailableTimeslotsForCheckup(checkupDate, checkupId, hospitalId);
             AvailableSlots = availableSlots;
+            
             ViewData["HospitalId"] = hospitalId;
             ViewData["CheckupId"] = checkupId;
             ViewData["CheckupDate"] = checkupDate;

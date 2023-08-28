@@ -180,7 +180,7 @@ namespace PrimeCareMed.Application.Services.Impl
             {
                 var checkupDateTime = DateTime.Parse(date).AddHours(slot.Hour).AddMinutes(slot.Minute).ToUniversalTime();
                 var chekupsAtDateTime = _checkupAppointmentService.GetAllCheckupAppointments(Guid.Parse(hospitalId), Guid.Parse(checkupId)).Where(r=>r.CheckupDate == checkupDateTime);
-                if (chekupsAtDateTime.Count() < 4)
+                if (chekupsAtDateTime.Count() < 3)
                 {
                     availableSlots.Add(slot);
                 }

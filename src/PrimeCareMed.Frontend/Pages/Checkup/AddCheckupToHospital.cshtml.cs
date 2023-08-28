@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Checkup;
 using PrimeCareMed.Application.Models.Hospital;
 using PrimeCareMed.Application.Models.HospitalCheckup;
-using PrimeCareMed.Application.Models.Medicine;
-using PrimeCareMed.Application.Models.MedicinePrescription;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.Application.Services.Impl;
 using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.Checkup
 {
+    [Authorize(Roles = "Administrator, SysAdministrator")]
     public class AddCheckupToHospitalModel : PageModel
     {
         private readonly IMedicineService _medicineService;
