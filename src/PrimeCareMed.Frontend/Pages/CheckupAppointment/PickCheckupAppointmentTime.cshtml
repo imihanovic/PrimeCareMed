@@ -1,7 +1,7 @@
 ﻿@page
 @model PrimeCareMed.Frontend.Pages.CheckupAppointment.PickCheckupAppointmentTimeModel
 @{
-    ViewData["Title"] = "Choose time";
+    ViewData["Title"] = "Select time";
 }
 <div class="container text-center d-flex align-items-center justify-content-center">
     <div>
@@ -21,7 +21,7 @@
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating mb-4">
-                    <select asp-for="time" class="form-select" id="selectCheckup" name="time" data-placeholder="Choose checkup">
+                    <select asp-for="time" class="form-select" id="selectCheckup" name="time" data-placeholder="Select time">
                         <option></option>
                         @foreach (var slot in Model.AvailableSlots)
                         {

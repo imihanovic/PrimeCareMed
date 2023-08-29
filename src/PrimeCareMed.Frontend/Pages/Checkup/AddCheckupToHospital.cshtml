@@ -14,8 +14,7 @@
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating mb-4">
-                    <select asp-for="NewHospitalCheckup.CheckupId" class="form-select" id="select-medicine" data-placeholder="Choose checkup">
-                        <option></option>
+                    <select class="form-select" id="multiple-select-field" name="checkups" data-placeholder="Select checkups" multiple>
                         @foreach (var checkup in Model.Checkups)
                         {
                                 <option value="@checkup.Id">@checkup.Name</option>
@@ -25,8 +24,6 @@
                 <div class="d-flex justify-content-end ms-5 mt-3">
                     <button id="confirmMedicineSubmit" type="submit" class="btn text-white" style="background-color: #006622">Confirm</button>
                 </div>
-
-
             </form>
             @if (ViewData["Message"] != null)
             {
@@ -45,6 +42,12 @@
         width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
         placeholder: $(this).data('placeholder'),
     });
+    $( '#multiple-select-field' ).select2( {
+    theme: "bootstrap-5",
+    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+    placeholder: $( this ).data( 'placeholder' ),
+    closeOnSelect: false,
+} );
 </script>
 @section Scripts {
         <partial name="_ValidationScriptsPartial" />

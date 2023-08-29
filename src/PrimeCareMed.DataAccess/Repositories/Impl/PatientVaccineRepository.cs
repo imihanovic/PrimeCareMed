@@ -2,11 +2,6 @@
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace PrimeCareMed.DataAccess.Repositories.Impl
@@ -23,6 +18,10 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         public async Task<IEnumerable<PatientsVaccine>> GetAllPatientsVaccinesForAppointmentAsync(Guid id)
         {
             return await _context.PatientsVaccines.OrderByDescending(r => r.VaccineDate).Include(r=>r.Vaccine).Where(r=>r.Appointment.Id==id).ToListAsync();
+        }
+        public async Task<IEnumerable<PatientsVaccine>> GetAllPatientsVaccinesForPatientAsync(Guid id)
+        {
+            return await _context.PatientsVaccines.OrderByDescending(r => r.VaccineDate).Include(r => r.Vaccine).Include(r=>r.Appointment).ThenInclude(r=>r.Patient).Where(r => r.Appointment.Patient.Id == id).ToListAsync();
         }
         public bool CheckPatientsVaccinesForAppointmentAsync(Guid id)
         {

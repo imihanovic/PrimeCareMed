@@ -15,5 +15,6 @@ namespace PrimeCareMed.Application.Services
         PatientsVaccine EditPatientVaccineAsync(PatientVaccineModelForCreate patientVaccineModel);
         Task DeleteMedicineAsync(Guid Id);
         IEnumerable<PatientVaccineModel> GetPatientVaccineForAppointment(Guid id);
+        IEnumerable<PatientVaccineModel> GetPatientVaccineForPatient(Guid id);
     }
 }

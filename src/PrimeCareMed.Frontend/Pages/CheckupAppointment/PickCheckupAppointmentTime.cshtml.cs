@@ -64,7 +64,7 @@ namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
                     NewCheckupAppointment.CheckupStatus = Core.Enums.CheckupStatus.Active;
                     Console.WriteLine($"PROVJERA{NewCheckupAppointment.Time}");
                     await _checkupAppointmentService.AddCheckupAppointment(NewCheckupAppointment);
-                    return RedirectToPage("/Hospital/ViewAllHospitals");
+                    return RedirectToPage("/Appointment/ViewAppointmentDetails", new {Id = Guid.Parse(appointmentId)});
                 }
                 catch (Exception ex)
                 {

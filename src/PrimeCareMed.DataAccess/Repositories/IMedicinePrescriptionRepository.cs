@@ -15,5 +15,6 @@ namespace PrimeCareMed.DataAccess.Repositories
         Task<MedicinePrescription> UpdateAsync(MedicinePrescription prescription);
         Task<MedicinePrescription> GetMedicalReportByIdAsync(Guid id);
         bool CheckMedicinePrescriptionForAppointmentAsync(Guid id);
+        Task<IEnumerable<MedicinePrescription>> GetAllMedicalPrecriptionsForPatientAsync(Guid Id);
     }
 }

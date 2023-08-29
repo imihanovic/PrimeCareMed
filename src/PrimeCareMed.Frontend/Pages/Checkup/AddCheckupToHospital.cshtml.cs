@@ -44,18 +44,23 @@ namespace PrimeCareMed.Frontend.Pages.Checkup
         [BindProperty]
         public IEnumerable<CheckupModel> Checkups => _checkupService.GetAllCheckupsNotInHospital(Id);
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(List<string> checkups)
         {
             NewHospitalCheckup.HospitalId = Id;
-            try
+            foreach(var checkup in checkups)
             {
-                await _checkupService.AddHospitalCheckup(NewHospitalCheckup);
+                NewHospitalCheckup.CheckupId = Guid.Parse(checkup);
+                try
+                {
+                    await _checkupService.AddHospitalCheckup(NewHospitalCheckup);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return Page();
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Page();
-            }
+            
             return RedirectToPage("/Checkup/ViewAllCheckupsForHospital", new { id = Id });
         }
     }

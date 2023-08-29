@@ -144,49 +144,6 @@
                         </tr>
                     }
                 }
-                @* @foreach (var appointment in Model.Appointments)
-            {
-                @if (appointment.Status == "Waiting")
-                {
-                    <tr class="align-middle table-info">
-                    <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
-                    <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
-                    <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
-                    <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td class="d-none d-lg-table-cell">@appointment.Cause</td>
-                    <td>
-                    <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
-                    </td>
-                    </tr>
-                }
-                else if (appointment.Status == "Pending")
-                {
-                    <tr class="align-middle table-danger">
-                    <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
-                    <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
-                    <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
-                    <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td class="d-none d-lg-table-cell">@appointment.Cause</td>
-                    <td>
-                    <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
-                    </td>
-                    </tr>
-                }
-                else
-                {
-                    <tr class="align-middle table-primary">
-                    <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
-                    <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
-                    <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
-                    <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td class="d-none d-lg-table-cell">@appointment.Cause</td>
-                    <td>
-                    <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
-                    </td>
-                    </tr>
-                }
-                
-                }*@
             }
         </form>
     </tbody>

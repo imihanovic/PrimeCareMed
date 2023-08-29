@@ -20,6 +20,10 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         {
             return await _context.MedicinePrescription.OrderByDescending(r=>r.DatePrescribed).Include(r => r.Medicine).Where(r => r.Appointment.Id == Id).ToListAsync();
         }
+        public async Task<IEnumerable<MedicinePrescription>> GetAllMedicalPrecriptionsForPatientAsync(Guid Id)
+        {
+            return await _context.MedicinePrescription.OrderByDescending(r => r.DatePrescribed).Include(r => r.Medicine).Include(r=>r.Appointment).ThenInclude(r=>r.Patient).Where(r => r.Appointment.Patient.Id == Id).ToListAsync();
+        }
         public async Task<MedicinePrescription> AddAsync(MedicinePrescription prescription)
         {
             await _context.MedicinePrescription.AddAsync(prescription);

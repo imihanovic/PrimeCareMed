@@ -77,6 +77,22 @@ namespace PrimeCareMed.Application.Services.Impl
             }
             return patientVaccines.AsEnumerable();
         }
+        public IEnumerable<PatientVaccineModel> GetPatientVaccineForPatient(Guid id)
+        {
+            var patientVaccine = _patientVaccineRepository.GetAllPatientsVaccinesForPatientAsync(id).Result;
+            List<PatientVaccineModel> patientVaccines = new List<PatientVaccineModel>();
+            foreach (var vaccine in patientVaccine)
+            {
+                var vaccineDto = _mapper.Map<PatientVaccineModel>(vaccine);
+                vaccineDto.VaccineName = vaccine.Vaccine.Name;
+                vaccineDto.Dosage = vaccine.Dosage;
+                vaccineDto.VaccineDate = vaccine.VaccineDate;
+
+                patientVaccines.Add(vaccineDto);
+
+            }
+            return patientVaccines.AsEnumerable();
+        }
 
         public async Task DeleteMedicineAsync(Guid Id)
         {

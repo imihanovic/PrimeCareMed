@@ -10,7 +10,6 @@ namespace PrimeCareMed.Core.Enums
     {
         Active = 0,
         Cancelled = 1,
-        NoShow = 2,
-        Done = 3
+        Done = 2
     }
 }

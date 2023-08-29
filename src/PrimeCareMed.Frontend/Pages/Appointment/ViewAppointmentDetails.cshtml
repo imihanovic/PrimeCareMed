@@ -6,12 +6,12 @@
 <div class="container text-center align-items-center justify-content-center w-100">
     <div>
         <div>
-            <h1>@ViewData["Title"]</h1>
+            <h1 style="color:#002133">@ViewData["Title"]</h1>
         </div>
         <div>
             <form id="appointmentDetailsForm" method="post">
                 <hr />
-                <div class="nameSurnameDetails">
+                <div class="nameSurnameDetails" style="color:#002133">
                     <font size="+3">
                     <b>
                         @Model.Appointment.PatientMbo
@@ -21,7 +21,7 @@
                 </div>
                 <div class="nameSurnameDetails">
                     <font size="+1">
-                        <b>
+                        <b style="color:#002133">
                             Cause <br />
                         </b>
                             @Model.Appointment.Cause
@@ -35,7 +35,7 @@
                     </a>
                 </div>
                 <div class="form-floating align-items-center justify-content-center mt-2">
-                    @if (Model.Appointment.MedicalReport is null && (Model.Appointment.Status != "Done" || User.IsInRole("SysAdministrator")))
+                    @if (Model.Appointment.MedicalReport is null && ((Model.Appointment.Status != "Done" && !User.IsInRole("Nurse")) || User.IsInRole("SysAdministrator")))
                     {
                         <a class="btn-blue-custom p-1" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id">
                             <i class="fa-solid fa-file-pen"></i>
@@ -47,7 +47,7 @@
                         <font size="+1">
                             <b style="color: #002133">
                                 Medical report 
-                                @if (Model.Appointment.Status != "Done" || User.IsInRole("SysAdministrator"))
+                                @if ((Model.Appointment.Status != "Done" && !User.IsInRole("Nurse")) || User.IsInRole("SysAdministrator"))
                                 {
                                     <a class="btn-blue-custom p-1" asp-area="" asp-page="/Appointment/EditAppointmentDetails" asp-route-id="@Model.Appointment.Id"><i class="fa-solid fa-file-pen"></i> Edit</a>
                                 }
@@ -60,7 +60,7 @@
                     }<br />
                     <div class="row justify-content-around">
                         <div class="col-6">
-                            @if (Model.Appointment.Status != "Done" && !User.IsInRole("SysAdministrator"))
+                            @if (Model.Appointment.Status != "Done" || User.IsInRole("SysAdministrator"))
                             {
                                 <a class="btn-blue-custom" asp-area="" asp-page="/PatientVaccines/CreatePatientVaccine" asp-route-id="@Model.Appointment.Id">
                                 <i class="fa-solid fa-syringe fa-xs"></i> Vaccine
@@ -88,7 +88,7 @@
                             }
                         </div>
                         <div class="col-6">
-                            @if (Model.Appointment.Status != "Done" && !User.IsInRole("SysAdministrator"))
+                            @if (Model.Appointment.Status != "Done" || User.IsInRole("SysAdministrator"))
                             {
                                 <a class="btn-blue-custom" asp-area="" asp-page="/MedicinePrescription/CreateMedicinePrescription" 
                                 asp-route-id="@Model.Appointment.Id">

@@ -17,6 +17,11 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
             var appointments = GetAllAppointmentsAsync();
             return (Task<IEnumerable<Appointment>>)appointments.Result.Where(r => r.Shift.Office.Id.ToString() == Id);
         }
+        public IEnumerable<Appointment> GetAllAppointmentsForPatientAsync(string Id)
+        {
+            var appointments = GetAllAppointmentsAsync().Result.Where(r => r.Patient.Id == Guid.Parse(Id)).OrderByDescending(r=>r.AppointmentDate);
+            return appointments;
+        }
         public IEnumerable<Appointment> GetAllAppointmentsForDoctorAsync(string Id)
         {
             var appointments = GetAllAppointmentsAsync().Result;
@@ -48,7 +53,7 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         }
         public async Task<Appointment> FinishAppointmentAsync(Appointment appointment)
         {
-            var editItem = await GetAppointmentByIdAsync(appointment.Id);
+            var editItem = GetAppointmentByIdAsync(appointment.Id).Result;
             editItem.Status = AppointmentStatus.Done;
             await _context.SaveChangesAsync();
             return editItem;

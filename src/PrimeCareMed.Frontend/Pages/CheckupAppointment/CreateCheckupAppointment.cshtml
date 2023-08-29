@@ -16,7 +16,7 @@
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating mb-4">
-                    <select asp-for="CheckupId" class="form-select" id="selectCheckup" name="selectCheckup" data-placeholder="Choose checkup">
+                    <select asp-for="CheckupId" class="form-select" id="selectCheckup" name="selectCheckup" data-placeholder="Select checkup">
                         <option></option>
                         @foreach (var checkup in Model.Checkups)
                         {

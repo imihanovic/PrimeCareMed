@@ -26,5 +26,6 @@ namespace PrimeCareMed.Application.Services
         IEnumerable<AppointmentModel> AppointmentFilterStatus(IEnumerable<AppointmentModel> appointments, string status);
         IEnumerable<AppointmentModel> AppointmentSearch(IEnumerable<AppointmentModel> appointments, string searchString);
         IEnumerable<AppointmentModel> AppointmentSorting(IEnumerable<AppointmentModel> appointments, string sortOrder);
+        IEnumerable<AppointmentModel> GetAllAppointmentsForPatient(string Id);
     }
 }

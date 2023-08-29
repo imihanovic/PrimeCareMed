@@ -10,5 +10,6 @@ namespace PrimeCareMed.Application.Services
         IEnumerable<MedicinePrescriptionModel> GetMedicinePrescriptionsForAppointment(Guid id);
         MedicinePrescription EditMedicinePrescriptionAsync(MedicinePrescriptionModelForCreate prescriptionModel);
         Task DeleteMedicineAsync(Guid Id);
+        IEnumerable<MedicinePrescriptionModel> GetMedicinePrescriptionsForPatient(Guid patientId);
     }
 }

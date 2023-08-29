@@ -1,9 +1,4 @@
 ﻿using PrimeCareMed.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PrimeCareMed.DataAccess.Repositories
 {
@@ -15,5 +10,6 @@ namespace PrimeCareMed.DataAccess.Repositories
         Task<PatientsVaccine> UpdateAsync(PatientsVaccine patientsVaccine);
         Task<PatientsVaccine> GetPatientsVaccineByIdAsync(Guid id);
         bool CheckPatientsVaccinesForAppointmentAsync(Guid id);
+        Task<IEnumerable<PatientsVaccine>> GetAllPatientsVaccinesForPatientAsync(Guid id);
     }
 }

@@ -13,20 +13,14 @@ namespace PrimeCareMed.Frontend.Pages.Patients
     {
         private readonly IPatientRepository _patientRepository;
         private readonly IPatientService _patientService;
-        private readonly IUserRepository _userRepository;
-        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public EditPatientModel(IPatientRepository patientRepository,
             IPatientService patientService,
-            IUserRepository userRepository,
-            IUserService userService,
             IMapper mapper)
         {
             _patientRepository = patientRepository;
             _patientService = patientService;
-            _userService = userService;
-            _userRepository = userRepository;
             _mapper = mapper;
         }
 

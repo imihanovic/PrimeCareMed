@@ -82,6 +82,24 @@ namespace PrimeCareMed.Application.Services.Impl
             }
             return appointments.AsEnumerable().OrderByDescending(r=>r.AppointmentDate);
         }
+        public IEnumerable<AppointmentModel> GetAllAppointmentsForPatient(string Id)
+        {
+            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsForPatientAsync(Id);
+
+            var appointments = new List<AppointmentModel>();
+            foreach (var appointment in appointmentsFromDB)
+            {
+                var appointmentDto = _mapper.Map<AppointmentModel>(appointment);
+                appointmentDto.AppointmentDate = appointment.AppointmentDate;
+                appointmentDto.Cause = appointment.Cause;
+                appointmentDto.PatientFirstName = appointment.Patient.FirstName;
+                appointmentDto.PatientLastName = appointment.Patient.LastName;
+                appointmentDto.PatientMbo = appointment.Patient.Mbo;
+                appointments.Add(appointmentDto);
+
+            }
+            return appointments.AsEnumerable().OrderByDescending(r => r.AppointmentDate);
+        }
         public IEnumerable<AppointmentModel> GetAllAppointments(string Id)
         {
             

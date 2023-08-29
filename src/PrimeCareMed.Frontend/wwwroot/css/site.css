@@ -77,6 +77,17 @@ html {
     color: #004266;
     text-decoration: none;
 }
+.btn-blue-custom-edit {
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-color: #004266;
+    color: #004266;
+    text-decoration: none;
+    margin-bottom: 3px;
+    align-self: center;
+}
     .btn-blue-custom:hover {
         background-color: #004266;
         color: white;

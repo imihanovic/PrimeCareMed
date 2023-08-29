@@ -1,0 +1,241 @@
+﻿@page "/patient/details/{id:Guid}"
+@model PrimeCareMed.Frontend.Pages.Patients.PatientDetailsModel
+@{
+    ViewData["Title"] = "Patient details";
+}
+<div class="d-flex align-items-center">
+<a class="display-5" style="color:#002133; text-decoration: none;">
+    <b>@ViewData["Title"]</b>
+    <a class="btn-blue-custom-edit mt-3 ml-2" asp-page="EditPatient" asp-route-id="@Model.Id"><i class="fa-regular fa-pen-to-square"></i></a>
+</a>
+</div>
+<hr/>
+<div class="d-flex">
+    <div class="form-actions col-4 align-items-start">
+        <form asp-action="PatientDetails" method="get">
+            <div class="">
+                <div class="table-responsive">
+                    <table class="table table-user-information">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong style="color:#002133">
+                                        <span class="glyphicon glyphicon-asterisk text-primary"></span>
+                                        Mbo
+                                    </strong>
+                                </td>
+                                <td style="color:#002133">
+                                    @Model.Patient.Mbo
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong style="color:#002133">
+                                        <span class="glyphicon glyphicon-user  text-primary"></span>
+                                        Name
+                                    </strong>
+                                </td>
+                                <td style="color:#002133">
+                                    @Model.Patient.FirstName
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong style="color:#002133">
+                                        <span class="glyphicon glyphicon-cloud text-primary"></span>
+                                        Lastname
+                                    </strong>
+                                </td>
+                                <td style="color:#002133">
+                                    @Model.Patient.LastName
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong style="color:#002133">
+                                        <span class="glyphicon glyphicon-calendar text-primary"></span>
+                                        Date of birth
+                                    </strong>
+                                </td>
+                                <td style="color:#002133">
+                                    @Model.Patient.DateOfBirth.ToString("dd.MM.yyyy.")
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong style="color:#002133">
+                                        <span class="glyphicon glyphicon-info-sign text-primary"></span>
+                                        Gender
+                                    </strong>
+                                </td>
+                                <td style="color:#002133">
+                                    @Model.Patient.Gender
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong style="color:#002133">
+                                        <span class="glyphicon glyphicon-envelope text-primary"></span>
+                                        Email
+                                    </strong>
+                                </td>
+                                <td style="color:#002133">
+                                    @Model.Patient.Email
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <strong style="color:#002133">
+                                        <span class="glyphicon glyphicon-phone text-primary"></span>
+                                        Phone number
+                                    </strong>
+                                </td>
+                                <td style="color:#002133">
+                                    @Model.Patient.PhoneNumber
+                                </td>
+                            </tr>
+                            @if (User.IsInRole("SysAdministrator"))
+                            {
+                                <tr>
+                                    <td>
+                                        <strong style="color:#002133">
+                                            <span class="glyphicon glyphicon-user text-primary"></span>
+                                            Doctor
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        @Model.Patient.Doctor
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-1 align-items-center">
+    </div>
+    <div class="col-7 align-items-center flex-column">
+        
+        @if (Model.Checkups.Count() > 0)
+        {
+            <div>
+                <div class="d-flex justify-content-between">
+                    <b style="color:#002133">Checkups</b>
+                    <a class="" style="color:#002133" asp-page="/Appointment/ViewAllPatientAppointments" asp-route-id="@Model.Patient.Id">View all</a>
+                </div>
+            <div>
+            <table class="table border">
+            <thead>
+                <tr>
+                  
+                </tr>
+            </thead>
+            <tbody>
+               @foreach (var checkup in Model.Checkups)
+                {
+                    <tr class="align-middle">
+                        <td class="d-none d-lg-table-cell">@checkup.CheckupName</td>
+                        <td class="d-none d-lg-table-cell">@checkup.HospitalName @checkup.HospitalAddressCity</td>
+                        <td class="d-none d-lg-table-cell">@checkup.CheckupDate.ToString("dd.MM.yyyy. HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+            </table>
+            </div>
+            <br />
+            </div>
+        }
+
+        @if (Model.Medicines.Count() > 0)
+        {
+            <div>
+                <div class="d-flex justify-content-between">
+                    <b style="color:#002133">Medicines</b>
+                    <a class="" style="color:#002133" asp-page="/Appointment/ViewAllPatientAppointments" asp-route-id="@Model.Patient.Id">View all</a>
+                </div>
+                <div>
+            <table class="table border">
+                <thead>
+                    <tr>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var medicine in Model.Medicines)
+                    {
+                        <tr class="align-middle">
+                            <td class="d-none d-lg-table-cell">@medicine.MedicineName</td>
+                            <td class="d-none d-lg-table-cell">@medicine.Description</td>
+                            <td class="d-none d-lg-table-cell">@medicine.DatePrescribed.ToString("dd.MM.yyyy.")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
+            <br />
+            </div>
+        }
+        @if (Model.Vaccines.Count() > 0)
+        {
+            <div>
+                <div class="d-flex justify-content-between">
+                    <b style="color:#002133">Vaccines</b>
+                    <a class="" style="color:#002133" asp-page="/Appointment/ViewAllPatientAppointments" asp-route-id="@Model.Patient.Id">View all</a>
+                </div>
+                <div>
+                <table class="table border">
+                    <thead>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var vaccine in Model.Vaccines)
+                        {
+                            <tr class="align-middle">
+                                <td class="d-none d-lg-table-cell">@vaccine.VaccineName</td>
+                                <td class="d-none d-sm-table-cell">@vaccine.Dosage mg</td>
+                                <td class="d-none d-lg-table-cell">@vaccine.VaccineDate.ToString("dd.MM.yyyy.")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<br />
+<div class="d-flex flex-column">
+    @if (Model.Appointments.Count() > 0)
+    {
+        <div class="d-flex justify-content-between">
+            <b style="color:#002133">Appointments</b>
+            <a class="" style="color:#002133" asp-page="/Appointment/ViewAllPatientAppointments" asp-route-id="@Model.Patient.Id">View all</a>
+        </div>
+        <div>
+        <table class="table border">
+            <thead>
+                <tr>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var appointment in Model.Appointments)
+                {
+                    <tr class="align-middle">
+                        <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy.")</td>
+                        <td class="d-none d-sm-table-cell">@appointment.Cause</td>
+                        <td>
+                        <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
+    }
+</div>
+
+
