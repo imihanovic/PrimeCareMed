@@ -9,7 +9,7 @@ namespace PrimeCareMed.DataAccess.Repositories
 {
     public interface IAppointmentRepository
     {
-        Task<IEnumerable<Appointment>> GetAllAppointmentsForOfficeAsync(string Id);
+        IEnumerable<Appointment> GetAllAppointmentsForOfficeAsync(string Id);
         IEnumerable<Appointment> GetAllAppointmentsForPatientAsync(string Id);
         IEnumerable<Appointment> GetAllAppointmentsForDoctorAsync(string Id);
         Task<IEnumerable<Appointment>> GetAllAppointmentsAsync();

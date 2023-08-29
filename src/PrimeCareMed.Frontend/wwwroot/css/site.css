@@ -109,3 +109,7 @@ html {
     background-attachment:fixed;
     background-size:cover;
 }
+.border-bottom-custom{
+    border-bottom: 1px solid;
+    border-bottom-color:darkblue;
+}

@@ -9,6 +9,7 @@ using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
 using System.Data;
 using PrimeCareMed.Application.Models.Shift;
+using PrimeCareMed.Application.Models.User;
 
 namespace PrimeCareMed.Frontend.Pages.Appointment
 {
@@ -22,11 +23,11 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         public readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 
-        public List<string> AppointmentModelProperties => _appointmentService.GetAppointmentModelFields();
+        public List<string> AppointmentModelProperties { get; set; }
 
         [FromRoute]
         public Guid Id { get; set; }
-        public IEnumerable<AppointmentModel> Appointments => _appointmentService.GetAllAppointmentsForShift(Id).OrderByDescending(r => r.AppointmentDate);
+        public PaginatedList<AppointmentModel> Appointments { get; set; }
         public ShiftModel ShiftModel => _shiftService.GetAllShifts().FirstOrDefault(r => r.Id == Id);
 
         public int TotalPages { get; set; }
@@ -46,26 +47,42 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             _shiftRepository = shiftRepository;
         }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(string sort, string currentFilter, string keyword, string dateFilter, int? pageIndex)
+
         {
-
+            AppointmentModelProperties = _appointmentService.GetAppointmentModelFields();
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            if (currentUser is null)
+            {
+                return Redirect("/Identity/Account/Login");
+            }
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
-            //AllTables = tables;
+            var appointments = new List<AppointmentModel>();
+            appointments = _appointmentService.GetAllAppointmentsForShift(Id).OrderByDescending(r => r.AppointmentDate).ToList();
+            if (keyword != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                keyword = currentFilter;
+            }
+            int pageSize = 7;
 
-            //ViewData["CurrentSort"] = sort;
-            //tables = _tableService.TableSorting(tables, sort);
+            ViewData["CurrentSort"] = sort;
+            if (sort != "")
+            {
+                appointments = _appointmentService.AppointmentSorting(appointments, sort).ToList();
+            }
 
-            //ViewData["AreaFilter"] = areaFilter;
-            //tables = _tableService.TableFilterByArea(tables, areaFilter);
+            ViewData["Keyword"] = keyword;
+            appointments = _appointmentService.AppointmentSearch(appointments, keyword).ToList();
 
-            //ViewData["SmokingFilter"] = smokingFilter;
-            //tables = _tableService.TableFilterBySmoking(tables, smokingFilter);
+            ViewData["DateFilter"] = dateFilter;
+            appointments = _appointmentService.AppointmentFilterDate(appointments, dateFilter).ToList();
 
-            //Tables = PaginatedList<TableModel>.Create(tables, pageIndex ?? 1, pageSize);
-
-            //TotalPages = (int)Math.Ceiling(decimal.Divide(tables.Count(), pageSize));
-
+            TotalPages = (int)Math.Ceiling(decimal.Divide(appointments.Count(), pageSize));
+            Appointments = PaginatedList<AppointmentModel>.Create(appointments, pageIndex ?? 1, pageSize);
             return Page();
         }
     }

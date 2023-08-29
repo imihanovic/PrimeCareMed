@@ -12,10 +12,10 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public Task<IEnumerable<Appointment>> GetAllAppointmentsForOfficeAsync(string Id)
+        public IEnumerable<Appointment> GetAllAppointmentsForOfficeAsync(string Id)
         {
-            var appointments = GetAllAppointmentsAsync();
-            return (Task<IEnumerable<Appointment>>)appointments.Result.Where(r => r.Shift.Office.Id.ToString() == Id);
+            var appointments = GetAllAppointmentsAsync().Result.Where(r => r.Shift.Office.Id.ToString() == Id);
+            return appointments;
         }
         public IEnumerable<Appointment> GetAllAppointmentsForPatientAsync(string Id)
         {

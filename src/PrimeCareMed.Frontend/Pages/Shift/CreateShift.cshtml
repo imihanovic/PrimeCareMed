@@ -18,6 +18,11 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
 <div class="container text-center d-flex align-items-center justify-content-center">
@@ -25,44 +30,41 @@
         <div>
             <h1>@ViewData["Title"]</h1>
         </div>
-        <div>
+        <div style="width:450px">
             <form id="createShiftForm" method="post">
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-floating">
-                    <select asp-for="NewShift.OfficeId" class="form-control">
-                        <option disabled selected>Select office</option>
+                <div class="form-floating mb-4">
+                    <select asp-for="NewShift.OfficeId" class="form-select" id="select-office" data-placeholder="Select office">
+                        <option></option>
                         @foreach (var office in Model.Offices)
                         {
                             <option value="@office.Id">@office.Address @office.City</option>
                         }
                     </select>
-                    <label asp-for="NewShift.OfficeId"></label>
                 </div>
                 @if (!User.IsInRole("Doctor"))
                 {
-                    <div class="form-floating">
-                        <select asp-for="NewShift.DoctorId" class="form-control">
-                            <option disabled selected>Select doctor</option>
+                    <div class="form-floating mb-4">
+                        <select asp-for="NewShift.DoctorId" class="form-select" id="select-doctor" data-placeholder="Select doctor">
+                            <option></option>
                             @foreach (var doctor in Model.Doctors)
                             {
                                 <option value="@doctor.Id">@doctor.FirstName @doctor.LastName</option>
                             }
                         </select>
-                        <label asp-for="NewShift.DoctorId"></label>
                     </div>
                 }
                 else if(!User.IsInRole("Nurse"))
                 {
-                    <div class="form-floating">
-                        <select asp-for="NewShift.NurseId" class="form-control">
-                            <option disabled selected>Select nurse</option>
+                    <div class="form-floating mb-4">
+                        <select asp-for="NewShift.NurseId" class="form-select" id="select-nurse" data-placeholder="Select nurse">
+                            <option></option>
                             @foreach (var nurse in Model.Nurses)
                             {
                                 <option value="@nurse.Id">@nurse.FirstName @nurse.LastName</option>
                             }
                         </select>
-                        <label asp-for="NewShift.NurseId"></label>
                     </div>
                 }
                 @if (User.IsInRole("Doctor"))
@@ -75,9 +77,11 @@
                 }
                     <button id="createShiftSubmit" type="submit" class="w-100 btn btn-lg text-white" style="background-color: #006622">Confirm</button>
             </form>
-            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                    <button id="logout" type="submit" class="btn btn-lg text-white" style="background-color:#004266">Logout</button>
-            </form>
+            <br />
+                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                    <button id="logout" type="submit" class="dropdown-item" style="color:#002133; font-size:20px">Logout</button>
+                </form>
+               
             @if (ViewData["Message"] != null)
             {
                 <script type="text/javascript">
@@ -91,6 +95,27 @@
 </div>
 </body>
 </html>
+<script>
+    $('#select-office').select2({
+        theme: "bootstrap-5",
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+    });
+</script>
+<script>
+    $('#select-doctor').select2({
+        theme: "bootstrap-5",
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+    });
+</script>
+<script>
+    $('#select-nurse').select2({
+        theme: "bootstrap-5",
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+    });
+</script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

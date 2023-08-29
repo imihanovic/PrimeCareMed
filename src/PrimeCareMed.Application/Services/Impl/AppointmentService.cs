@@ -103,7 +103,7 @@ namespace PrimeCareMed.Application.Services.Impl
         public IEnumerable<AppointmentModel> GetAllAppointments(string Id)
         {
             
-            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsForOfficeAsync(Id).Result;
+            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsForOfficeAsync(Id);
 
             var appointments = new List<AppointmentModel>();
             foreach (var appointment in appointmentsFromDB)
@@ -157,7 +157,7 @@ namespace PrimeCareMed.Application.Services.Impl
         }
         public IEnumerable<AppointmentModel> GetAllAppointmentsForShift(Guid Id)
         {
-            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r => r.Shift.Id == Id).ToList();
+            var appointmentsFromDB = _appointmentRepository.GetAllAppointmentsAsync().Result.Where(r => r.Shift.Id == Id);
             var appointments = new List<AppointmentModel>();
             foreach (var appointment in appointmentsFromDB)
             {

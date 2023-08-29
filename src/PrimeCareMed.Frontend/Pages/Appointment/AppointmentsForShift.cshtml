@@ -2,58 +2,141 @@
 @model PrimeCareMed.Frontend.Pages.Appointment.AppointmentsForShiftModel
 @{
     ViewData["Title"] = "Appointments for shift";
+    var sort = ViewData["CurrentSort"] as string;
+    var keyword = ViewData["Keyword"] as string;
+    var dateFilter = ViewData["DateFilter"] as string;
+    var prevDisabled = !Model.Appointments.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Appointments.HasNextPage ? "disabled" : "";
 }
 <h1>@ViewData["Title"]</h1>
 <hr />
 
 <div class="form-actions no-color col">
-    <form asp-action="ViewAllPatients" method="get">
+    <form asp-action="AppointmentsForShift" method="get">
         <div class="row">
             <div class="col-4 col-sm-7">
-                @* <div class="input-group mb-3">*@
-                @* <input type="search" class="form-control" placeholder="Search..." name="keyword" value="@keyword">
-                <select class="form-select" aria-label="Checkupple select with button addon" name="categoryFilter">
-                <option value="">All categories</option>
-                @foreach (var category in Enum.GetNames(typeof(DishCategory)))
-                {
-                <option value="@category" selected="@(category == categoryFilter)">@category</option>
-                }
-                </select>
-                <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
-                </div>*@
+                <div class="input-group mb-3">
+                    <input type="search" class="form-control" placeholder="Search..." name="keyword" value="@keyword">
+                    <input id="dateFilter" type="date" name="dateFilter" class="form-control d-none d-lg-table-cell" value="@dateFilter" />
+                    <button type="submit" class="btn text-white" style="background-color:#004266"><i class="bi bi-search"></i></button>
+                </div>
             </div>
-            @*<div class="col-1">
-            <a asp-action="ViewAllDishes" class="btn btn-secondary clear-btn">Clear</a>
-            </div>*@
+            <div class="col-1">
+                <a asp-action="AppointmentsForShift" class="btn btn-secondary clear-btn">Clear</a>
+            </div>
+            <div class="col-7 col-sm-4 text-end">
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    <a class="btn text-white d-none d-lg-inline-block" style="background-color:#004266" asp-area="" asp-page="/Appointment/CreateAppointment"><i class="fa-solid fa-file-pen" style="color: #ffffff;"></i> New appointment</a>
+                }
+            </div>
         </div>
     </form>
 </div>
-
 <table class="table">
     <thead>
         <tr>
-            @foreach(var property in Model.AppointmentModelProperties)
+            @foreach (var property in Model.AppointmentModelProperties)
             {
-                 <th>@property</th>
-            } 
+                if (property != "Cause" && property != "Status")
+                {
+                    <th class="@(property == "PatientLastName" ? "" : "d-none d-lg-table-cell")" style="color: #002133">
+
+                        @property
+                        @if (sort is null)
+                        {
+                            <a asp-page="AppointmentsForShift" asp-route-keyword="@ViewData["Keyword"]"
+                   asp-route-statusFilter="@ViewData["StatusFilter"]"
+                   asp-route-sort=@($"{@property}")
+                   class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                            <a asp-page="AppointmentsForShift"
+                   asp-route-keyword="@ViewData["Keyword"]"
+                   asp-route-statusFilter="@ViewData["StatusFilter"]"
+                   asp-route-sort=@($"{@property}Desc") class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+
+                        }
+                        else if (sort.Contains("Desc"))
+                        {
+                            <a asp-page="AppointmentsForShift"
+                   asp-route-sort=@($"{@property}")
+                   asp-route-keyword="@ViewData["Keyword"]"
+                   asp-route-statusFilter="@ViewData["StatusFilter"]"
+                   class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+                        }
+                        else
+                        {
+                            <a asp-page="AppointmentsForShift"
+                   asp-route-keyword="@ViewData["Keyword"]"
+                   asp-route-dateFilter="@ViewData["DateFilter"]"
+                   asp-route-sort=@($"{@property}Desc")
+                   class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                        }
+                    </th>
+                }
+                else
+                {
+                    <th class="d-none d-lg-table-cell" style="color: #002133">
+                        @property
+                    </th>
+                }
+            }
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @if (Model.Appointments.Count() > 0)
-        {
-            @foreach (var appointment in Model.Appointments)
+        <form method="post">
+            @if (Model.Appointments.Count() > 0)
             {
-                <tr class="align-middle">
-                    <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
-                    <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
-                    <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
-                    <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
-                    <td class="d-none d-lg-table-cell">@appointment.Cause</td>
-                    <td>
-                        <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
-                    </td>
-                </tr>
+                @foreach (var appointment in Model.Appointments)
+                {
+                    <tr class="align-middle">
+                        <td class="d-none d-lg-table-cell">@appointment.PatientMbo</td>
+                        <td class="d-none d-lg-table-cell">@appointment.PatientFirstName</td>
+                        <td class="d-none d-lg-table-cell">@appointment.PatientLastName</td>
+                        <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td class="d-none d-lg-table-cell">@appointment.Cause</td>
+                        <td>
+                            <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                        </td>
+                    </tr>
+                }
             }
-        }
+        </form>
     </tbody>
 </table>
+<div>
+    <ul class="pagination">
+        <li class="page-item">
+            <a asp-page="./AppointmentsForShift"
+               asp-route-sort="@ViewData["CurrentSort"]"
+               asp-route-pageIndex="@(Model.Appointments.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               asp-route-dateFilter="@ViewData["DateFilter"]"
+               class="page-link @prevDisabled text-white" style="background-color: #004266">
+                Previous
+            </a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Appointments.PageIndex ? "active" : "")">
+                <a asp-page="./AppointmentsForShift"
+               asp-route-sort="@ViewData["CurrentSort"]"
+               asp-route-keyword="@ViewData["Keyword"]"
+               asp-route-statusFilter="@ViewData["StatusFilter"]"
+               asp-route-pageIndex="@i" class="page-link text-black" style="background-color:#fff">
+                    @i
+                </a>
+            </li>
+        }
+        <li class="page-item">
+            <a asp-page="./AppointmentsForShift"
+               asp-route-sort="@ViewData["CurrentSort"]"
+               asp-route-pageIndex="@(Model.Appointments.PageIndex +1)"
+               asp-route-keyword="@ViewData["Keyword"]"
+               asp-route-statusFilter="@ViewData["StatusFilter"]"
+               class="page-link @nextDisabled text-white" style="background-color: #004266">
+                Next
+            </a>
+        </li>
+    </ul>
+</div>
