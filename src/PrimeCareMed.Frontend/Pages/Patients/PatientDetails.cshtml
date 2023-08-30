@@ -124,7 +124,7 @@
             <div>
                 <div class="d-flex justify-content-between border-bottom-custom">
                     <b style="color:#002133">Checkups</b>
-                    <a class="" style="color:#002133" asp-page="/Appointment/ViewAllPatientAppointments" asp-route-id="@Model.Patient.Id">View all</a>
+                    <a class="" style="color:#002133" asp-page="/Checkup/ViewAllPatientCheckups" asp-route-id="@Model.Patient.Id">View all</a>
                 </div>
             <div>
             <table class="table border">
@@ -154,7 +154,7 @@
             <div>
                 <div class="d-flex justify-content-between border-bottom-custom">
                     <b style="color:#002133">Medicines</b>
-                    <a class="" style="color:#002133" asp-page="/Appointment/ViewAllPatientAppointments" asp-route-id="@Model.Patient.Id">View all</a>
+                    <a class="" style="color:#002133" asp-page="/Medicine/ViewAllPatientMedicines" asp-route-id="@Model.Patient.Id">View all</a>
                 </div>
                 <div>
             <table class="table border">
@@ -183,7 +183,7 @@
             <div>
                 <div class="d-flex justify-content-between border-bottom-custom">
                     <b style="color:#002133">Vaccines</b>
-                    <a class="" style="color:#002133" asp-page="/Appointment/ViewAllPatientAppointments" asp-route-id="@Model.Patient.Id">View all</a>
+                    <a class="" style="color:#002133" asp-page="/PatientVaccines/ViewAllPatientVaccines" asp-route-id="@Model.Patient.Id">View all</a>
                 </div>
                 <div>
                 <table class="table border">
@@ -228,7 +228,7 @@
                         <td class="d-none d-lg-table-cell">@appointment.AppointmentDate.ToString("dd.MM.yyyy.")</td>
                         <td class="d-none d-sm-table-cell">@appointment.Cause</td>
                         <td>
-                        <a class="btn-blue-custom" asp-page="ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
+                        <a class="btn-blue-custom" asp-page="/Appointment/ViewAppointmentDetails" asp-route-id="@appointment.Id"><i class="bi bi-info-lg"></i></a>
                         </td>
                     </tr>
                 }

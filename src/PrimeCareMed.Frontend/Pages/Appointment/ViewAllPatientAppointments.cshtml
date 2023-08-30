@@ -25,12 +25,6 @@
             <div class="col-1">
                 <a asp-action="ViewAllPatientAppointments" class="btn btn-secondary clear-btn">Clear</a>
             </div>
-            <div class="col-7 col-sm-4 text-end">
-                @if (User.Identity!.IsAuthenticated)
-                {
-                    <a class="btn text-white d-none d-lg-inline-block" style="background-color:#004266" asp-area="" asp-page="/Appointment/CreateAppointment"><i class="fa-solid fa-file-pen" style="color: #ffffff;"></i> New appointment</a>
-                }
-            </div>
         </div>
     </form>
 </div>

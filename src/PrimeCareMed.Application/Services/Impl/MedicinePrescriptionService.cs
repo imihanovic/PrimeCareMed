@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using PrimeCareMed.Application.Models.MedicinePrescription;
-using PrimeCareMed.Application.Models.Medicine;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
-using PrimeCareMed.Application.Models.PatientVaccine;
-using PrimeCareMed.DataAccess.Repositories.Impl;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -78,7 +75,7 @@ namespace PrimeCareMed.Application.Services.Impl
 
         public List<string> GetMedicinePrescriptionModelFields()
         {
-            var medicineDto = new MedicineModel();
+            var medicineDto = new MedicinePrescriptionModel();
             return medicineDto.GetType().GetProperties().Where(x => x.Name != "Id").Select(x => x.Name).ToList();
         }
         public MedicinePrescription EditMedicinePrescriptionAsync(MedicinePrescriptionModelForCreate prescriptionModel)
@@ -87,9 +84,38 @@ namespace PrimeCareMed.Application.Services.Impl
             return _medicinePrescriptionRepository.UpdateAsync(prescription).Result;
         }
 
-        public async Task DeleteMedicineAsync(Guid Id)
+        public async Task DeleteAsync(Guid Id)
         {
             await _medicinePrescriptionRepository.DeleteAsync(Id);
+        }
+        public IEnumerable<MedicinePrescriptionModel> MedicinePrescriptionSorting(IEnumerable<MedicinePrescriptionModel> prescriptions, string sortOrder)
+        {
+            IEnumerable<MedicinePrescriptionModel> sortedPrescriptions = prescriptions;
+            switch (sortOrder)
+            {
+                case "MedicineName":
+                    return prescriptions.OrderBy(s => s.MedicineName);
+                case "MedicineNameDesc":
+                    return prescriptions.OrderByDescending(s => s.MedicineName);
+                case "DatePrescribed":
+                    return prescriptions.OrderBy(s => s.DatePrescribed);
+                case "DatePrescribedDesc":
+                    return prescriptions.OrderByDescending(s => s.DatePrescribed);
+                default:
+                    return prescriptions.OrderByDescending(s => s.DatePrescribed);
+            }
+        }
+
+        public IEnumerable<MedicinePrescriptionModel> MedicinePrescriptionSearch(IEnumerable<MedicinePrescriptionModel> prescriptions, string searchString)
+        {
+            IEnumerable<MedicinePrescriptionModel> searchedPrescriptions = prescriptions;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var searchStrTrim = searchString.ToLower().Trim();
+                searchedPrescriptions = prescriptions.Where(s => s.MedicineName.ToLower().Contains(searchStrTrim)
+                                            );
+            }
+            return searchedPrescriptions;
         }
     }
 }

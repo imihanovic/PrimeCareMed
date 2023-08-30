@@ -61,7 +61,7 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
 
         public async Task<Appointment> GetAppointmentByIdAsync(Guid id)
         {
-            return await _context.Appointment.Include(r=>r.Shift).Include(r=>r.Patient).Include(r=>r.PatientsVaccines).ThenInclude(r=>r.Vaccine).Include(r=>r.MedicinePrescriptions).ThenInclude(r=>r.Medicine).FirstOrDefaultAsync(t => t.Id == id);
+            return await _context.Appointment.Include(r=>r.Shift).Include(r=>r.Patient).ThenInclude(r=>r.Doctor).Include(r=>r.PatientsVaccines).ThenInclude(r=>r.Vaccine).Include(r=>r.MedicinePrescriptions).ThenInclude(r=>r.Medicine).FirstOrDefaultAsync(t => t.Id == id);
         }
     }
 }

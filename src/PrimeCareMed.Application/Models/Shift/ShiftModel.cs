@@ -1,8 +1,4 @@
-﻿
-using PrimeCareMed.Core.Entities.Identity;
-using PrimeCareMed.Core.Enums;
-
-namespace PrimeCareMed.Application.Models.Shift
+﻿namespace PrimeCareMed.Application.Models.Shift
 {
     public class ShiftModel : BaseResponseModel
     {

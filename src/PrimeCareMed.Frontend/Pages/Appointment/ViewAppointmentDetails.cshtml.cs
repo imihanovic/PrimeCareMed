@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Appointment;
-using PrimeCareMed.Application.Models.MedicalReport;
 using PrimeCareMed.Application.Models.MedicinePrescription;
 using PrimeCareMed.Application.Models.PatientVaccine;
 using PrimeCareMed.Application.Services;
@@ -38,6 +37,8 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         public Guid Id { get; set; }
         public int TotalPages { get; set; }
 
+        public bool PatientsDoctor { get; set; }
+
         public ViewAppointmentDetailsModel(IAppointmentService appointmentService,
             UserManager<ApplicationUser> userManager,
             IAppointmentRepository appointmentRepository,
@@ -58,7 +59,11 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         {
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
+            
             Appointment = _appointmentService.GetAppointmentDetailsById(Id);
+            var appointment = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
+            
+            
             var cookie = Request.Cookies["sessionCookie"];
             if (currentUserRole == "Doctor" && cookie is null)
             {
@@ -76,15 +81,30 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             {
                 MedicinePrescriptions = _medicinePrescriptionService.GetMedicinePrescriptionsForAppointment(Id);
             }
+            if(appointment.Patient.Doctor is not null)
+            {
+                PatientsDoctor = currentUser.Id == appointment.Patient.Doctor.Id ? true : false;
+            }
+            else
+            {
+                PatientsDoctor = false;
+            }
+            
             return Page();
         }
         public IActionResult OnPost()
         {
+            var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
+            var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
             try
             {
                 var appointmentDB = _appointmentRepository.GetAppointmentByIdAsync(Id).Result;
                 appointmentDB.Status = Core.Enums.AppointmentStatus.Done;
                 _appointmentRepository.FinishAppointmentAsync(appointmentDB);
+                if(currentUserRole == "SysAdministrator")
+                {
+                    return Page();
+                }
                 return RedirectToPage("/Appointment/WaitingRoom");
             }
             catch (Exception ex)

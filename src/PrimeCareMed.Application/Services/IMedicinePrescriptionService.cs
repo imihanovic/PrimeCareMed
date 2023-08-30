@@ -9,7 +9,9 @@ namespace PrimeCareMed.Application.Services
         List<string> GetMedicinePrescriptionModelFields();
         IEnumerable<MedicinePrescriptionModel> GetMedicinePrescriptionsForAppointment(Guid id);
         MedicinePrescription EditMedicinePrescriptionAsync(MedicinePrescriptionModelForCreate prescriptionModel);
-        Task DeleteMedicineAsync(Guid Id);
+        Task DeleteAsync(Guid Id);
         IEnumerable<MedicinePrescriptionModel> GetMedicinePrescriptionsForPatient(Guid patientId);
+        IEnumerable<MedicinePrescriptionModel> MedicinePrescriptionSearch(IEnumerable<MedicinePrescriptionModel> prescriptions, string searchString);
+        IEnumerable<MedicinePrescriptionModel> MedicinePrescriptionSorting(IEnumerable<MedicinePrescriptionModel> prescriptions, string sortOrder);
     }
 }

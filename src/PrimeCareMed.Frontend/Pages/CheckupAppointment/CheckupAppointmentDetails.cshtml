@@ -1,0 +1,44 @@
+﻿@page "/patient/checkup/edit/{id:Guid}"
+@model PrimeCareMed.Frontend.Pages.CheckupAppointment.CheckupAppointmentDetailsModel
+@{
+    ViewData["Title"] = "Checkup Appointment";
+}
+<div class="container text-center align-items-center justify-content-center w-100">
+    <div>
+        <div>
+            <h1 style="color:#002133">@ViewData["Title"]</h1>
+        </div>
+        <div>
+            <form id="appointmentDetailsForm" method="post">
+                <hr />
+                
+                <h3 style="color:#002133">@Model.Patient.Mbo</h3>
+                <h3 style="color:#002133">@Model.Patient.FirstName @Model.Patient.LastName (@Model.Patient.DateOfBirth.ToString("dd.MM.yyyy"))</h3>
+                <br />
+                <h3 style="color:#002133">@Model.Checkup.CheckupName</h3>
+                <h3 style="color:#002133">@Model.Checkup.HospitalName, @Model.Checkup.HospitalAddressCity</h3>
+                <br />
+                <h3 style="color:#002133">@Model.Checkup.CheckupDate.ToString("dd.MM.yyyy. HH:mm")</h3>
+                @if (Model.Checkup.CheckupStatus.ToString() != "Cancelled")
+                {
+                    <br />
+                    <div class="">
+                        <button type="submit" style="background-color: #990000" class="btn text-white">Cancel appointment</button>
+                    </div>
+                }
+            </form>
+            @if (ViewData["Message"] != null)
+            {
+                <script type="text/javascript">
+                    window.onload = function () {
+                        alert("@ViewData["Message"]");
+                    };
+                </script>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

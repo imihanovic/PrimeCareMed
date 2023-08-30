@@ -1,5 +1,4 @@
-﻿using PrimeCareMed.Core.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PrimeCareMed.Application.Models.User
 {

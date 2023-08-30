@@ -1,14 +1,9 @@
 ﻿using AutoMapper;
 using PrimeCareMed.Application.Models.Medicine;
 using PrimeCareMed.Application.Models.PatientVaccine;
-using PrimeCareMed.Application.Models.Shift;
+using PrimeCareMed.Application.Models.Vaccine;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -52,8 +47,8 @@ namespace PrimeCareMed.Application.Services.Impl
 
         public List<string> GetPatientVaccineModelFields()
         {
-            var medicineDto = new MedicineModel();
-            return medicineDto.GetType().GetProperties().Where(x => x.Name != "Id").Select(x => x.Name).ToList();
+            var vaccineDto = new PatientVaccineModel();
+            return vaccineDto.GetType().GetProperties().Where(x => x.Name != "Id").Select(x => x.Name).ToList();
         }
         public PatientsVaccine EditPatientVaccineAsync(PatientVaccineModelForCreate patientVaccineModel)
         {
@@ -94,9 +89,37 @@ namespace PrimeCareMed.Application.Services.Impl
             return patientVaccines.AsEnumerable();
         }
 
-        public async Task DeleteMedicineAsync(Guid Id)
+        public async Task DeletePatientVaccineAsync(Guid Id)
         {
             await _patientVaccineRepository.DeleteAsync(Id);
+        }
+        public IEnumerable<PatientVaccineModel> VaccineSorting(IEnumerable<PatientVaccineModel> vaccines, string sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case "VaccineName":
+                    return vaccines.OrderBy(s => s.VaccineName);
+                case "VaccineNameDesc":
+                    return vaccines.OrderByDescending(s => s.VaccineName);
+                case "VaccineDate":
+                    return vaccines.OrderBy(s => s.VaccineDate);
+                case "VaccineDateDesc":
+                    return vaccines.OrderByDescending(s => s.VaccineDate);
+                default:
+                    return vaccines.OrderByDescending(s => s.VaccineDate);
+            }
+        }
+
+        public IEnumerable<PatientVaccineModel> VaccineSearch(IEnumerable<PatientVaccineModel> vaccines, string searchString)
+        {
+            IEnumerable<PatientVaccineModel> searchedVaccines = vaccines;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var searchStrTrim = searchString.ToLower().Trim();
+                searchedVaccines = vaccines.Where(s => s.VaccineName.ToLower().Contains(searchStrTrim)
+                                            );
+            }
+            return searchedVaccines;
         }
     }
 }

@@ -6,6 +6,7 @@ using PrimeCareMed.Application.Models.GeneralMedicineOffice;
 using PrimeCareMed.Application.Models.Shift;
 using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
+using PrimeCareMed.Application.Services.Impl;
 using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
 
@@ -19,17 +20,20 @@ namespace PrimeCareMed.Frontend.Pages.Shift
         private readonly IShiftRepository _shiftRepository;
         private readonly IOfficeService _officeService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAppointmentService _appointmentService;
 
         public CreateShiftModel(
             IShiftService shiftService,
             IOfficeService officeService,
             UserManager<ApplicationUser> userManager,
-            IShiftRepository shiftRepository)
+            IShiftRepository shiftRepository,
+            IAppointmentService appointmentService)
         {
             _shiftService = shiftService;
             _officeService = officeService;
             _userManager = userManager;
             _shiftRepository = shiftRepository;
+            _appointmentService = appointmentService;
         }
         [BindProperty]
         public ShiftModelForCreate NewShift { get; set; }
@@ -106,13 +110,20 @@ namespace PrimeCareMed.Frontend.Pages.Shift
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();
             var shift = new PrimeCareMed.Core.Entities.Shift();
             var cookie = Request.Cookies["shiftCookie"];
-            if(currentUserRole == "Doctor")
+            if (currentUserRole == "Doctor")
             {
                 shift = _shiftRepository.CheckIfOpenShiftExistsForDoctor(currentUser.Id);
             }
             else
             {
                 shift = _shiftRepository.CheckIfOpenShiftExistsForDoctor(currentUser.Id);
+            }
+            var openShifts = _appointmentService.GetAllAppointmentsForShift(shift.Id).Where(r => r.Status != "Done");
+
+            if (openShifts.Any())
+            {
+                ViewData["ShowMessage"] = "There are undone appointments!";
+                return Redirect("/Appointment/WaitingRoom");
             }
             Response.Cookies.Delete("shiftCookie");
             Response.Cookies.Delete("sessionCookie");

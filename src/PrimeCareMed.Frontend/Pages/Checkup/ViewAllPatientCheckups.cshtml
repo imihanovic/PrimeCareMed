@@ -1,0 +1,156 @@
+﻿@page "/patient/checkups/{id:Guid}"
+@model PrimeCareMed.Frontend.Pages.Checkup.ViewAllPatientCheckupsModel
+@{
+    ViewData["Title"] = "Checkups";
+    var sort = ViewData["CurrentSort"] as string;
+    var keyword = ViewData["Keyword"] as string;
+    var prevDisabled = !Model.Checkups.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Checkups.HasNextPage ? "disabled" : "";
+}
+<h1 style="color:#002133">@ViewData["Title"]</h1>
+<br />
+<h3 style="color:#002133">@Model.Patient.Mbo</h3>
+<h3 style="color:#002133">@Model.Patient.FirstName @Model.Patient.LastName (@Model.Patient.DateOfBirth.ToString("dd.MM.yyyy"))</h3>
+<hr />
+
+<div class="form-actions no-color col">
+    <form asp-action="ViewAllPatientCheckups" method="get">
+        <div class="row">
+            <div class="col-4 col-sm-7">
+                <div class="input-group mb-3">
+                    <input type="search" class="form-control" placeholder="Search..." name="keyword" value="@keyword">
+                    <button type="submit" class="btn text-white" style="background-color:#004266"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+            <div class="col-1">
+                <a asp-action="ViewAllPatientCheckups" class="btn btn-secondary clear-btn">Clear</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th class="" style="color:#004266">
+                Checkup
+                @if (sort is null)
+                {
+                    <a asp-page="ViewAllPatientCheckups" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+            asp-route-sort=@($"CheckupName") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                    <a asp-page="ViewAllPatientCheckups" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"CheckupNameDesc") class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+
+                }
+                else if (sort.Contains("Desc"))
+                {
+                    <a asp-page="ViewAllPatientCheckups"
+                   asp-route-sort=@($"CheckupName")
+            asp-route-currentFilter="@ViewData["CurrentFilter"]"
+            class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+                }
+                else
+                {
+                    <a asp-page="ViewAllPatientCheckups" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"CheckupNameDesc") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                }
+            </th>
+            <th class="" style="color:#004266">
+                Hospital
+                @if (sort is null)
+                {
+                    <a asp-page="ViewAllPatientCheckups" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"HospitalName") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                    <a asp-page="ViewAllPatientCheckups" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"HospitalNameDesc") class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+
+                }
+                else if (sort.Contains("Desc"))
+                {
+                    <a asp-page="ViewAllPatientCheckups"
+                   asp-route-sort=@($"HospitalName")
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+                }
+                else
+                {
+                    <a asp-page="ViewAllPatientCheckups" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"HospitalNameDesc") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                }
+            </th>
+            <th>
+                Date
+                @if (sort is null)
+                {
+                    <a asp-page="ViewAllPatientCheckups" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"CheckupDate") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                    <a asp-page="ViewAllPatientCheckups" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"CheckupDateDesc") class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+
+                }
+                else if (sort.Contains("Desc"))
+                {
+                    <a asp-page="ViewAllPatientCheckups"
+                   asp-route-sort=@($"CheckupDate")
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+                }
+                else
+                {
+                    <a asp-page="ViewAllPatientCheckups" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"CheckupDateDesc") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                }
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Checkups.Count() > 0)
+        {
+            @foreach (var checkup in Model.Checkups)
+            {
+                <tr class="align-middle">
+                    <td class="d-none d-lg-table-cell">@checkup.CheckupName</td>
+                    <td class="d-none d-lg-table-cell">@checkup.HospitalName @checkup.HospitalAddressCity</td>
+                    <td class="d-none d-lg-table-cell">@checkup.CheckupDate.ToString("dd.MM.yyyy. HH:mm")</td>
+                    <td class="d-none d-lg-table-cell">@checkup.CheckupStatus.ToString()</td>
+                    <td>
+                        <a class="btn-blue-custom" asp-page="/CheckupAppointment/CheckupAppointmentDetails" asp-route-id="@checkup.Id"><i class="bi bi-info-lg"></i></a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div>
+    <ul class="pagination">
+        <li class="page-item">
+            <a asp-page="./ViewAllPatientCheckups"
+               asp-route-pageIndex="@(Model.Checkups.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="page-link @prevDisabled text-white" style="background-color: #004266">
+                Previous
+            </a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Checkups.PageIndex ? "active" : "")">
+                <a asp-page="./ViewAllPatientCheckups"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               asp-route-pageIndex="@i" class="page-link text-black" style="background-color:#fff">
+                    @i
+                </a>
+            </li>
+        }
+        <li class="page-item">
+            <a asp-page="./ViewAllPatientCheckups"
+               asp-route-pageIndex="@(Model.Checkups.PageIndex +1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="page-link @nextDisabled text-white" style="background-color: #004266">
+                Next
+            </a>
+        </li>
+    </ul>
+</div>

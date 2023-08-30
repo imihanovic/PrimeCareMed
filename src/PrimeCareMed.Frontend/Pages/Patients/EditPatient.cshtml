@@ -52,11 +52,19 @@
                     <select asp-for="EditPatient.Gender" class="form-control">
                         @foreach (var area in (Gender[])Enum.GetValues(typeof(Gender)))
                         {
-                            @*<option value="@area" selected="@(area==Model.EditPatient.Gender?true:false)">@area</option>*@
                             <option value="@area.ToString()">@area.ToString()</option>
                         }
                     </select>
                     <label asp-for="EditPatient.Gender"></label>
+                </div>
+                <div class="form-floating mb-4">
+                    <select asp-for="EditPatient.DoctorId" class="form-select" id="select-doctor" data-placeholder="Choose doctor">
+                        <option></option>
+                        @foreach (var doctor in Model.Doctors)
+                        {
+                            <option value="@doctor.Id">@doctor.FirstName @doctor.LastName</option>
+                        }
+                    </select>
                 </div>
                 <div class="form-floating align-items-center justify-content-center mt-2">
                     <button asp-page-handler="edit" class="btn btn-outline-success col-5">

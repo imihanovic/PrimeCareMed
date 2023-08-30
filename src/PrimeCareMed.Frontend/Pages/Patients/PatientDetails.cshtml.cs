@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Appointment;
@@ -8,9 +7,7 @@ using PrimeCareMed.Application.Models.CheckupAppointment;
 using PrimeCareMed.Application.Models.MedicinePrescription;
 using PrimeCareMed.Application.Models.Patient;
 using PrimeCareMed.Application.Models.PatientVaccine;
-using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
-using PrimeCareMed.Core.Entities.Identity;
 using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.Patients
@@ -62,7 +59,11 @@ namespace PrimeCareMed.Frontend.Pages.Patients
         {
             var patient = _patientRepository.GetPatientByIdAsync(Id).Result;
             Patient = _mapper.Map<PatientModel>(patient);
-            Checkups = _checkupAppointmentService.GetAllPatientCheckupAppointments(Id).Take(3);
+            if(patient.Doctor is not null)
+            {
+                Patient.Doctor = patient.Doctor.FirstName + " " + patient.Doctor.LastName;
+            }
+            Checkups = _checkupAppointmentService.GetAllPatientCheckupAppointments(Id).Where(r=>r.CheckupStatus.ToString() != "Cancelled").Take(3);
             Medicines = _medicinePrescriptionService.GetMedicinePrescriptionsForPatient(Id).Take(3);
             Vaccines = _patientVaccineService.GetPatientVaccineForPatient(Id).Take(3);
             Appointments = _appointmentService.GetAllAppointmentsForPatient(Id.ToString()).Take(3);

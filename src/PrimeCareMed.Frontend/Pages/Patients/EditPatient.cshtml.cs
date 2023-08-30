@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PrimeCareMed.Application.Models.Patient;
+using PrimeCareMed.Application.Models.User;
 using PrimeCareMed.Application.Services;
+using PrimeCareMed.Application.Services.Impl;
 using PrimeCareMed.DataAccess.Repositories;
 
 namespace PrimeCareMed.Frontend.Pages.Patients
@@ -14,22 +16,25 @@ namespace PrimeCareMed.Frontend.Pages.Patients
         private readonly IPatientRepository _patientRepository;
         private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
         public EditPatientModel(IPatientRepository patientRepository,
             IPatientService patientService,
-            IMapper mapper)
+            IMapper mapper,
+            IUserService userService)
         {
             _patientRepository = patientRepository;
             _patientService = patientService;
             _mapper = mapper;
+            _userService = userService;
         }
 
         [FromRoute]
         public Guid Id { get; set; }
-
         [BindProperty]
         public PatientModelForCreate EditPatient { get; set; }
 
+        public IEnumerable<ListUsersModel> Doctors => _userService.GetAllUsers().Where(r => r.UserRole == "Doctor");
         public void OnGet()
         {
             var patient = _patientRepository.GetPatientByIdAsync(Id).Result;
@@ -46,6 +51,7 @@ namespace PrimeCareMed.Frontend.Pages.Patients
             EditPatient.Id = Id.ToString();
             try
             {
+                Console.WriteLine($"DOKTOR {EditPatient.DoctorId}");
                 _patientService.EditPatientAsync(EditPatient);
                 return RedirectToPage("ViewAllPatients");
             }

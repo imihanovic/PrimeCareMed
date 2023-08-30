@@ -1,0 +1,116 @@
+﻿@page "/patient/medicines/{id:Guid}"
+@model PrimeCareMed.Frontend.Pages.Medicine.ViewAllPatientMedicinesModel
+@{
+    ViewData["Title"] = "Medicines";
+    var sort = ViewData["CurrentSort"] as string;
+    var keyword = ViewData["Keyword"] as string;
+    var prevDisabled = !Model.Medicines.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Medicines.HasNextPage ? "disabled" : "";
+}
+<h1 style="color:#002133">@ViewData["Title"]</h1>
+<br />
+<h3 style="color:#002133">@Model.Patient.Mbo</h3>
+<h3 style="color:#002133">@Model.Patient.FirstName @Model.Patient.LastName (@Model.Patient.DateOfBirth.ToString("dd.MM.yyyy"))</h3>
+<hr />
+
+<div class="form-actions no-color col">
+    <form asp-action="ViewAllPatientMedicines" method="get">
+        <div class="row">
+            <div class="col-4 col-sm-7">
+                <div class="input-group mb-3">
+                    <input type="search" class="form-control" placeholder="Search..." name="keyword" value="@keyword">
+                    <button type="submit" class="btn text-white" style="background-color:#004266"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+            <div class="col-1">
+                <a asp-action="ViewAllPatientMedicines" class="btn btn-secondary clear-btn">Clear</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            @foreach (var property in Model.MedicinePrescriptionModelProperties)
+            {
+                if (property != "Description")
+                {
+                    <th class="@(property == "MedicineName" ? "" : "d-none d-lg-table-cell")" style="color:#004266">
+
+                        @property
+                        @if (sort is null)
+                        {
+                            <a asp-page="ViewAllPatientMedicines" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"{@property}") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                            <a asp-page="ViewAllPatientMedicines" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"{@property}Desc") class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+
+                        }
+                        else if (sort.Contains("Desc"))
+                        {
+                            <a asp-page="ViewAllPatientMedicines"
+                   asp-route-sort=@($"{@property}")
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="sort-icon"><span class="bi bi-arrow-down"></span></a>
+                        }
+                        else
+                        {
+                            <a asp-page="ViewAllPatientMedicines" asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sort=@($"{@property}Desc") class="sort-icon"><span class="bi bi-arrow-up"></span></a>
+                        }
+                    </th>
+                }
+                else
+                {
+                    <th class="d-none d-lg-table-cell" style="color:#004266">
+                        @property
+                    </th>
+                }
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Medicines.Count() > 0)
+        {
+            @foreach (var medicine in Model.Medicines)
+            {
+                <tr class="align-middle">
+                    <td class="d-none d-lg-table-cell">@medicine.MedicineName</td>
+                    <td class="d-none d-lg-table-cell">@medicine.Description</td>
+                    <td class="d-none d-lg-table-cell">@medicine.DatePrescribed.ToString("dd.MM.yyyy.")</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div>
+    <ul class="pagination">
+        <li class="page-item">
+            <a asp-page="./ViewAllPatientMedicines"
+               asp-route-pageIndex="@(Model.Medicines.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="page-link @prevDisabled text-white" style="background-color: #004266">
+                Previous
+            </a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Medicines.PageIndex ? "active" : "")">
+                <a asp-page="./ViewAllPatientMedicines"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               asp-route-pageIndex="@i" class="page-link text-black" style="background-color:#fff">
+                    @i
+                </a>
+            </li>
+        }
+        <li class="page-item">
+            <a asp-page="./ViewAllPatientMedicines"
+               asp-route-pageIndex="@(Model.Medicines.PageIndex +1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="page-link @nextDisabled text-white" style="background-color: #004266">
+                Next
+            </a>
+        </li>
+    </ul>
+</div>

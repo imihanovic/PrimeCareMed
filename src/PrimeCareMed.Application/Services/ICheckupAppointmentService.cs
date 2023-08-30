@@ -22,6 +22,7 @@ namespace PrimeCareMed.Application.Services
         CheckupAppointment EditCheckupAppointmentAsync(CheckupAppointmentModelForCreate checkupAppointmentModel);
         CheckupAppointmentModelForCreate GetCheckupAppointmentById(string Id);
         Task DeleteCheckupAppointmentAsync(Guid Id);
+        CheckupAppointmentModel GetCheckupAppointmentDetailsById(string Id);
 
     }
 }

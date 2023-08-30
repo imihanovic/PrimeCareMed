@@ -37,6 +37,14 @@
                     <a class="btn text-white d-none d-lg-inline-block" style="background-color:#004266" asp-area="" asp-page="/Appointment/CreateAppointment"><i class="fa-solid fa-file-pen" style="color: #ffffff;"></i> New appointment</a>
                 }
             </div>
+            @if (ViewData["Message"] != null)
+            {
+                <script type="text/javascript">
+                    window.onload = function () {
+                        alert("@ViewData["Message"]");
+                    };
+                </script>
+            }
         </div>
     </form>
 </div>

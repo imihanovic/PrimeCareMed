@@ -40,14 +40,13 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         public async Task<CheckupAppointment> UpdateAsync(CheckupAppointment checkupAppointment)
         {
             var editItem = await GetCheckupAppointmentByIdAsync(checkupAppointment.Id.ToString());
-            editItem.CheckupDate = checkupAppointment.CheckupDate;
             editItem.CheckupStatus = checkupAppointment.CheckupStatus;
             await _context.SaveChangesAsync();
             return editItem;
         }
         public async Task<CheckupAppointment> GetCheckupAppointmentByIdAsync(string id)
         {
-            return await _context.CheckupAppointment.FirstOrDefaultAsync(t => t.Id.ToString() == id);
+            return await _context.CheckupAppointment.Include(r=>r.Appointment).ThenInclude(r => r.Patient).Include(r=>r.HospitalCheckup).ThenInclude(r=>r.Checkup).Include(r => r.HospitalCheckup).ThenInclude(r => r.Hospital).FirstOrDefaultAsync(t => t.Id.ToString() == id);
         }
     }
 }

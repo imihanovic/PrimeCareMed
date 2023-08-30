@@ -29,6 +29,7 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         }
         public async Task<Patient> UpdateAsync(Patient patient)
         {
+            Console.WriteLine($"DOKTOR REPO {patient.Doctor}");
             var editItem = await GetPatientByIdAsync(patient.Id);
             editItem.FirstName = patient.FirstName;
             editItem.LastName = patient.LastName;
@@ -38,12 +39,16 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
             editItem.Oib = patient.Oib;
             editItem.Mbo = patient.Mbo;
             editItem.Gender = patient.Gender;
+            if(patient.Doctor is not null)
+            {
+                editItem.Doctor = patient.Doctor;
+            }
             await _context.SaveChangesAsync();
             return editItem;
         }
         public async Task<Patient> GetPatientByIdAsync(Guid id)
         {
-            return await _context.Patients.FirstOrDefaultAsync(t => t.Id == id);
+            return await _context.Patients.Include(r=>r.Doctor).FirstOrDefaultAsync(t => t.Id == id);
         }
     }
 }

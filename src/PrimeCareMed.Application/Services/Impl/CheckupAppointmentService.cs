@@ -133,7 +133,11 @@ namespace PrimeCareMed.Application.Services.Impl
         }
         public CheckupAppointment EditCheckupAppointmentAsync(CheckupAppointmentModelForCreate checkupAppointmentModel)
         {
+            Console.WriteLine($"STATUS u servisu{checkupAppointmentModel.CheckupId}");
+            Console.WriteLine($"STATUS u servisu{checkupAppointmentModel.CheckupStatus}");
             var checkupAppointment = _mapper.Map<CheckupAppointment>(checkupAppointmentModel);
+            Console.WriteLine($"STATUS u servisu{checkupAppointmentModel.CheckupId}");
+            Console.WriteLine($"STATUS u servisu{checkupAppointmentModel.CheckupStatus}");
             return _checkupAppointmentRepository.UpdateAsync(checkupAppointment).Result;
         }
         public CheckupAppointmentModelForCreate GetCheckupAppointmentById(string Id)
@@ -141,7 +145,20 @@ namespace PrimeCareMed.Application.Services.Impl
             var checkupAppointmentFromDB = _checkupAppointmentRepository.GetCheckupAppointmentByIdAsync(Id).Result;
             return _mapper.Map<CheckupAppointmentModelForCreate>(checkupAppointmentFromDB);
         }
-
+        public CheckupAppointmentModel GetCheckupAppointmentDetailsById(string Id)
+        {
+            var checkupAppointment = _checkupAppointmentRepository.GetCheckupAppointmentByIdAsync(Id).Result;
+            var checkupAppointmentDto = _mapper.Map<CheckupAppointmentModel>(checkupAppointment);
+            checkupAppointmentDto.HospitalName = checkupAppointment.HospitalCheckup.Hospital.Name;
+            checkupAppointmentDto.HospitalAddressCity = checkupAppointment.HospitalCheckup.Hospital.Address + ", " + checkupAppointment.HospitalCheckup.Hospital.City;
+            checkupAppointmentDto.CheckupName = checkupAppointment.HospitalCheckup.Checkup.Name;
+            checkupAppointmentDto.CheckupDescription = checkupAppointment.HospitalCheckup.Checkup.Description;
+            checkupAppointmentDto.CheckupDuration = checkupAppointment.HospitalCheckup.Checkup.Duration;
+            checkupAppointmentDto.CheckupPreparation = checkupAppointment.HospitalCheckup.Checkup.Preparation;
+            checkupAppointmentDto.CheckupDate = checkupAppointment.CheckupDate;
+            checkupAppointmentDto.CheckupStatus = checkupAppointment.CheckupStatus;
+            return checkupAppointmentDto;
+        }
         public async Task DeleteCheckupAppointmentAsync(Guid Id)
         {
             await _checkupAppointmentRepository.DeleteCheckupAppointmentAsync(Id);
