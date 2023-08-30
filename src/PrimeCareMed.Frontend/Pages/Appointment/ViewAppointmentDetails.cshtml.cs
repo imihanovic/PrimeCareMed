@@ -103,7 +103,7 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
                 _appointmentRepository.FinishAppointmentAsync(appointmentDB);
                 if(currentUserRole == "SysAdministrator")
                 {
-                    return Page();
+                    return RedirectToPage("/Appointment/ViewAllAppointments");
                 }
                 return RedirectToPage("/Appointment/WaitingRoom");
             }
