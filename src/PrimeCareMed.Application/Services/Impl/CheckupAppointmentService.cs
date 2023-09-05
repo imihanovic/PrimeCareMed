@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PrimeCareMed.Application.Common.Email;
 using PrimeCareMed.Application.Models.Checkup;
 using PrimeCareMed.Application.Models.CheckupAppointment;
 using PrimeCareMed.Core.Entities;
@@ -12,17 +13,26 @@ namespace PrimeCareMed.Application.Services.Impl
         private readonly ICheckupAppointmentRepository _checkupAppointmentRepository;
         private readonly ICheckupRepository _checkupRepository;
         private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IEmailService _emailService;
+        private readonly IHospitalRepository _hospitalRepository;
+        private readonly IPatientRepository _patientRepository;
 
         public CheckupAppointmentService(IMapper mapper,
             ICheckupAppointmentRepository checkupAppointmentRepository,
             ICheckupRepository checkupRepository,
-            IAppointmentRepository appointmentRepository
+            IAppointmentRepository appointmentRepository,
+            IEmailService emailService,
+            IHospitalRepository hospitalRepository,
+            IPatientRepository patientRepository
             )
         {
             _mapper = mapper;
             _checkupAppointmentRepository = checkupAppointmentRepository;
             _checkupRepository = checkupRepository;
             _appointmentRepository = appointmentRepository;
+            _emailService = emailService;
+            _hospitalRepository = hospitalRepository;
+            _patientRepository = patientRepository;
         }
 
         public async Task<CheckupAppointment> AddCheckupAppointment(CheckupAppointmentModelForCreate createCheckupAppointmentModel)
@@ -33,7 +43,19 @@ namespace PrimeCareMed.Application.Services.Impl
             checkupAppointment.Appointment = _appointmentRepository.GetAppointmentByIdAsync(createCheckupAppointmentModel.AppointmentId).Result;
             checkupAppointment.CheckupDate = createCheckupAppointmentModel.Date.Add(createCheckupAppointmentModel.Time.TimeOfDay);
             checkupAppointment.CheckupStatus = createCheckupAppointmentModel.CheckupStatus;
+            var checkup = _checkupRepository.GetCheckupByIdAsync(createCheckupAppointmentModel.CheckupId.ToString()).Result;
+            var hospital = _hospitalRepository.GetHospitalByIdAsync(createCheckupAppointmentModel.HospitalId.ToString()).Result;
             await _checkupAppointmentRepository.AddAsync(checkupAppointment);
+
+            var emailBody = "<h1>" + checkupAppointment.Appointment.Patient.Mbo+ "</h1><h2>"
+                +checkupAppointment.Appointment.Patient.FirstName + " " + checkupAppointment.Appointment.Patient.LastName +"</h2><h3>"
+                + checkup.Name + "</h3><br>"
+                + hospital.Name + " " + hospital.Address + ", " + hospital.City + "<br><b>" 
+                + checkupAppointment.CheckupDate.ToString("dd.MM.yyyy. HH:mm") + "</b><br>" 
+                + checkup.Duration + " minutes<br> <b>Description:</b><br>" 
+                + checkup.Description + "<br>" 
+                + "<b>Preparation:</b><br>" + checkup.Preparation;
+            await _emailService.SendEmailAsync(EmailMessage.Create(checkupAppointment.Appointment.Patient.Email, emailBody, "Appointment for checkup"));
             return checkupAppointment;
         }
 

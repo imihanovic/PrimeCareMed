@@ -1,4 +1,5 @@
 ﻿using MailKit.Net.Smtp;
+using MailKit.Security;
 using MimeKit;
 using PrimeCareMed.Application.Common.Email;
 
@@ -24,9 +25,9 @@ public class EmailService : IEmailService
 
         try
         {
-            await client.ConnectAsync(_smtpSettings.Server, _smtpSettings.Port, true);
+            await client.ConnectAsync("mailhog", 1025, false);
             client.AuthenticationMechanisms.Remove("XOAUTH2");
-            await client.AuthenticateAsync(_smtpSettings.Username, _smtpSettings.Password);
+            await client.AuthenticateAsync("", "");
 
             await client.SendAsync(message);
         }
@@ -53,7 +54,7 @@ public class EmailService : IEmailService
             Body = builder.ToMessageBody()
         };
 
-        email.From.Add(new MailboxAddress(_smtpSettings.SenderName, _smtpSettings.SenderEmail));
+        email.From.Add(new MailboxAddress("PrimeCareMed", "primecaremed@gmail.com"));
         email.To.Add(new MailboxAddress(emailMessage.ToAddress.Split("@")[0], emailMessage.ToAddress));
 
         return email;
