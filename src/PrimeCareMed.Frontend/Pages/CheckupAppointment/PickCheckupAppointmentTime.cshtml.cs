@@ -50,9 +50,6 @@ namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
             var currentHour = int.Parse(DateTime.Now.ToLocalTime().ToString("HH")) + 2;
             Appointment = _appointmentService.GetAppointmentDetailsById(Guid.Parse(appointmentId));
             Checkup = _checkupService.GetHospitalCheckupById(hospitalId, checkupId);
-
-            Console.WriteLine($"VRIME {NewCheckupAppointment.Time}");
-            Console.WriteLine($"VRIME {time}");
             if(NewCheckupAppointment.Time.ToString("dd/MM/yyyy HH:mm:ss") != "01/01/0001 00:00:00")
             {
                 try

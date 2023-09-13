@@ -51,11 +51,7 @@ namespace PrimeCareMed.Frontend.Pages.CheckupAppointment
         public IActionResult OnPost()
         {
             var checkup = _checkupAppointmentRepository.GetCheckupAppointmentByIdAsync(Id.ToString()).Result;
-
-            Console.WriteLine($"STATUS{checkup.CheckupStatus}");
             checkup.CheckupStatus = Core.Enums.CheckupStatus.Cancelled;
-            
-            Console.WriteLine($"STATUS{checkup.CheckupStatus}");
             var appointmentUpdate = _checkupAppointmentRepository.UpdateAsync(checkup).Result;
             return RedirectToPage("/Checkup/ViewAllPatientCheckups", new { id = checkup.Appointment.Patient.Id });
         }

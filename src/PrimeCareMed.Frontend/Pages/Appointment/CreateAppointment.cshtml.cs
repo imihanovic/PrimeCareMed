@@ -67,11 +67,8 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             var cookie = Request.Cookies["sessionCookie"];
             if(cookie != null)
             {
-                Console.WriteLine($"POSTOJI COOKIE");
                 var shift = _shiftService.GetShiftById(cookie);
-                Console.WriteLine($"POSTOJI SMJENA PO ID");
                 CurrentShift = shift;
-                Console.WriteLine($"DOHVAĆEN CURRENT SHIFT");
                 CurrentShiftId = cookie;
                 Patients = _patientService.GetAllAvailablePatients(cookie);
             }

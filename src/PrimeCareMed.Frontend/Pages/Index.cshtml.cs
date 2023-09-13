@@ -69,8 +69,7 @@ namespace PrimeCareMed.Frontend.Pages
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"ONGET INDEX {ex}");
-
+                Console.WriteLine($"{ex}");
             }
             return Page();
             

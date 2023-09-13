@@ -44,7 +44,6 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
         public IActionResult OnGet(string sort, string currentFilter, string keyword, int? pageIndex)
 
         {
-            Console.WriteLine($"AJDI {Id}");
             var patient = _patientRepository.GetPatientByIdAsync(Id).Result;
             Patient = _mapper.Map<PatientModel>(patient);
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;

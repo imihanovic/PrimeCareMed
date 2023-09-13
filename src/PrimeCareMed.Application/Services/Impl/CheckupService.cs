@@ -142,11 +142,9 @@ namespace PrimeCareMed.Application.Services.Impl
             List<HospitalCheckupModel> availableCheckupModels = new List<HospitalCheckupModel>();
             foreach (var checkup in patientCheckups)
             {
-                Console.WriteLine($"CHECKUP DOSTUPAN{checkup.Name}");
                 var hospitals = _checkupRepository.GetAllCheckupHospitalsAsync(checkup.Id).Result;
                 foreach(var hospital in hospitals)
                 {
-                    Console.WriteLine($"CHECKUP DOSTUPAN{hospital.Hospital.Name}");
                     var checkupDto = new HospitalCheckupModel();
                     checkupDto.HospitalId= hospital.Hospital.Id;
                     checkupDto.CheckupId = checkup.Id;

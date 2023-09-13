@@ -26,10 +26,8 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         }
         public async Task<Shift> AddAsync(Shift shiftShift)
         {
-            Console.WriteLine($"ADDASYNC U REPU");
             await _context.Shift.AddAsync(shiftShift);
             await _context.SaveChangesAsync();
-            Console.WriteLine($"ADDASYNC U REPU NAKON CONTEXTA");
             return shiftShift;
         }
         public async Task<Shift> UpdateAsync(Shift shift)
@@ -41,7 +39,6 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         }
         public Shift CheckIfOpenShiftExistsForDoctor(string Id)
         {
-            Console.WriteLine($"REPO DOKTOR SHIFT{Id}");
             var all = GetAllShiftsAsync().Result;
             return all.Where(r => r.Doctor.Id == Id && r.ShiftEndTime == null).FirstOrDefault();
         }

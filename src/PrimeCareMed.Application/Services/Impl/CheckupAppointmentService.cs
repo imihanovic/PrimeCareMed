@@ -155,11 +155,7 @@ namespace PrimeCareMed.Application.Services.Impl
         }
         public CheckupAppointment EditCheckupAppointmentAsync(CheckupAppointmentModelForCreate checkupAppointmentModel)
         {
-            Console.WriteLine($"STATUS u servisu{checkupAppointmentModel.CheckupId}");
-            Console.WriteLine($"STATUS u servisu{checkupAppointmentModel.CheckupStatus}");
             var checkupAppointment = _mapper.Map<CheckupAppointment>(checkupAppointmentModel);
-            Console.WriteLine($"STATUS u servisu{checkupAppointmentModel.CheckupId}");
-            Console.WriteLine($"STATUS u servisu{checkupAppointmentModel.CheckupStatus}");
             return _checkupAppointmentRepository.UpdateAsync(checkupAppointment).Result;
         }
         public CheckupAppointmentModelForCreate GetCheckupAppointmentById(string Id)

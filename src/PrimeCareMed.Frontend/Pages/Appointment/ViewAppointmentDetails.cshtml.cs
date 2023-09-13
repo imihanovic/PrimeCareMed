@@ -109,7 +109,6 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             }
             catch (Exception ex)
             {
-                Console.WriteLine("EXCEPTION");
                 Console.WriteLine(ex.Message);
                 return Page();
             }

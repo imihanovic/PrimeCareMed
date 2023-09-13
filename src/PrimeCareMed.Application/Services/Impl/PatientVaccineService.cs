@@ -31,7 +31,6 @@ namespace PrimeCareMed.Application.Services.Impl
 
         public async Task<PatientVaccineModel> AddAsync(PatientVaccineModelForCreate createReportModel, Guid appointmentId)
         {
-            Console.WriteLine($"AJDI VAKCINE SERVIS {createReportModel.VaccineId}");
             var config = new MapperConfiguration(cfg => {
 
                 cfg.CreateMap<PatientVaccineModelForCreate, PatientsVaccine>();

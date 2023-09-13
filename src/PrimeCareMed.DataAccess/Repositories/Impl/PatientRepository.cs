@@ -29,7 +29,6 @@ namespace PrimeCareMed.DataAccess.Repositories.Impl
         }
         public async Task<Patient> UpdateAsync(Patient patient)
         {
-            Console.WriteLine($"DOKTOR REPO {patient.Doctor}");
             var editItem = await GetPatientByIdAsync(patient.Id);
             editItem.FirstName = patient.FirstName;
             editItem.LastName = patient.LastName;

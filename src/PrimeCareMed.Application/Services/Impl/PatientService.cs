@@ -78,7 +78,6 @@ namespace PrimeCareMed.Application.Services.Impl
         }
         public Patient EditPatientAsync(PatientModelForCreate patientModel)
         {
-            Console.WriteLine($"DOKTOR SERVIS {patientModel.DoctorId}");
             var patient = _mapper.Map<Patient>(patientModel);
             patient.Doctor = _userRepository.GetUserByIdAsync(patientModel.DoctorId.ToString()).Result;
             return _patientRepository.UpdateAsync(patient).Result;

@@ -51,7 +51,6 @@ namespace PrimeCareMed.Frontend.Pages.Patients
             EditPatient.Id = Id.ToString();
             try
             {
-                Console.WriteLine($"DOKTOR {EditPatient.DoctorId}");
                 _patientService.EditPatientAsync(EditPatient);
                 return RedirectToPage("ViewAllPatients");
             }
