@@ -43,6 +43,9 @@ namespace PrimeCareMed.Frontend.Pages
                     HttpContext.Response.Cookies.Append(
                     "shiftCookieDetails", doctorShift.Nurse.FirstName + " " + doctorShift.Nurse.LastName,
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
+                    HttpContext.Response.Cookies.Append(
+                    "doctorId", doctorShift.Doctor.Id,
+                    new CookieOptions() { SameSite = SameSiteMode.Lax });
                 }
                 else if (nurseShift is not null)
                 {
@@ -56,6 +59,9 @@ namespace PrimeCareMed.Frontend.Pages
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
                     HttpContext.Response.Cookies.Append(
                     "shiftCookieDetails", nurseShift.Doctor.FirstName + " " + nurseShift.Doctor.LastName,
+                    new CookieOptions() { SameSite = SameSiteMode.Lax });
+                    HttpContext.Response.Cookies.Append(
+                    "doctorId", nurseShift.Doctor.Id,
                     new CookieOptions() { SameSite = SameSiteMode.Lax });
                 }
                 if (currentUserRole == "Doctor" && doctorShift is null)

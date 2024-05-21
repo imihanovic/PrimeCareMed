@@ -74,7 +74,7 @@ namespace PrimeCareMed.Frontend.Pages.Appointment
             }
             else
             {
-                Patients = _patientService.GetAllPatients();
+                Patients = _patientService.GetAllPatients("");
             }
             var currentUser = _userManager.GetUserAsync(HttpContext.User).Result;
             var currentUserRole = _userManager.GetRolesAsync(currentUser).Result.First();

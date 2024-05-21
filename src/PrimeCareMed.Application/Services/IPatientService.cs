@@ -7,7 +7,7 @@ namespace PrimeCareMed.Application.Services
     {
         Task<PatientModel> AddAsync(PatientModelForCreate createPatientModel);
         List<string> GetPatientModelFields();
-        IEnumerable<PatientModel> GetAllPatients();
+        IEnumerable<PatientModel> GetAllPatients(string doctorId);
         Patient EditPatientAsync(PatientModelForCreate patientModel);
         Task DeletePatientAsync(Guid Id);
         IEnumerable<PatientModel> GetAllAvailablePatients(string shiftId);

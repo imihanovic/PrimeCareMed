@@ -46,7 +46,7 @@
         <tr>
             @foreach (var property in Model.PatientModelProperties)
             {
-                if (property != "PhoneNumber" && property != "Gender" && property != "DateOfBirth" && property!="Doctor")
+                if (property != "PhoneNumber" && property != "Gender" && property != "DateOfBirth" && property!="Doctor" )
                 {
                     <th class="@(property == "UserName" ? "" : "d-none d-lg-table-cell")" style="color: #002133">
 
@@ -99,9 +99,19 @@
                     <td class="d-none d-lg-table-cell">@patient.Email</td>
                     <td class="d-none d-lg-table-cell">@patient.PhoneNumber</td>
                     <td class="d-none d-lg-table-cell">@patient.Doctor</td>
-                    <td>
-                        <a class="btn-blue-custom" asp-page="PatientDetails" asp-route-id="@patient.Id"><i class="bi bi-info-lg"></i></a>
-                    </td>
+                    @if (patient.IsDoctor || User.IsInRole("SysAdministrator"))
+                    {
+                        <td>
+                            <a class="btn-blue-custom" asp-page="PatientDetails" asp-route-id="@patient.Id"><i class="bi bi-info-lg"></i></a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a class="btn-blue-custom" asp-page="PatientDetails" asp-route-id="@patient.Id" aria-disabled="true"><i class="bi bi-info-lg"></i></a>
+                        </td>
+                    }
+                    
                 </tr>
             }
         }

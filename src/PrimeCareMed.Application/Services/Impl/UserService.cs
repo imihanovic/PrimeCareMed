@@ -190,7 +190,6 @@ public class UserService : IUserService
                                         || s.FirstName.ToLower().Contains(searchStrTrim)
                                         || s.UserName.ToLower().Contains(searchStrTrim)
                                         || s.Email.ToLower().Contains(searchStrTrim)
-                                        || s.PhoneNumber.ToLower().Contains(searchStrTrim)
                                         );
         }
         return searchedUsers;

@@ -15,7 +15,7 @@ namespace PrimeCareMed.Frontend.Pages.Patients
         private readonly IPatientService _patientService;
 
 #nullable enable
-        public PaginatedList<PatientModel> Patients { get; set; }
+        public PaginatedList<PatientModel>? Patients { get; set; }
 #nullable disable
 
         public List<string> PatientModelProperties;
@@ -31,7 +31,6 @@ namespace PrimeCareMed.Frontend.Pages.Patients
         {
 
             PatientModelProperties = _patientService.GetPatientModelFields();
-
             if (keyword != null)
             {
                 pageIndex = 1;
@@ -40,11 +39,19 @@ namespace PrimeCareMed.Frontend.Pages.Patients
             {
                 keyword = currentFilter;
             }
-
+            
             ViewData["CurrentFilter"] = keyword;
             int pageSize = 7;
-
-            var patients = _patientService.GetAllPatients();
+            var cookie = Request.Cookies["doctorId"];
+            var patients = new List<PatientModel>().AsEnumerable();
+            if (cookie != null)
+            {
+                patients = _patientService.GetAllPatients(cookie);
+            }
+            else
+            {
+                patients = _patientService.GetAllPatients("");
+            }
 
             ViewData["CurrentSort"] = sort;
             patients = _patientService.PatientSorting(patients, sort);

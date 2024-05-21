@@ -13,5 +13,6 @@ namespace PrimeCareMed.Application.Models.Patient
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string Doctor { get; set; }
+        public bool IsDoctor { get; set; }
     }
 }

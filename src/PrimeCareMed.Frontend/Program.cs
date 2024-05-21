@@ -25,12 +25,18 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
     .AddDefaultUI()
     .AddEntityFrameworkStores<DatabaseContext>();
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(
+//options=>
+//{
+//    options.Conventions.AuthorizeFolder("/Pages").AllowAnonymousToPage("/Pages/Index");
+//}
+);
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdministratorRole",
          policy => policy.RequireRole("SysAdministrator"));
+    
 });
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
+using Org.BouncyCastle.Math.EC.Rfc7748;
 using PrimeCareMed.Application.Models.Patient;
-using PrimeCareMed.Application.Models.Shift;
 using PrimeCareMed.Core.Entities;
 using PrimeCareMed.DataAccess.Repositories;
-using PrimeCareMed.DataAccess.Repositories.Impl;
 
 namespace PrimeCareMed.Application.Services.Impl
 {
@@ -45,9 +44,9 @@ namespace PrimeCareMed.Application.Services.Impl
         public List<string> GetPatientModelFields()
         {
             var patientDto = new PatientModel();
-            return patientDto.GetType().GetProperties().Where(x => x.Name != "Id").Select(x => x.Name).ToList();
+            return patientDto.GetType().GetProperties().Where(x => x.Name != "Id" && x.Name!="IsDoctor").Select(x => x.Name).ToList();
         }
-        public IEnumerable<PatientModel> GetAllPatients()
+        public IEnumerable<PatientModel> GetAllPatients(string doctorId)
         {
             var patientsFromDatabase = _patientRepository.GetAllPatientsAsync().Result;
 
@@ -66,6 +65,11 @@ namespace PrimeCareMed.Application.Services.Impl
                 if(patient.Doctor is not null)
                 {
                     patientDto.Doctor = patient.Doctor.FirstName + " " + patient.Doctor.LastName;
+                    patientDto.IsDoctor = patient.Doctor.Id == doctorId ? true : false;
+                }
+                else
+                {
+                    patientDto.IsDoctor = true;
                 }
                 patients.Add(patientDto);
             }
@@ -73,7 +77,7 @@ namespace PrimeCareMed.Application.Services.Impl
         }
         public IEnumerable<PatientModel> GetAllAvailablePatients(string shiftId)
         {
-            var allPatients = GetAllPatients();
+            var allPatients = GetAllPatients("");
             return _appointmentService.GetAllPatientsNotInWaitingRoom(allPatients, shiftId);
         }
         public Patient EditPatientAsync(PatientModelForCreate patientModel)
@@ -129,7 +133,6 @@ namespace PrimeCareMed.Application.Services.Impl
                                             || s.Email.ToLower().Contains(searchStrTrim)
                                             || s.Mbo.ToLower().Contains(searchStrTrim)
                                             || s.PhoneNumber.ToLower().Contains(searchStrTrim)
-                                            || s.Doctor.ToLower().Contains(searchStrTrim)
                                             );
             }
             return searchedPatients;

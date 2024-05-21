@@ -21,7 +21,6 @@ namespace PrimeCareMed.Frontend.Pages.Shift
         private readonly IOfficeService _officeService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAppointmentService _appointmentService;
-
         public CreateShiftModel(
             IShiftService shiftService,
             IOfficeService officeService,
@@ -82,6 +81,9 @@ namespace PrimeCareMed.Frontend.Pages.Shift
                     HttpContext.Response.Cookies.Append(
                             "shiftCookie", newShift.OfficeName + " " + newShift.OfficeCity,
                             new CookieOptions() { SameSite = SameSiteMode.Lax });
+                    HttpContext.Response.Cookies.Append(
+                            "doctorId", NewShift.DoctorId,
+                            new CookieOptions() { SameSite = SameSiteMode.Lax });
                     if (User.IsInRole("Doctor"))
                     {
                         HttpContext.Response.Cookies.Append(
@@ -129,6 +131,7 @@ namespace PrimeCareMed.Frontend.Pages.Shift
             Response.Cookies.Delete("sessionCookie");
             Response.Cookies.Delete("shiftCookieOffice");
             Response.Cookies.Delete("shiftCookieDetails");
+            Response.Cookies.Delete("doctorId");
             shift = _shiftRepository.UpdateAsync(shift).Result;
             return Redirect("/Shift/CreateShift");
         }
